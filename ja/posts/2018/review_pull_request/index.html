@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>どうしてレビューをする必要があるのか</title><meta name="description" content="どうしてレビューをする必要があるのかに関するメモ。"><!-- OGP --><meta property="og:title" content="どうしてレビューをする必要があるのか"><meta name="og:description" content="どうしてレビューをする必要があるのかに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="どうしてレビューをする必要があるのか"><meta name="twitter:description" content="どうしてレビューをする必要があるのかに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">どうしてレビューをする必要があるのか</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">どうしてレビューをする必要があるのか</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-12-31T00:00:00.000Z"> 2018-12-31 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/review-pull-request/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/12/31</li>
+</ul>
+<p>ウエイト重めな仕様変更のプルリク、簡単なテストコードの修正のプルリク、アプリケーションとは関係のない自動化ツールの作成のプルリク、、</p>
+<p>と、いろいろあると思いますがそんなかなり身近なプルリクのレビューについて今回は記事にしたいと思います。</p>
+<p>ちなみに私が所属しているチームの中でのプルリクの扱い方の書きますので参考程度にお読みください！！</p>
+<h2 id="どうしてレビューをする必要があるのか">どうしてレビューをする必要があるのか</h2>
+<p>人間はミスをする生き物です。</p>
+<p>そのためレビューイ(レビューされる人)の判断でソースに問題がないと思っていても他の人がソースを見ると問題があるコードというのはかなり多く存在しています。</p>
+<p>そのため、レビューという行為は必ず必要となるのです。</p>
+<p>他にも、新人のプログラマは先輩のソースコードを見ることでソースの書き方や処理ロジックを参考にすることができるのです。
+⇒これもかなり大事なこと</p>
+<p>できる先輩方のソースを見ると、「そう書くと簡潔に書けるのか」と感心することが多々あります。</p>
+<p>そのため、プルリクのレビューはミスを発見する以外にも重要な工程なのです。</p>
+<h2 id="プルリクってなにさ">プルリクってなにさ</h2>
+<p>ここで簡単にプルリクについて書いておきたいと思います。</p>
+<p>プルリクについてわかっている人はスキップしてかまいません。</p>
+<p>SIの方でSVNしか触ったことがない人とかは必見です(私もSI系にいたときはSVNしか使用していないプロジェクトがあり最初は戸惑いました。。)</p>
+<p>現在の多くのプロジェクトではGitを使用してソースコードを管理していると思います。</p>
+<p>Gitを使用するとブランチという機能を使用して本幹のソースコードに影響を与えることなくソースコードを改修することが可能となります。</p>
+<p>そのためGitを使用して開発や保守を行っているプロジェクトではブランチを切って作業を行うことが普通だと思います。</p>
+<p>作成したブランチですが、本幹のブランチに統合(マージ)しないとデプロイとかのときに改修内容が反映されません。</p>
+<p>その時にブランチをマージするときにプルリクエストという形で本幹のブランチにマージするリクエストを送ります。</p>
+<p>これがプルリクのことです。</p>
+<p>開発するときはGitのホスティングサービスのBitBucketやGitBucket、GitHubなんかを使用していると思いますがこの時ソースコードをマージするレビューアを決めソースコードのレビューをしてもらうイメージです。</p>
+<h2 id="プルリクの粒度とは">プルリクの粒度とは</h2>
+<p>プルリクを作成することの意義、レビューをすることの意義、プルリクについてを書いてきましたが、ここではプルリクの粒度について書きたいと思います。</p>
+<p>大規模なソースコードの改修になると触るファイルや追加するコードの行数が多くなってきます。</p>
+<p>この時1つのプルリクにたくさんのソースの改修内容を含ませてしまうと、本人は楽で良いですがレビューアからするとソースを読むだけでかなりの時間がとられてしまいます。</p>
+<p>ですからレビューアのことも考えてプルリクの粒度をなるべく小さく、機能単位にしてあげることが重要です。</p>
+<p>1つのプルリクでは1つの機能とそのテストくらいにとどめて複数のプルリクを作成してあげた方がレビューアからすると良い場合はたくさんあります。</p>
+<p>そのためプルリクの粒度(大きさ)を意識してプルリクを送ることが重要となってくるのです。</p>
+<h2 id="どうしてレビューに時間をかけるのか">どうしてレビューに時間をかけるのか</h2>
+<p>プルリクをレビューするのはコーディングをするよりも時間がかかったりするものです。</p>
+<p>複数人にレビューを依頼する場合、その人数と時間がレビューに費やされるためコーディングより時間がかかってしまうことが多くなるのです。</p>
+<p>では、なぜレビューにそんな時間をかけるのか、ということですが、そのソースコードの改修を本幹のブランチに入れるということはそのまま本番反映に直結することも多いのです。</p>
+<p>そのため、改修をした本人からは「簡単なソースコード改修だから早くマージしてくれ」と思ってもレビューアからするとそう簡単なことではないのです。</p>
+<p>本番反映をしてからそのソースに問題があることが分かったとしてその分のエラー部分の修正をする方がよっぽど工数がかかってしまいます。
+(調査とかから入り、類似箇所、影響範囲なども考えないといけないため)</p>
+<p>そのため、責任者というのは本番反映に関して注意を払っているのです。</p>
+<h2 id="最後に">最後に</h2>
+<p>簡単にプルリクの粒度とレビューに関して書きましたが、ここで私の所属しているチームでのプルリクの取り扱いについて書きたいと思います。</p>
+<p>私の所属しているチームではプルリクの承認をするだけでマージは本人が行うという方式をとっています。</p>
+<p>これは改修したソースの責任の所在をはっきりさせるために行っています。</p>
+<p>基本的にはブランチのマージはレビューアの人が行うと思いますが、あえてレビューイが承認を受けたうえでマージすることで責任をレビューイが負うということになっています。</p>
+<p>最初は責任を負うから改修をしたくないと思うかもしれませんが、本人が責任を負う形をとることで当事者意識を持ち改修をに取り組むようになるため効果的とのことでこの形式をとっています。</p>
+<p>是非、参考にしてみてください！</p>
+<p>ちなみに私のチームは主にインフラ面を扱っているのですが自動化ツールやansibleなどの構成管理ツールの面でのプルリクが多く、がっつりソースをいじることが少ないためこの方式がより適しているのかもしれません。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E3%81%A9%E3%81%86%E3%81%97%E3%81%A6%E3%83%AC%E3%83%93%E3%83%A5%E3%83%BC%E3%82%92%E3%81%99%E3%82%8B%E5%BF%85%E8%A6%81%E3%81%8C%E3%81%82%E3%82%8B%E3%81%AE%E3%81%8B&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Freview_pull_request%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

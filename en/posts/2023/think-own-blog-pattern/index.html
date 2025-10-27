@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Choosing a Setup for a Personal Tech Blog</title><meta name="description" content="Pros and cons of hosted publishing services, GitHub Pages, rental servers, and building everything yourself."><!-- OGP --><meta property="og:title" content="Choosing a Setup for a Personal Tech Blog"><meta name="og:description" content="Pros and cons of hosted publishing services, GitHub Pages, rental servers, and building everything yourself."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Choosing a Setup for a Personal Tech Blog"><meta name="twitter:description" content="Pros and cons of hosted publishing services, GitHub Pages, rental servers, and building everything yourself."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Choosing a Setup for a Personal Tech Blog</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Choosing a Setup for a Personal Tech Blog</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-01-15T00:00:00.000Z"> 2023-01-15 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2023/think_own_blog_pattern/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2023/01/15</li>
+</ul>
+<h2 id="choosing-a-setup-for-a-personal-tech-blog">Choosing a Setup for a Personal Tech Blog</h2>
+<p>I run this site on GitHub Pages with the Python static site generator mkdocs. After researching options, here is how I think about different setups.</p>
+<h3 id="pattern-1--first-time-bloggers">Pattern 1 – First-time bloggers</h3>
+<p>If you just want to share knowledge, start with a publishing platform. Sign up and you are ready—no domain, hosting, or infrastructure knowledge required, and you only pay when you post paid content. Popular choices:</p>
+<ul>
+<li>Japan: <a href="https://qiita.com/">Qiita</a>, <a href="https://zenn.dev/">Zenn</a></li>
+<li>International: <a href="https://dev.to/">Dev Community</a>, <a href="https://medium.com/">Medium</a></li>
+</ul>
+<p>These sites have large audiences, which helps motivation; likes and comments give feedback, and you get visibility without worrying about SEO. Many teams reference Qiita/Zenn articles in day-to-day work. For people lacking infra/SEO know-how, or those unsure about consistency, hosted services are the best way to start.</p>
+<h3 id="pattern-2--monetization-or-learning-via-a-custom-environment">Pattern 2 – Monetization or learning via a custom environment</h3>
+<p>Some services (Zenn, <a href="https://note.com/">note</a>, Medium) support paid articles, but if you want ad revenue (affiliate links, Google Ads) you generally need your own site. Running one is also great practice. Here are three approaches:</p>
+<h4 id="1-github-pages--static-site-generator">1. GitHub Pages + static site generator</h4>
+<p>This site uses GitHub Pages plus <a href="https://github.com/mkdocs/mkdocs">mkdocs</a>. GitHub Pages hosts static content for free (public repos only). You can configure a custom domain, hook up Google Analytics, and even run ads. Static site generators provide polished themes and Markdown-based authoring so you do not have to handcraft HTML/CSS/JS—though you still can if that is your thing. Cost is just the domain.</p>
+<h4 id="2-rental-server--wordpress">2. Rental server + WordPress</h4>
+<p>Many rental servers offer one-click WordPress installs. If you already know WordPress—or want access to its plugin ecosystem—this is attractive. The trade-off is recurring hosting fees, so I recommend it when you are serious about blogging, not when you are merely testing the waters.</p>
+<h4 id="3-fully-custom-implementation">3. Fully custom implementation</h4>
+<p>You can build everything yourself, but launching takes time. Static hosting providers like GitHub Pages or <a href="https://www.netlify.com/">Netlify</a> are cheap for static sites. If you want a database-backed app, platforms like <a href="https://jp.heroku.com/">Heroku</a> exist, yet free tiers are limited; expect to pay ¥1,000–1,500 per month for meaningful capacity. I would not suggest this route for beginners, but if your goal is to learn by building and operating a service end-to-end, it is a valuable experience.</p>
+<h2 id="summary">Summary</h2>
+<ul>
+<li>Just want to write technical posts → Qiita, Zenn</li>
+<li>Want to own the site and maybe earn a bit → GitHub Pages + static site generator</li>
+<li>Prefer WordPress → Rental server + WordPress</li>
+<li>Treat it as a personal dev project → Build it yourself</li>
+</ul>
+<p>Whatever you choose, consistency matters. I am still working on that myself, but plan to keep writing at a relaxed pace.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Choosing%20a%20Setup%20for%20a%20Personal%20Tech%20Blog&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2023%2Fthink-own-blog-pattern%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

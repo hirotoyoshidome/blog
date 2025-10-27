@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>What I Learned from Running Rundeck</title><meta name="description" content="My notes on Rundeck's architecture, pros/cons, and real-world troubleshooting tips."><!-- OGP --><meta property="og:title" content="What I Learned from Running Rundeck"><meta name="og:description" content="My notes on Rundeck's architecture, pros/cons, and real-world troubleshooting tips."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="What I Learned from Running Rundeck"><meta name="twitter:description" content="My notes on Rundeck's architecture, pros/cons, and real-world troubleshooting tips."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">What I Learned from Running Rundeck</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">What I Learned from Running Rundeck</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-12-24T00:00:00.000Z"> 2018-12-24 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2018/about_rundeck/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2018/12/24</li>
+</ul>
+<h2 id="background">Background</h2>
+<p>We use Rundeck at work to manage jobs. It is handy, but it can also be a pain: the server CPU suddenly spikes, memory usage explodes, backups are tedious, and so on. Because I used to be a Java engineer, have touched Groovy, and know the basics of Rails, I decided to read Rundeck’s source code and dig into the architecture. Here is a summary for anyone who still manages a mountain of cron jobs by hand.</p>
+<h2 id="what-is-rundeck">What is Rundeck?</h2>
+<ul>
+<li>Rundeck is a job scheduler that, like cron, lets you run programs on a schedule.</li>
+<li>It gives you a visual way to manage jobs that would otherwise be hard to read inside <code>crontab</code>, and it helps tame a large number of jobs by grouping them by project and by target node so that you can fan out to multiple servers easily.</li>
+</ul>
+<h2 id="benefits-of-using-rundeck">Benefits of using Rundeck</h2>
+<ul>
+<li>Compared with plain cron, you gain visibility, can organize jobs per project, and can keep target host information in node definitions to orchestrate multiple servers.</li>
+<li>SSH keys can be stored and managed on the Rundeck server itself.</li>
+<li>Plenty of plugins exist—for example, to send Slack notifications when a job fails—so you do not have to script every integration by hand.</li>
+</ul>
+<h2 id="downsides">Downsides</h2>
+<ul>
+<li>Even though Rundeck is open source, you may still see sudden CPU and memory spikes. (Countermeasures later.)</li>
+<li>If you need to run jobs against multiple clients, you need a dedicated Rundeck server.</li>
+<li>The GUI can feel sluggish.</li>
+</ul>
+<h2 id="architecture-highlights">Architecture highlights</h2>
+<ul>
+<li>Because Rundeck is open source, the only operating cost is the server and database.</li>
+<li>The app is built with Grails (a Groovy framework that ultimately sits on Spring MVC), so if you understand Spring MVC you can follow the code path.</li>
+<li>The default database is H2, the embedded DB that ships with Java.</li>
+<li>Rundeck stores all job definitions in the database (login accounts live in files on the server). Embedded H2 adds load to the app server, so it is better to run a separate DB such as MySQL or PostgreSQL.</li>
+</ul>
+<h2 id="finer-grained-architecture-notes">Finer-grained architecture notes</h2>
+<ul>
+<li>Grails uses GSP (Groovy Server Pages) for the view layer.</li>
+<li>You get the <code>g</code> taglib so you can generate forms, anchors, and more dynamically.</li>
+<li>Because the foundation is Spring MVC, it relies on a DI container and creates the database the first time the app boots (see <code>applicationContext.xml</code>).</li>
+<li><code>grails.xml</code> defines the DB schema.</li>
+<li>The <code>grails-app</code> directory contains the Grails application proper.</li>
+<li>Database access is implemented with Hibernate, the familiar Java ORM, so you will not find raw SQL in the codebase.</li>
+<li>Running <code>EXPLAIN</code> on the DB console showed no query design issues.</li>
+<li>Controllers call services, and the services hit the DB. If you are on MySQL, enable slow query logs and compare them with what Rundeck is doing.</li>
+</ul>
+<h2 id="troubleshooting-tips">Troubleshooting tips</h2>
+<ul>
+<li>Slow DB access
+<ul>
+<li>Add indexes to heavily accessed columns.</li>
+</ul>
+</li>
+<li>Slow list pages
+<ul>
+<li>Split large projects into smaller ones. The source code reveals that sample views perform full table scans, so reducing the number of rows per project shortens render time.</li>
+</ul>
+</li>
+<li>High CPU usage
+<ul>
+<li>Configure job timeouts.</li>
+<li>Consider whether the DB is simply underpowered. When memory runs out, the system starts paging to disk and CPU shoots up. Make sure the server specs match your workload (e.g., resize the instance class on AWS).</li>
+</ul>
+</li>
+<li>Jobs piling up
+<ul>
+<li>As with the CPU issue, tune the connection pool size if needed.</li>
+<li>On MySQL, enable slow query logging to find the bottleneck queries. In my experience, few queries are intrinsically bad because the app uses JPA-style constructs, so adding the right index usually fixes it.</li>
+</ul>
+</li>
+</ul>
+<h2 id="final-note">Final note</h2>
+<p>If you know Java, read the source—it pays off.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=What%20I%20Learned%20from%20Running%20Rundeck&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2018%2Fabout-rundeck%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Integrating ChatGPT into a Web Service</title><meta name="description" content="Ways to embed ChatGPT via the API or fine-tuning, plus considerations for using your own data."><!-- OGP --><meta property="og:title" content="Integrating ChatGPT into a Web Service"><meta name="og:description" content="Ways to embed ChatGPT via the API or fine-tuning, plus considerations for using your own data."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Integrating ChatGPT into a Web Service"><meta name="twitter:description" content="Ways to embed ChatGPT via the API or fine-tuning, plus considerations for using your own data."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Integrating ChatGPT into a Web Service</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Integrating ChatGPT into a Web Service</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-09-13T00:00:00.000Z"> 2023-09-13 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2023/this_chatgpt_web_service/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2023/09/13</li>
+</ul>
+<h1 id="integrating-chatgpt-into-a-web-service">Integrating ChatGPT into a Web Service</h1>
+<p>ChatGPT exploded in 2023. It is a conversational AI from OpenAI, and even a year ago I barely knew the company’s name. Today it is everywhere—bookstores are full of guides, and OpenAI recently announced fine-tuning for GPT‑3.5 (GPT‑4 support is planned). Here is how I would approach embedding ChatGPT into a web product.</p>
+<h2 id="call-the-chatgpt-api-from-your-backend">Call the ChatGPT API from your backend</h2>
+<p>OpenAI provides an API. You can invoke it server-side and tailor responses with prompt engineering. Imagine an e-commerce search experience where, instead of toggling filters manually, the user chats:</p>
+<ul>
+<li>Bot: “What are you looking for?”</li>
+<li>User: “Wireless earphones.”</li>
+<li>Bot: “What is your budget?”</li>
+<li>User: “Around ¥2,000.”</li>
+<li>Bot: “Any preferences (color, sound, battery)?”</li>
+<li>User: “Black with long battery life.”</li>
+<li>Bot: “Here are some options.”</li>
+</ul>
+<p>By structuring prompts carefully and formatting the response to match your UI, you can deliver conversational search without major training.</p>
+<h2 id="fine-tuning">Fine-tuning</h2>
+<p>Fine-tuning retrains the model on your own data so it better fits your domain. In theory this yields higher accuracy than prompts alone, but it is harder: you need training data, must pay for training and inference, and evaluation is tough. I have not seen many production successes yet; it feels premature today, though potentially powerful later.</p>
+<h2 id="summary-and-concerns">Summary and concerns</h2>
+<p>Broadly, you either call the API or fine-tune a model. Even within the API route you have options: optimize outputs for specific inputs, let ChatGPT synthesize results, have it summarize content, etc. Creativity matters.</p>
+<p>My worry is that a pure API integration may underuse your proprietary data (user behavior, catalog details). Those datasets are unique assets that differentiate your service, but the API simply lets you consume ChatGPT’s capabilities—it does not automatically learn from your data. Finding ways to blend your data with ChatGPT’s strengths will be key. The API is inexpensive and accessible (GPT‑3.5 via the UI is even free), so experimentation is within reach. Given the pace of generative AI, staying informed is essential.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Integrating%20ChatGPT%20into%20a%20Web%20Service&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2023%2Fthis-chatgpt-web-service%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

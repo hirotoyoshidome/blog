@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Linuxコマンドメモ</title><meta name="description" content="Linuxコマンド編に関するメモ。"><!-- OGP --><meta property="og:title" content="Linuxコマンドメモ"><meta name="og:description" content="Linuxコマンド編に関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Linuxコマンドメモ"><meta name="twitter:description" content="Linuxコマンド編に関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Linuxコマンドメモ</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Linuxコマンドメモ</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-04-06T00:00:00.000Z"> 2019-04-06 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2019/infra-command/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2019/04/06</li>
+</ul>
+<h2 id="linuxコマンド編">Linuxコマンド編</h2>
+<h3 id="ゾンビプロセスの有無を確認する">ゾンビプロセスの有無を確認する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>ps aux | grep [\&#x3C;]defunct\></span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="子プロセスの親プロセスを確認する">子プロセスの親プロセスを確認する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>ps auxf</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="プロセスを殺す">プロセスを殺す</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo kill -9 {PID}</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="データの使用量を確認する">データの使用量を確認する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>du -sh ディレクトリ</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="空き容量を調べる">空き容量を調べる</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>df -h ディレクトリ</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="cpu使用率を確認する">CPU使用率を確認する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>top</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="メモリの使用率を確認する">メモリの使用率を確認する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>free -m</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="ディレクトリ配下の一覧を更新日付順に出力する">ディレクトリ配下の一覧を更新日付順に出力する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>ls -lrt</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="ユーザー確認">ユーザー確認</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo cat /etc/passwd</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="ユーザー変更">ユーザー変更</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo su - ユーザー名</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="踏み台サーバーからのssh接続情報確認">踏み台サーバーからのssh接続情報確認</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>cat ~/.ssh/config</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="cpu情報確認">CPU情報確認</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo less /proc/cpuinfo</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="shell編">Shell編</h2>
+<h3 id="lsの結果を配列に格納してfor文で回す">lsの結果を配列に格納してfor文で回す</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>items=(`ls -l`)</span></span>
+<span class="line"><span>for item in ${items[@]}</span></span>
+<span class="line"><span>do</span></span>
+<span class="line"><span>  # do some work</span></span>
+<span class="line"><span>done</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="スクリプトの標準出力を捨てる">スクリプトの標準出力を捨てる</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>./shell.sh > /dev/null</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="標準出力を追記でファイルに出力する">標準出力を追記でファイルに出力する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>./shell.sh >> filename.log</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="apache編">apache編</h2>
+<h3 id="サービスの状態を確認する">サービスの状態を確認する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service httpd status</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="vhostファイルとかの設定のテストをする">vhostファイルとかの設定のテストをする</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service httpd configtest</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="サービスの再起動をするrestartよりも安全な再起動">サービスの再起動をする(restartよりも安全な再起動)</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service httpd graceful</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="dnsレコードを確認する">DNSレコードを確認する</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>dig {domain}</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="ドメインの情報を確認する">ドメインの情報を確認する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>nslookup {domain}</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="ドメインやipアドレスの所有者を確認する">ドメインやIPアドレスの所有者を確認する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>whois {domain}</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="mysql編">MySQL編</h2>
+<h3 id="サービスの状態を確認する-1">サービスの状態を確認する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service mysqld status</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="サービスの再起動">サービスの再起動</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service mysqld restart</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="ログイン">ログイン</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mysql -uユーザー名 -hホスト名(awsの場合はエンドポイント) -p</span></span>
+<span class="line"><span>>password</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="db確認">DB確認</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>show databases:</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="テーブル確認">テーブル確認</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>show tables;</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="dbの設定を確認環境変数">DBの設定を確認（環境変数）</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>show global variables;</span></span>
+<span class="line"><span>show global variables like '絞り込み'</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="ユーザー情報確認">ユーザー情報確認</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>select Host, User from mysql.user;</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="ユーザーの権限を確認">ユーザーの権限を確認</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>show grants for user;</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="cron編">cron編</h2>
+<h3 id="サービスの情報を確認する">サービスの情報を確認する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service crond status</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="cronに設定されているジョブを参照する">cronに設定されているジョブを参照する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>crontab -l</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="cronを修正する">cronを修正する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>crontab -e</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="cronをすべて削除する">cronをすべて削除する</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>crontab -r</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="awscli編">AWS(CLI)編</h2>
+<p>※credentialsを設定する必要があります</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>aws configure</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="s3のバケットを確認する疎通確認とかにも使用">S3のバケットを確認する(疎通確認とかにも使用)</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>aws s3 ls s3://{bucketname}</span></span>
+<span class="line"><span></span></span></code></pre> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Linux%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%A1%E3%83%A2&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2019%2Finfra_command%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

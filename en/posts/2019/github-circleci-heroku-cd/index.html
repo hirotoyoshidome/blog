@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Automating Deployments with GitHub, CircleCI, and Heroku</title><meta name="description" content="How I wired a Laravel repo on GitHub to CircleCI and deployed to Heroku using the free tiers."><!-- OGP --><meta property="og:title" content="Automating Deployments with GitHub, CircleCI, and Heroku"><meta name="og:description" content="How I wired a Laravel repo on GitHub to CircleCI and deployed to Heroku using the free tiers."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Automating Deployments with GitHub, CircleCI, and Heroku"><meta name="twitter:description" content="How I wired a Laravel repo on GitHub to CircleCI and deployed to Heroku using the free tiers."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Automating Deployments with GitHub, CircleCI, and Heroku</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Automating Deployments with GitHub, CircleCI, and Heroku</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-10-14T00:00:00.000Z"> 2019-10-14 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2019/github_circleci_heroku_cd/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2019/10/14
+I wanted to deploy automatically by connecting a public GitHub repo to CircleCI and pushing to Heroku—all on free plans.</li>
+</ul>
+<h2 id="github--laravel-setup">GitHub + Laravel setup</h2>
+<p>I created <a href="https://github.com/hirotoyoshidome/learn-laravel">https://github.com/hirotoyoshidome/learn-laravel</a>. Laravel installation steps are omitted, but you can scaffold with Docker if you do not want to pollute your local environment: <a href="https://github.com/hirotoyoshidome/docker-composer-laravel-mysql">https://github.com/hirotoyoshidome/docker-composer-laravel-mysql</a>.</p>
+<p>Create the project:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>php artisan create-project laravel/laravel {appname} --prefer-dist</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>For clarity I made <code>/</code> render <code>resources/views/hello.blade.php</code> with “HelloWorld!!”.</p>
+<h2 id="heroku-prep">Heroku prep</h2>
+<p>Create an account, install the CLI, and log in (<code>heroku login</code>). Create the app:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>heroku create {appname} --buildpack heroku/php</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Add a <code>Procfile</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>web: vendor/bin/heroku-php-apache2 public/</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Force HTTPS in production (<code>AppServiceProvider::boot</code>). Deploy once manually:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>git add .</span></span>
+<span class="line"><span>git commit -m "add Heroku settings."</span></span>
+<span class="line"><span>git remote add heroku https://git.heroku.com/{appname}.git</span></span>
+<span class="line"><span>git push heroku master</span></span>
+<span class="line"><span>heroku run php artisan key:generate</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Visit <code>https://{appname}.herokuapp.com/</code> to confirm it works.</p>
+<h2 id="circleci">CircleCI</h2>
+<p>Sign in with GitHub at <a href="https://circleci.com/">https://circleci.com/</a>, add the repository, and commit <code>/.circleci/config.yml</code>. My config:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>version: 2</span></span>
+<span class="line"><span>jobs:</span></span>
+<span class="line"><span>  build:</span></span>
+<span class="line"><span>    docker:</span></span>
+<span class="line"><span>      - image: circleci/php:7.3-node-browsers</span></span>
+<span class="line"><span>    steps:</span></span>
+<span class="line"><span>      - checkout</span></span>
+<span class="line"><span>      - run: sudo apt update</span></span>
+<span class="line"><span>      - restore_cache:</span></span>
+<span class="line"><span>          keys:</span></span>
+<span class="line"><span>            - v1-dependencies-{{ checksum "composer.json" }}</span></span>
+<span class="line"><span>            - v1-dependencies-</span></span>
+<span class="line"><span>      - run: composer install -n --prefer-dist</span></span>
+<span class="line"><span>      - save_cache:</span></span>
+<span class="line"><span>          key: v1-dependencies-{{ checksum "composer.json" }}</span></span>
+<span class="line"><span>          paths:</span></span>
+<span class="line"><span>            - ./vendor</span></span>
+<span class="line"><span>      - restore_cache:</span></span>
+<span class="line"><span>          keys:</span></span>
+<span class="line"><span>            - node-v1-{{ checksum "package.json" }}</span></span>
+<span class="line"><span>            - node-v1-</span></span>
+<span class="line"><span>      - run: yarn install</span></span>
+<span class="line"><span>      - save_cache:</span></span>
+<span class="line"><span>          key: node-v1-{{ checksum "package.json" }}</span></span>
+<span class="line"><span>          paths:</span></span>
+<span class="line"><span>            - node_modules</span></span>
+<span class="line"><span>      - run: cp .env.example .env</span></span>
+<span class="line"><span>  deploy-prod:</span></span>
+<span class="line"><span>    machine:</span></span>
+<span class="line"><span>      image: circleci/classic:edge</span></span>
+<span class="line"><span>    steps:</span></span>
+<span class="line"><span>      - checkout</span></span>
+<span class="line"><span>      - run: heroku maintenance:on --app ${HEROKU_APP_NAME_PROD}</span></span>
+<span class="line"><span>      - run: |</span></span>
+<span class="line"><span>          git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_PROD.git master</span></span>
+<span class="line"><span>      - run: heroku maintenance:off --app ${HEROKU_APP_NAME_PROD}</span></span>
+<span class="line"><span>workflows:</span></span>
+<span class="line"><span>  version: 2</span></span>
+<span class="line"><span>  build_and_deploy:</span></span>
+<span class="line"><span>    jobs:</span></span>
+<span class="line"><span>      - build</span></span>
+<span class="line"><span>      - deploy-prod:</span></span>
+<span class="line"><span>          requires:</span></span>
+<span class="line"><span>            - build</span></span>
+<span class="line"><span>          filters:</span></span>
+<span class="line"><span>            branches:</span></span>
+<span class="line"><span>              only: master</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>If the build passes, the deploy job runs. Set the Heroku API key and app name as CircleCI environment variables. I tweaked the hello view, committed to <code>master</code>, and confirmed that the CircleCI jobs succeeded and the change appeared on the site.</p>
+<h2 id="wrap-up">Wrap-up</h2>
+<p>This was my first time using CircleCI, and it was surprisingly simple. Paid tiers may be required for serious production use, but for personal projects it is great. You can also build CI/CD on AWS (CodePipeline + CodeBuild) or Jenkins if that suits your stack.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Automating%20Deployments%20with%20GitHub%2C%20CircleCI%2C%20and%20Heroku&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2019%2Fgithub-circleci-heroku-cd%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

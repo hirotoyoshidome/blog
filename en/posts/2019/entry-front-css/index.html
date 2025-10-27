@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Catching Up on CSS</title><meta name="description" content="Cheat-sheet style notes on positioning, flexbox, display modes, sizing, whitespace, pseudo-elements, and more."><!-- OGP --><meta property="og:title" content="Catching Up on CSS"><meta name="og:description" content="Cheat-sheet style notes on positioning, flexbox, display modes, sizing, whitespace, pseudo-elements, and more."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Catching Up on CSS"><meta name="twitter:description" content="Cheat-sheet style notes on positioning, flexbox, display modes, sizing, whitespace, pseudo-elements, and more."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Catching Up on CSS</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Catching Up on CSS</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-11-12T00:00:00.000Z"> 2019-11-12 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2019/entry_front_css/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2019/11/12
+I had barely touched HTML/CSS beyond minor tweaks, so when I suddenly had to build layouts I panicked. These are the essentials I learned.</li>
+</ul>
+<h2 id="position">position</h2>
+<ul>
+<li><code>relative</code> – offset relative to the current position.</li>
+<li><code>absolute</code> – place relative to the nearest positioned ancestor.</li>
+<li><code>fixed</code> – stick to a fixed viewport location.</li>
+<li><code>flex</code> – (technically <code>display: flex</code>) use flexbox for flexible layouts.</li>
+</ul>
+<p>Once positioned, use <code>top</code>, <code>bottom</code>, <code>left</code>, <code>right</code> to place elements. The default is <code>static</code>, which ignores those props. <code>z-index</code> controls stacking order. Set the parent to <code>relative</code> and absolutely position children you want to overlap.</p>
+<h2 id="flexbox">Flexbox</h2>
+<ul>
+<li><code>flex-direction</code> – row vs. column.</li>
+<li><code>flex-wrap</code> – whether items wrap.</li>
+<li><code>justify-content</code> – alignment along the main axis.</li>
+<li><code>align-items</code> – alignment along the cross axis/baseline.</li>
+</ul>
+<h2 id="display">display</h2>
+<ul>
+<li><code>block</code> – fills the full width and stacks vertically (<code>div</code>, <code>h1</code>, <code>p</code>, <code>ul</code> by default).</li>
+<li><code>inline</code> – flows inline (<code>a</code>, <code>span</code>, <code>img</code>).</li>
+<li><code>inline-block</code> – flows inline but behaves like a block (you can set width/height).</li>
+<li><code>none</code> – hide the element.</li>
+</ul>
+<p>Block/inline-block can set width/height and all margins/padding. Inline elements can only set horizontal margins/padding but support <code>text-align</code>. Inline elements usually live inside block-level elements.</p>
+<h2 id="widthheight-units">Width/height units</h2>
+<ul>
+<li><code>px</code> – absolute pixels.</li>
+<li><code>%</code> – percentage of the parent.</li>
+<li><code>em</code> – relative to the parent’s font-size.</li>
+<li><code>rem</code> – relative to the root (<code>html</code>) font-size.</li>
+<li><code>auto</code> – automatic (typically fills the parent).</li>
+</ul>
+<p>Set only width + <code>height: auto</code> to maintain aspect ratio. With <code>auto</code>, width includes padding/border; <code>width: 100%</code> does not. Use <code>min-width</code> / <code>max-width</code> to cap sizes.</p>
+<h2 id="margin-vs-padding">margin vs. padding</h2>
+<p><code>margin</code> adds outer spacing; <code>padding</code> adds inner spacing.</p>
+<h2 id="div-vs-span">div vs. span</h2>
+<p><code>div</code> is block-level; <code>span</code> is inline. <code>div</code> introduces line breaks; <code>span</code> is great for inline styling.</p>
+<h2 id="white-space">white-space</h2>
+<ul>
+<li><code>normal</code> – collapse whitespace, auto-wrap.</li>
+<li><code>nowrap</code> – collapse whitespace, no auto-wrap.</li>
+<li><code>pre-line</code> – honor newlines, auto-wrap long lines.</li>
+<li><code>pre</code> – honor spaces/tabs/newlines, no auto-wrap.</li>
+<li><code>pre-wrap</code> – honor spaces/tabs/newlines and auto-wrap.</li>
+</ul>
+<h2 id="before--after">::before / ::after</h2>
+<p>Pseudo-elements to inject content before/after an element.</p>
+<h2 id="overflow">overflow</h2>
+<ul>
+<li><code>visible</code> – show overflow.</li>
+<li><code>hidden</code> – clip overflow.</li>
+<li><code>scroll</code> – clip + always show scrollbars.</li>
+<li><code>auto</code> – clip + show scrollbars when needed.</li>
+</ul>
+<h2 id="misc">Misc</h2>
+<ul>
+<li>Specificity: styles closer to the element win; <code>!important</code> overrides everything.</li>
+<li>Sass/SCSS compiles to CSS, supports variables, math, conditionals, inheritance.</li>
+<li>CSS Grid lets you layout content in rows/columns.</li>
+<li>Prefer responsive design with CSS (media queries) over JS hacks.</li>
+<li><code>border-radius</code> rounds corners; <code>vertical-align</code> controls vertical alignment.</li>
+<li>Establish your own mini framework or use an existing one for maintainability.</li>
+</ul>
+<p><em>Grid systems and multi-column layouts are on my “study later” list.</em></p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Catching%20Up%20on%20CSS&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2019%2Fentry-front-css%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

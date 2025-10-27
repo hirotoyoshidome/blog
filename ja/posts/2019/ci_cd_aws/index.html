@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>AWSでCI・CD環境を構築したはなし</title><meta name="description" content="AWSでCI・CD環境を構築したはなしに関するメモ。"><!-- OGP --><meta property="og:title" content="AWSでCI・CD環境を構築したはなし"><meta name="og:description" content="AWSでCI・CD環境を構築したはなしに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="AWSでCI・CD環境を構築したはなし"><meta name="twitter:description" content="AWSでCI・CD環境を構築したはなしに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">AWSでCI・CD環境を構築したはなし</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">AWSでCI・CD環境を構築したはなし</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-10-28T00:00:00.000Z"> 2019-10-28 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2019/ci-cd-aws/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2019/10/28</li>
+</ul>
+<h1 id="awsでcicd環境を構築したはなし">AWSでCI・CD環境を構築したはなし</h1>
+<p>今回はAWSのサービスを利用して、CI・CD環境を整えることについて書きたいと思います。</p>
+<p>というのも、最近CI・CD環境をAWSのサービスのみで構築したので、備忘録もかねてとなります。</p>
+<p>今回利用していくサービスは</p>
+<ul>
+<li>CodePipeline</li>
+<li>CodeBuild</li>
+<li>CodeDeploy</li>
+</ul>
+<p>となります。</p>
+<p>CodeCommitも利用したら完璧でしたが、今回はGitHubでやりましたので、その手順で書きたいと思います。</p>
+<h2 id="手順">手順</h2>
+<p>今回は、GitHubで管理されている、ソースを、テスト、ビルドして、EC2上にデプロイするというものをサクッと環境構築したいと思います。</p>
+<p>先ずは、GitHubのリポジトリに適当にデプロイするソースをコミットします。（省略します。）</p>
+<p>今回はmasterブランチでやろうと思いますが、GitHubの特定のブランチを選択することができますので、選択の幅はかなり広いかなと思いました。</p>
+<p>続いて、CodePipelineの準備をしていきます。</p>
+<p>パイプラインの作成を選択することで、GUIのコンソールから作成することができました。</p>
+<p>SourceのステージでGitHub WebHookとの連携をします。（これも簡単にできます。）</p>
+<p>次にBuildステージの設定ですが、今回はCodeBuildを利用しますので、デプロイするリポジトリのルートディレクトリにbuildspac.ymlをコミットする必要があります。</p>
+<p>下記はサンプルです。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>version: 0.2</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>run-as: root</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>phases:</span></span>
+<span class="line"><span>  build:</span></span>
+<span class="line"><span>    commands:</span></span>
+<span class="line"><span>      - ここでテストやビルドのコマンドを記述してください</span></span>
+<span class="line"><span>artifacts:</span></span>
+<span class="line"><span>  files:</span></span>
+<span class="line"><span>    - '**/*'</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>ビルドグループは適宜作成。</p>
+<p>コンソールのアーティファクト(artifact)の部分でSourceステージで同期したものを選択します。</p>
+<p>私の場合は、CodeBuildで提供されているDockerのイメージを利用しましたが、自分で作成したDockerイメージでも動かすことができます。（ECRでイメージの保存をする感じになります。）</p>
+<p>このとき出力アーティファクトはS3に保存しておくと良いかと思います。</p>
+<p>最後にデプロイですが、今回はCodeDeployを利用するため、デプロイするリポジトリのルートディレクトリにappspac.ymlをコミットする必要があります。</p>
+<p>下記はサンプルです。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>version: 0.0</span></span>
+<span class="line"><span>os: linux</span></span>
+<span class="line"><span>files:</span></span>
+<span class="line"><span>  - source: /</span></span>
+<span class="line"><span>    destination: /var/src</span></span>
+<span class="line"><span>hooks:</span></span>
+<span class="line"><span>  BeforeInstall:</span></span>
+<span class="line"><span>    - location: code_deploy/before_install.sh</span></span>
+<span class="line"><span>      timeout: 300</span></span>
+<span class="line"><span>      runas: root</span></span>
+<span class="line"><span>  AfterInstall:</span></span>
+<span class="line"><span>    - location: code_deploy/after_install.sh</span></span>
+<span class="line"><span>      timeout: 300</span></span>
+<span class="line"><span>      runas: root</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span></code></pre>
+<p>上記の場合、対象のソースを/var/src配下に展開します。</p>
+<p>また、デプロイ前とデプロイ語にshellを実行することが可能なため、配置後の権限だったりを変更することが可能となっています。</p>
+<p>デプロイグループは適宜作成</p>
+<p>今回はCodePipelineからのキックとなるため、対象のソースはCodeBuildで作成した、出力アーティファクトのものを選択します。</p>
+<p>こんな感じで、AWSのサービスだけでもCI・CD環境を構築することができました。</p>
+<h2 id="最後に">最後に</h2>
+<p>今回はJenkinsやCircleCIを利用した方法ではなく、AWSのサービスのみでの構築について簡単に書いてみました。</p>
+<p>AWSだけで行うメリットは、コスト管理だと思います。</p>
+<p>他のサービスを利用すると、コスト管理が煩雑になったり、思わぬところでコストがかかったりします。</p>
+<p>また、AWSのサービスですので、連携性はかなり良いし簡単に構築できるのもメリットかなと思いました。</p>
+<p>また、CodeBuildは従量課金制なので、これも使いやすいかなと思いました。</p>
+<p>余談ですが、先日Japan IT Weekに参加してきまして、とある方が、CI・CD環境の重要性について語っていました。</p>
+<p>現在の開発はスピーディーに開発し、サイクルを早く回すことが重要となってくると思うので、CI・CDを自動化することは大切だと痛感しました。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=AWS%E3%81%A7CI%E3%83%BBCD%E7%92%B0%E5%A2%83%E3%82%92%E6%A7%8B%E7%AF%89%E3%81%97%E3%81%9F%E3%81%AF%E3%81%AA%E3%81%97&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2019%2Fci_cd_aws%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

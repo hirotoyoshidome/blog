@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Webプッシュを使ってみる</title><meta name="description" content="Webプッシュを使ってみるに関するメモ。"><!-- OGP --><meta property="og:title" content="Webプッシュを使ってみる"><meta name="og:description" content="Webプッシュを使ってみるに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Webプッシュを使ってみる"><meta name="twitter:description" content="Webプッシュを使ってみるに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Webプッシュを使ってみる</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Webプッシュを使ってみる</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2022-07-13T00:00:00.000Z"> 2022-07-13 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2022/how-to-use-web-push/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2022/07/13</li>
+</ul>
+<h2 id="webプッシュを使ってみる">Webプッシュを使ってみる</h2>
+<p>Webサービスを運営していると通知機能はとても大事になると思います。</p>
+<p>Webサービスだと、サービス内での通知やメールなどが主流でしょうか。</p>
+<p>今回はその通知方法の一つとしてWebプッシュを簡単に実装したいと思います。</p>
+<h2 id="流れ">流れ</h2>
+<ol>
+<li>serviceWorker.jsを読み込み</li>
+<li>serviceWorker.jsではPushイベントのハンドリングをしておく</li>
+<li>ユーザーがWebページにアクセス</li>
+<li>通知を許可するか聞かれるため許可する</li>
+<li>Publicキーを利用してサブスクライブ設定をする</li>
+<li>サブスクライブ設定が成功するとトークン、エンドポイントが発行される</li>
+<li>トークン、エンドポイントはサーバー側に送信する必要がある</li>
+<li>サーバー側でPush通知を行いたいタイミングでエンドポイントに向けてトークンを含めてPOSTする(暗号化の必要あり)</li>
+<li>serviceWorkerが起動している場合、PushイベントをキャッチしてPush通知を実行する。</li>
+</ol>
+<h2 id="サンプルコード">サンプルコード</h2>
+<p><a href="https://github.com/hirotoyoshidome/exp-web-push">https://github.com/hirotoyoshidome/exp-web-push</a></p>
+<h2 id="注意点ほか">注意点・ほか</h2>
+<ul>
+<li>Privateキーはサーバー側でメッセージのPOST時に利用します。</li>
+<li>Privateキーは公開してはいけません。サーバー側で保管すると良いでしょう。</li>
+<li>ブラウザのシークレットウィンドウではブラウザ通知は利用できないようです。(コンソールにエラーが表示されます。)</li>
+<li>ユーザーが通知を許可しない場合、強制的にでも通知をすることはできません。(エンドポイントやトークンが発行されません。)</li>
+<li>Chromeの場合、開発者モードのApplicationタブよりServiceWokerへメッセージをPUSHすることが可能です。これによりメッセージの検証ができます。</li>
+<li>サーバーからメッセージをPushする場合1つのテキストしか送信できませんでした。
+<ul>
+<li>Push通知にはタイトルやdataパラメータを使うとURLなどが送信可能です。</li>
+<li>そのためJSON形式で送信するのが良いと思います。</li>
+<li>Push通知で表示されたポップアップをクリックした時に画面遷移させることが可能です。</li>
+</ul>
+</li>
+</ul>
+<h2 id="最後に">最後に</h2>
+<ul>
+<li>Push通知は簡単にできるだろうと思っていましたが、想像以上に多くのステップを踏む必要がありました。</li>
+<li>しかし通知のチャネルを増やすという観点では有効な側面もあると思います。</li>
+<li>サーバー側からPushする場合、トークン等を含めて暗号化する必要があるようです。そのためライブラリを利用することをおすすめします。(Python, Node.js製などググれば出てきます。)</li>
+</ul> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Web%E3%83%97%E3%83%83%E3%82%B7%E3%83%A5%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%8B&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2022%2Fhow_to_use_web_push%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Rubyでanemoneを使用する</title><meta name="description" content="Rubyでanemoneを使用するに関するメモ。"><!-- OGP --><meta property="og:title" content="Rubyでanemoneを使用する"><meta name="og:description" content="Rubyでanemoneを使用するに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Rubyでanemoneを使用する"><meta name="twitter:description" content="Rubyでanemoneを使用するに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Rubyでanemoneを使用する</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Rubyでanemoneを使用する</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-09-04T00:00:00.000Z"> 2018-09-04 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/ruby-anemone/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/09/04</li>
+</ul>
+<h2 id="rubyでanemoneを使用する">Rubyでanemoneを使用する</h2>
+<ul>
+<li>anemoneとはRubyのライブラリでクローリングを行うフレームワークである。</li>
+<li><code>gem install anemone</code> をプロンプトより実行することで使用できる。</li>
+</ul>
+<h2 id="anemoneの使用方法">anemoneの使用方法</h2>
+<ol>
+<li>まずはrubyスクリプトよりライブラリを使用するためにrequireする。</li>
+<li>anemoneではURL(ドメインでも可能)を設定することで対象のURLよりリンクを検索し処理を行うことができる。</li>
+</ol>
+<p>簡単なサンプルコード</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>require 'anemone'</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># クローラクラス</span></span>
+<span class="line"><span># URLを返却する</span></span>
+<span class="line"><span>class Crawl</span></span>
+<span class="line"><span>	# 階層は1つまでたどる</span></span>
+<span class="line"><span>	def find_url(domain)</span></span>
+<span class="line"><span>		urls = []</span></span>
+<span class="line"><span>		Anemone.crawl(domain, :depth_limit => 1) do |anemone|</span></span>
+<span class="line"><span>			anemone.on_every_page do |page|</span></span>
+<span class="line"><span>				urls.push(page.url)</span></span>
+<span class="line"><span>			end</span></span>
+<span class="line"><span>		end</span></span>
+<span class="line"><span>		return urls</span></span>
+<span class="line"><span>	end</span></span>
+<span class="line"><span>end</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>上記のコードではドメインを引数として渡すとそのドメインより1階層のみを検索し検索結果のURLを配列にして返却するメソッドを定義している。</p>
+<h3 id="解説">解説</h3>
+<ul>
+<li>Anemone.crawlメソッドには引数としてクローリングする際のオプションを設定することができる。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">オプション</th><th align="center">用途</th></tr></thead><tbody><tr><td align="center">depth_limit</td><td align="center">検索する階層の数を設定する</td></tr><tr><td align="center">delay</td><td align="center">1つ検索するときの待ち時間を設定する</td></tr><tr><td align="center">skip_query_strings</td><td align="center">trueを設定するとクエリストリングを無視する</td></tr></tbody></table>
+<p>などが存在している。</p>
+<ul>
+<li>on_every_pageメソッドではすべての検索したページに対して処理を行うことが可能である。</li>
+<li>focus_crawlメソッドを使用すればon_every_pageメソッドで処理を行う対象のページをふるいにかけることが可能である。</li>
+<li>on_pages_linkメソッドでは正規表現でマッチしたurlにのみ処理を行う。</li>
+<li>skip_links_likeメソッドでは正規表現にマッチしたurl以外に処理を行う。</li>
+<li>ここではurlを取得しているがHTMLを取得したり(body)、Nokogiriライブラリで使用できる形式を取得したり(doc)することが標準で準備されている。</li>
+</ul>
+<p>※ 詳しくは<a href="https://github.com/sparklemotion/nokogiri">GitHub README</a>を参照すること。</p>
+<h2 id="プロキシ環境でクローリングを行う場合">プロキシ環境でクローリングを行う場合</h2>
+<p>注. <strong>私が躓いた部分です</strong></p>
+<ul>
+<li>プロキシ設定を行う場合はオプションでプロキシホストとプロキシポートを設定しなくてはいけないが設定する値がNokogiriライブラリと異なっているため躓いてしまった。</li>
+</ul>
+<p>設定値</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">オプション</th><th align="center">内容</th></tr></thead><tbody><tr><td align="center">proxy_host</td><td align="center">プロキシのホスト名のみを設定する</td></tr><tr><td align="center">proxy_port</td><td align="center">ポート番号をstringで設定する</td></tr></tbody></table>
+<p>※ ここで重要な箇所はプロキシのホスト名のみを設定する点です。</p>
+<p>Nokogiriライブラリでは <code>http://xxx.co.jp:80</code> のような感じでプロキシ設定を行うのですがAnemoneライブラリでは <code>xxx.co.jp</code> の部分しかホストには設定を行いません。</p>
+<p>ここを <code>http://</code> (プロトコル)を設定してしまうとプロキシの設定が上手くできないため躓いていました。</p>
+<p>※ ホスト名と書いてあるのにプロトコルから設定してしまうのは私だけ？？</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://github.com/sparklemotion/nokogiri">https://github.com/sparklemotion/nokogiri</a></li>
+<li><a href="https://www.amazon.co.jp/dp/4797380357/">Rubyによるクローラー開発技法 </a></li>
+</ul> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Ruby%E3%81%A7anemone%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Fruby_anemone%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

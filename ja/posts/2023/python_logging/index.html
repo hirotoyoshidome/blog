@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pythonのロギングでハマった話</title><meta name="description" content="Pythonのロギングでハマった話に関するメモ。"><!-- OGP --><meta property="og:title" content="Pythonのロギングでハマった話"><meta name="og:description" content="Pythonのロギングでハマった話に関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Pythonのロギングでハマった話"><meta name="twitter:description" content="Pythonのロギングでハマった話に関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Pythonのロギングでハマった話</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Pythonのロギングでハマった話</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-08-11T00:00:00.000Z"> 2023-08-11 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2023/python-logging/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2023/08/11</li>
+</ul>
+<h1 id="pythonのロギングでハマった話">Pythonのロギングでハマった話</h1>
+<p>こんにちは。</p>
+<p>今回は最近Pythonのロギングでハマったのでその内容を書きたいと思います。</p>
+<p>Webサービスを運用する上で何かしらのログは、ほぼ100%取っていると思います。</p>
+<p>ログを蓄積させていく中で開発する側として考えるべきポイントは多くありますが、その中でもログの出力先は大切です。</p>
+<p>今回はログの出力先でハマった話を書きます。</p>
+<h2 id="前提">前提</h2>
+<p>今回のケースでは、コンテナ環境で動いているWebアプリケーションを想定しています。</p>
+<p>Dockerを利用している場合、コンテナ内で動作しているアプリケーションのログは標準出力を使うことが多いと思います。</p>
+<p>これは、Dockerが標準出力をログとして認識してくれるため、例えば <code>docker logs</code> コマンドを使ってログを参照することができます。</p>
+<p>また、Webアプリケーションなので、リクエストのログを取得しています。</p>
+<p>リクエストのログなどは自分で取得するものやフォーマットを決めることもできますが、便利なライブラリを使うことも多いと思います。</p>
+<p>今回のケースでもいい感じにログ出力してくれるライブラリを利用しています。</p>
+<p>また、ログの出力単位を変えたいこともあります。</p>
+<p>例えば特定のケースでは標準出力ではなく、ログファイルとして出力したいケースなどが考えられるでしょう。</p>
+<p>今回も特定のケースでログをファイル出力する処理がありました。</p>
+<h2 id="事象">事象</h2>
+<p>事象としては標準出力して欲しいログが全てファイルに出力されており、標準出力されていないという事象が発生しました。</p>
+<p>Pythonの標準ライブラリのロギングで標準出力させたい場合は</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>import logging</span></span>
+<span class="line"><span>import sys</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>logging.basicConfig(stream=sys.stdout, level=logging.INFO)</span></span>
+<span class="line"><span>logger = logging.getLogger(__name__)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>logger.info("abc")</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>のような形でログの出力ができます。</p>
+<p>ファイル出力させたい場合は、</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>import logging</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>logging.basicConfig(filename="/var/log/xxx/xxx.log", filemode="a", format="%(message)s", level=logging.INFO)</span></span>
+<span class="line"><span>logger = logging.getLogger(__name__)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>logger.info("abc")</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>のようにするとファイルにログを出力することができます。</p>
+<p>しかし、これがハマったポイントでした。</p>
+<h2 id="原因">原因</h2>
+<p>logging.basicConfig は名前から察する通り、共通の設定です。</p>
+<p>そのため、ロギングの種類が複数ある場合に使ってしまったため、一方のログ出力が意図しない形で出力されてしまっていました。</p>
+<p>調査していく過程で、loggerの設定箇所で設定し直すということもできません。</p>
+<p>できない例</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>import logging</span></span>
+<span class="line"><span>import sys</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>logging.basicConfig(stream=sys.stdout, level=logging.INFO)</span></span>
+<span class="line"><span>stdout_logger = logging.getLogger("stdout-logger")</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>logging.basicConfig(filename="/var/log/xxx/xxx.log", filemode="a", format="%(message)s", level=logging.INFO)</span></span>
+<span class="line"><span>file_logger = logging.getLogger("file-logger")</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>また、使っているライブラリ でも内部的にbasicConfigの設定内容が採用されるようでさらに混乱をきたしました。
+(ライブラリの設定で標準出力にしているのにファイル出力される！)</p>
+<h2 id="解決方法">解決方法</h2>
+<p>logging.basicConfigを使わないで出力先を設定する方法に書き直すことで解決しました。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>import logging</span></span>
+<span class="line"><span>import sys</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># 標準出力用ロガー</span></span>
+<span class="line"><span>handler = logging.StreamHandler(sys.stdout)</span></span>
+<span class="line"><span>formatter = logging.Formatter("%(message)s")</span></span>
+<span class="line"><span>handler.setFormatter(formatter)</span></span>
+<span class="line"><span>stdout_logger = logging.getLogger("stdout-logger")</span></span>
+<span class="line"><span>stdout_logger.setLevel(logging.INFO)</span></span>
+<span class="line"><span>stdout_logger.addHandler(handler)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># ファイル出力用ロガー</span></span>
+<span class="line"><span>handler = logging.FileHandler("/var/log/xxx/xxx.log", mode="a")</span></span>
+<span class="line"><span>formatter = logging.Formatter("%(message)s")</span></span>
+<span class="line"><span>handler.setFormatter(formatter)</span></span>
+<span class="line"><span>file_logger = logging.getLogger("file-logger")</span></span>
+<span class="line"><span>file_logger.setLevel(logging.INFO)</span></span>
+<span class="line"><span>file_logger.addHandler(handler)</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="最後に">最後に</h2>
+<p>今回は最近ハマってしまったPythonのログ出力について書きました。</p>
+<p>ネットで検索するとbasicConfigで設定する方法がたくさんヒットするため、もしかしたらbasicConfigを使っても複数の設定ができる方法があるのかも知れませんが、見つけられませんでした。</p>
+<p>とは言え、ロガーの設定は最初のみのため、あえてbasicConfigを使って設定する必要もないのかなとも思います。</p>
+<p>こういうバグは原因の特定に時間がかかりますね。。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Python%E3%81%AE%E3%83%AD%E3%82%AE%E3%83%B3%E3%82%B0%E3%81%A7%E3%83%8F%E3%83%9E%E3%81%A3%E3%81%9F%E8%A9%B1&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2023%2Fpython_logging%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

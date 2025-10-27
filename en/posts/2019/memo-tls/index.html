@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>TLS Basics</title><meta name="description" content="Why services drop TLS 1.0/1.1, how to test connections, and tips for enforcing newer versions."><!-- OGP --><meta property="og:title" content="TLS Basics"><meta name="og:description" content="Why services drop TLS 1.0/1.1, how to test connections, and tips for enforcing newer versions."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="TLS Basics"><meta name="twitter:description" content="Why services drop TLS 1.0/1.1, how to test connections, and tips for enforcing newer versions."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">TLS Basics</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">TLS Basics</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-01-03T00:00:00.000Z"> 2019-01-03 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2019/memo_tls/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2019/01/03
+I updated some servers after Bitbucket announced it would only support TLS 1.2 in December 2019. Here is a quick refresher.</li>
+</ul>
+<h2 id="ssl-recap">SSL recap</h2>
+<p>SSL (Secure Socket Layer) is the protocol that made encrypted communication possible. When HTTPS became mainstream, SSL allowed browsers to connect securely.</p>
+<h2 id="tls">TLS</h2>
+<p>TLS (Transport Layer Security) is the successor to SSL. It incorporates fixes for known attacks and is more secure overall.</p>
+<h2 id="why-bitbucket-dropped-tls-1011">Why Bitbucket dropped TLS 1.0/1.1</h2>
+<p>Older TLS versions have known vulnerabilities, so providers like GitHub (as of Feb 2018) and Bitbucket refuse connections that negotiate anything below 1.2. They cannot guarantee security otherwise.</p>
+<h2 id="restricting-tls-versions-on-your-site">Restricting TLS versions on your site</h2>
+<p>You can configure your own site (e.g., Apache) to only accept modern TLS versions, but beware: very old clients will no longer connect. See <a href="https://weblabo.oscasierra.net/apache-httpd-sslprotocol/">https://weblabo.oscasierra.net/apache-httpd-sslprotocol/</a> for Apache settings.</p>
+<h2 id="testing-with-openssl-or-curl">Testing with OpenSSL or curl</h2>
+<p>Specify the TLS version explicitly:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>openssl s_client -connect yourdomain:443 -tls1_2</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>If <code>Cipher</code> is nonzero, the handshake succeeded. Change the suffix (e.g., <code>-tls1_1</code>) to see how domains like GitHub reject older versions.</p>
+<p>Using curl:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>curl -s -v --tlsv1.2 https://yourdomain > /dev/null</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Adjust the flag to test other versions.</p>
+<h2 id="updating-openssl">Updating OpenSSL</h2>
+<p>On older servers (CentOS 5, etc.) the bundled OpenSSL may not support these flags. Upgrade OpenSSL if needed (<a href="https://k-sugi.sakura.ne.jp/it_synthesis/linux/4370/">https://k-sugi.sakura.ne.jp/it_synthesis/linux/4370/</a>).</p>
+<h2 id="closing">Closing</h2>
+<p>Even if you do not do infra daily, it is worth knowing what TLS is. Give it a look while you have the chance.</p>
+<h3 id="reference">Reference</h3>
+<ul>
+<li><a href="https://ssl.sakura.ad.jp/column/ssl_tls/">https://ssl.sakura.ad.jp/column/ssl_tls/</a></li>
+</ul> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=TLS%20Basics&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2019%2Fmemo-tls%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

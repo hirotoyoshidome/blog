@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Setting Up Docker on Windows 10</title><meta name="description" content="Notes on installing Docker for Windows and running your first containers."><!-- OGP --><meta property="og:title" content="Setting Up Docker on Windows 10"><meta name="og:description" content="Notes on installing Docker for Windows and running your first containers."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Setting Up Docker on Windows 10"><meta name="twitter:description" content="Notes on installing Docker for Windows and running your first containers."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Setting Up Docker on Windows 10</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Setting Up Docker on Windows 10</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-09-10T00:00:00.000Z"> 2018-09-10 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2018/entry_docker_windows/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2018/09/10</li>
+</ul>
+<h2 id="environment">Environment</h2>
+<p>Windows 10 Pro 64-bit + Docker for Windows.</p>
+<h2 id="installation-steps">Installation steps</h2>
+<ul>
+<li>Open Control Panel → Programs and Features → Turn Windows features on or off, and enable Hyper-V.
+<ul>
+<li>Windows prompts for a reboot—go ahead and restart.</li>
+</ul>
+</li>
+<li>Download Docker for Windows from <a href="https://docs.docker.com/docker-for-windows/release-notes/">the release notes page</a> and install it.</li>
+<li>After installation, run <code>docker version</code> in Command Prompt. If version info prints, everything is set.</li>
+</ul>
+<h2 id="using-docker">Using Docker</h2>
+<ul>
+<li>Run <code>docker run hello-world</code> to create your first container. Seeing “Hello from Docker!” means the container was created locally.</li>
+<li>Next run <code>docker run -it ubuntu bash</code> and make sure you drop into a bash shell (you can try commands there). Type <code>exit</code> to leave.</li>
+<li>Pull an image from <a href="https://hub.docker.com/explore/">Docker Hub</a>. Here we will grab nginx:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>docker pull nginx</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>List images with:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>docker images</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Start nginx with <code>docker run -d -p 80:80 --name mynginx nginx</code>.</li>
+<li>Visit <a href="http://localhost:80/">http://localhost:80/</a> and confirm the server is up—you should see “Welcome to nginx!”.</li>
+</ul>
+<h3 id="tips">Tips</h3>
+<ul>
+<li><code>docker ps</code> shows running containers, and <code>docker ps -a</code> lists all containers.</li>
+<li>Stop the server with <code>docker stop mynginx</code>, then hit <a href="http://localhost:80/">http://localhost:80/</a> again to confirm it is down.</li>
+</ul> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Setting%20Up%20Docker%20on%20Windows%2010&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2018%2Fentry-docker-windows%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Shell Script Notes for Beginners</title><meta name="description" content="How I set up a CentOS VM and practiced basic shell scripting."><!-- OGP --><meta property="og:title" content="Shell Script Notes for Beginners"><meta name="og:description" content="How I set up a CentOS VM and practiced basic shell scripting."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Shell Script Notes for Beginners"><meta name="twitter:description" content="How I set up a CentOS VM and practiced basic shell scripting."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Shell Script Notes for Beginners</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Shell Script Notes for Beginners</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-10-06T00:00:00.000Z"> 2018-10-06 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2018/entry_shell/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2018/10/06</li>
+</ul>
+<h2 id="getting-started-with-shell-scripts">Getting started with shell scripts</h2>
+<p>I expect to write more shell soon, so I decided to learn the basics even as a beginner.</p>
+<h2 id="build-the-environment">Build the environment</h2>
+<ul>
+<li>CentOS 7</li>
+<li>Vagrant</li>
+<li>VirtualBox</li>
+</ul>
+<p>Steps:</p>
+<ol>
+<li>Install Vagrant and VirtualBox.</li>
+<li>Grab the CentOS 7 box script from <a href="https://app.vagrantup.com/centos/boxes/7">here</a>.</li>
+<li>Run the commands:</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>vagrant init centos/7</span></span>
+<span class="line"><span>vagrant up</span></span>
+<span class="line"><span>vagrant ssh</span></span>
+<span class="line"><span></span></span></code></pre>
+<ol start="4">
+<li>Confirm you can SSH into CentOS (if prompted for credentials, use <code>vagrant</code> / <code>vagrant</code>).</li>
+</ol>
+<h2 id="write-and-run-a-shell-script">Write and run a shell script</h2>
+<ol>
+<li>Create a file:</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>touch hello.sh</span></span>
+<span class="line"><span></span></span></code></pre>
+<ol start="2">
+<li>Edit it:</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>vi ./hello.sh</span></span>
+<span class="line"><span></span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>#!/bin/sh</span></span>
+<span class="line"><span>echo "helloworld"</span></span>
+<span class="line"><span></span></span></code></pre>
+<ol start="3">
+<li>Run it. Three options:</li>
+</ol>
+<ul>
+<li><code>sh hello.sh</code></li>
+<li><code>bash hello.sh</code></li>
+<li>Make it executable:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo chmod 755 ./hello.sh</span></span>
+<span class="line"><span>./hello.sh</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="basic-operations-omitting-binsh">Basic operations (omitting <code>#!/bin/sh</code>)</h2>
+<ul>
+<li>Output:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>echo text-to-print</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Read input:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>read</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Arithmetic:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>expr 2 \+ 2</span></span>
+<span class="line"><span>expr 2 \- 2</span></span>
+<span class="line"><span>expr 2 \* 2</span></span>
+<span class="line"><span>expr 2 \/ 2</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Assign variables:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>a=1</span></span>
+<span class="line"><span>b=2</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Capture command results with backticks (note the spaces):</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>r=`expr $a \+ $b`</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Print variables:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>echo $r</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li><code>if</code> statements:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>if [ $res -eq $zero ]; then</span></span>
+<span class="line"><span>  echo "Even"</span></span>
+<span class="line"><span>else</span></span>
+<span class="line"><span>  echo "Odd"</span></span>
+<span class="line"><span>fi</span></span>
+<span class="line"><span># String comparison uses =</span></span>
+<span class="line"><span>if [ "ABC" = "ABC" ]; then</span></span>
+<span class="line"><span>  echo "equal"</span></span>
+<span class="line"><span>else</span></span>
+<span class="line"><span>  echo "not equal"</span></span>
+<span class="line"><span>fi</span></span>
+<span class="line"><span></span></span></code></pre>
+<p><code>-eq</code> compares numbers.</p>
+<ul>
+<li><code>case</code> (switch):</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>var="red"</span></span>
+<span class="line"><span>case "$var" in</span></span>
+<span class="line"><span>  "blue" ) echo "blue" ;;</span></span>
+<span class="line"><span>  "green" ) echo "green" ;;</span></span>
+<span class="line"><span>  "red" ) echo "red" ;;</span></span>
+<span class="line"><span>esac</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li><code>while</code> loop (<code>-lt</code> == <code>&#x3C;</code>):</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>int=0</span></span>
+<span class="line"><span>while [ $int -lt 5 ]; do</span></span>
+<span class="line"><span>  echo $int</span></span>
+<span class="line"><span>  int=`expr $int \+ 1`</span></span>
+<span class="line"><span>done</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li><code>until</code> loop (<code>-gt</code> == <code>></code>):</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>until [ ! \( $int -gt 0 \) ]; do</span></span>
+<span class="line"><span>  echo $int</span></span>
+<span class="line"><span>  int=`expr $int \- 1`</span></span>
+<span class="line"><span>done</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li><code>for</code> loop:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>for var in 10 11 12 ; do</span></span>
+<span class="line"><span>  echo $var</span></span>
+<span class="line"><span>done</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Function:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>MyFunction () {</span></span>
+<span class="line"><span>  echo "Function executed"</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span>MyFunction</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Function with arguments:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>add () {</span></span>
+<span class="line"><span>  echo `expr $1 \+ $2`</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span>add 1 3</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="closing-thoughts">Closing thoughts</h2>
+<p>Shell scripting is unavoidable, so I am studying it early in my career. I stumbled over missing spaces and the CRLF line endings that Windows editors insert—Linux expects LF, so watch out!</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Shell%20Script%20Notes%20for%20Beginners&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2018%2Fentry-shell%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

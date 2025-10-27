@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Java 8 Stream API Sample</title><meta name="description" content="Example code that reads and writes files with the Java 8 Stream API."><!-- OGP --><meta property="og:title" content="Java 8 Stream API Sample"><meta name="og:description" content="Example code that reads and writes files with the Java 8 Stream API."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Java 8 Stream API Sample"><meta name="twitter:description" content="Example code that reads and writes files with the Java 8 Stream API."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Java 8 Stream API Sample</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Java 8 Stream API Sample</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-03-30T00:00:00.000Z"> 2018-03-30 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2018/java8_stream_api/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2018/03/30</li>
+</ul>
+<h2 id="sample-code">Sample code</h2>
+<p>I tried reading and writing files with the Stream API that shipped with Java 8.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>import java.io.IOException;</span></span>
+<span class="line"><span>import java.nio.charset.StandardCharsets;</span></span>
+<span class="line"><span>import java.nio.file.FileSystem;</span></span>
+<span class="line"><span>import java.nio.file.FileSystems;</span></span>
+<span class="line"><span>import java.nio.file.Files;</span></span>
+<span class="line"><span>import java.nio.file.Path;</span></span>
+<span class="line"><span>import java.nio.file.StandardOpenOption;</span></span>
+<span class="line"><span>import java.util.ArrayList;</span></span>
+<span class="line"><span>import java.util.List;</span></span>
+<span class="line"><span>import java.util.stream.Stream;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>/**</span></span>
+<span class="line"><span> * Stream sample</span></span>
+<span class="line"><span> * The character set is fixed to UTF-8 (Shift_JIS cannot be used).</span></span>
+<span class="line"><span> */</span></span>
+<span class="line"><span>public class SampleStream {</span></span>
+<span class="line"><span>	/** Read path */</span></span>
+<span class="line"><span>	private static final String INPUT_PATH = "C:\\temp\\in.txt";</span></span>
+<span class="line"><span>	/** Write path */</span></span>
+<span class="line"><span>	private static final String OUTPUT_PATH = "C:\\temp\\out.txt";</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>	public static void main(String[] args) throws Exception {</span></span>
+<span class="line"><span>		// Obtain the FileSystem</span></span>
+<span class="line"><span>		FileSystem fs = FileSystems.getDefault();</span></span>
+<span class="line"><span>		// Path to the source file</span></span>
+<span class="line"><span>		Path path = fs.getPath(INPUT_PATH);</span></span>
+<span class="line"><span>		// Path to the output file</span></span>
+<span class="line"><span>		Path out = fs.getPath(OUTPUT_PATH);</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>		// Read pattern #1: use Files.lines</span></span>
+<span class="line"><span>		try (Stream&#x3C;String> stream = Files.lines(path, StandardCharsets.UTF_8)) {</span></span>
+<span class="line"><span>			stream.filter(s -> s.contains("link"))</span></span>
+<span class="line"><span>					.map(s -> s.replace("html", "form"))</span></span>
+<span class="line"><span>					.map(s -> s.replace("action", "href"))</span></span>
+<span class="line"><span>					.forEach(System.out::println);</span></span>
+<span class="line"><span>		} catch (IOException e) {</span></span>
+<span class="line"><span>			System.out.println("error");</span></span>
+<span class="line"><span>		}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>		// Read pattern #2: use Files.readAllLines</span></span>
+<span class="line"><span>		List&#x3C;String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);</span></span>
+<span class="line"><span>		List&#x3C;String> output = new ArrayList&#x3C;String>();</span></span>
+<span class="line"><span>		lines.stream().filter(s -> s.contains("link")).forEach(output::add);</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>		// Write the extracted data to a text file</span></span>
+<span class="line"><span>		Files.write(out, output, StandardCharsets.UTF_8, StandardOpenOption.APPEND);</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>		// Print the output to verify it</span></span>
+<span class="line"><span>		for (String put : output) {</span></span>
+<span class="line"><span>			System.out.println(put);</span></span>
+<span class="line"><span>		}</span></span>
+<span class="line"><span>	}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Apparently UTF-8 is the only supported encoding; trying Shift_JIS throws an exception.</li>
+</ul> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Java%208%20Stream%20API%20Sample&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2018%2Fjava8-stream-api%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

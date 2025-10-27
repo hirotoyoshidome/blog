@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Elasticsearchのパフォーマンスについて考える</title><meta name="description" content="Elasticsearchのパフォーマンスについて考えるに関するメモ。"><!-- OGP --><meta property="og:title" content="Elasticsearchのパフォーマンスについて考える"><meta name="og:description" content="Elasticsearchのパフォーマンスについて考えるに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Elasticsearchのパフォーマンスについて考える"><meta name="twitter:description" content="Elasticsearchのパフォーマンスについて考えるに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Elasticsearchのパフォーマンスについて考える</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Elasticsearchのパフォーマンスについて考える</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-01-14T00:00:00.000Z"> 2023-01-14 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2023/performance-elasticsearch/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2023/01/14</li>
+</ul>
+<h2 id="elasticsearchのパフォーマンスについて考える">Elasticsearchのパフォーマンスについて考える</h2>
+<h3 id="はじめに">はじめに</h3>
+<p>こんにちは。</p>
+<p>今回はElasticsearchのパフォーマンスについて考えたいと思います。</p>
+<p>Elasticserarchはオープンソースの全文検索エンジンです。
+<a href="https://github.com/elastic/elasticsearch">https://github.com/elastic/elasticsearch</a></p>
+<p>Webサービスでは、何かしらの検索機能があるケースが多いと思います。</p>
+<p>ECサイトにしてもSNSにしてもDBに接続しデータを扱う以上、Webサービスと検索は親密な関係にあると考えています。</p>
+<p>それほどデータ数も多くなく、検索の条件も複雑ではない場合SQLを使って検索機能を作ることが一般的でこれはよくあるパターンだと思います。</p>
+<p>しかし、例えばECサイトの場合、商品の説明や商品のカテゴリ、商品の値段などなど。検索対象のデータというのはどんどん増えていきます。
+現在では、クライアント側のマシンスペックの向上（PCやスマホ）やネットワーク速度の向上、クラウドの普及による大規模なデータ管理などにより、扱えるデータは益々増えていると感じています。</p>
+<p>そのため、<strong>通常のSQLではやりたいことができない、もしくはやりたいことパフォーマンスがでない</strong>というケースが出てきます。</p>
+<p>そこで、Elasticsearchのような検索に特化したものが必要になるということだと思います。</p>
+<p>僕自身もElasticsearchを使う機会があり、Elasticsearchを使う上でのパフォーマンスについて考えることがあったのでそのことについて書きたいと思います。</p>
+<h3 id="大まかな流れ">大まかな流れ</h3>
+<p>ElasticsearchではRDBと同様にElasticsearch自体にINDEXという形で、データ構造の定義と実際のデータを投入をする必要があります。</p>
+<p>詳しい流れはここでは省きますが、簡単に試せるようにDockerを使った環境を作成しました。↓
+<a href="https://github.com/hirotoyoshidome/elasticsearch-query-etc">https://github.com/hirotoyoshidome/elasticsearch-query-etc</a></p>
+<p>INDEXとデータを投入したら検索ができるようになります。</p>
+<p>直接コマンドラインからcurlでクエリを実行することもできますし、「<strong>Kibana</strong>」というElasticsearchを開発しているelastic社が出しているGUIのツールもあるので、GUIからクエリを実行することも可能です。
+<a href="https://github.com/elastic/kibana">https://github.com/elastic/kibana</a></p>
+<p>クエリの結果はJSON形式で受け取ることができるので、Webサービスにも組み込みやすいと思います。</p>
+<p>また、プログラムからElasticsearchに接続する場合は、各メジャーな言語のクライアントライブラリも充実しているため、そちらを使うのが良いと思います。
+<a href="https://www.elastic.co/guide/en/elasticsearch/client/index.html">https://www.elastic.co/guide/en/elasticsearch/client/index.html</a></p>
+<h3 id="実際にハマったパフォーマンスについて">実際にハマったパフォーマンスについて</h3>
+<p><strong>１．INDEXを深いネスト構造に設計してしまう</strong></p>
+<p>これはネットでも検索するとよくヒットする事例です。</p>
+<p>Elasticsearchでは、データ構造をネストする形で保持することが可能です。</p>
+<p>関係としては親子になるようなデータの場合、↓のようにネストした形でデータを保持させたいケースがあると思います。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>{</span></span>
+<span class="line"><span>    "store_id": 1,</span></span>
+<span class="line"><span>    "store_name": "sample",</span></span>
+<span class="line"><span>    "employee": [</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            "name": "Mike",</span></span>
+<span class="line"><span>            "age": 30</span></span>
+<span class="line"><span>        },</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            "name": "John",</span></span>
+<span class="line"><span>            "age": 25</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    ],</span></span>
+<span class="line"><span>    "location": {</span></span>
+<span class="line"><span>        "prefecture": "Tokyo",</span></span>
+<span class="line"><span>        "city": "Minato-ku"</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>このネストが深くなっていくと検索パフォーマンスが低下します。</p>
+<p>データ数が少ない時はそれほどパフォーマンスの劣化を感じなくても増えてくると顕著に劣化します。</p>
+<p>そのためネストは深くならないように注意した方が良いです。（データ構造の変更は大変なので最初に知っておく方が良いですね。。）</p>
+<p>ちなみに検索にヒットした子要素をinner_hitsというクエリを使って取得することが可能です。
+このinner_hitsもデータ数が増えるとパフォーマンスが劣化してくるので調整が必要な部分だと思います。</p>
+<p><strong>２．条件を絞り込みせずにaggregationsしてしまう</strong></p>
+<p>これはSQLでも同じことが言えますね。</p>
+<p><code>aggregations</code> はデータを集約する時のクエリです。</p>
+<p>SQLだと <code>GROUP BY</code> に相当します。</p>
+<p>SQでも同様ですが、集約する前にデータを絞り込みしておく方がパフォーマンスが良くなります。</p>
+<p>Elasticsearchではaggregationsを使ったあとに絞り込みをすることができますが、こちらはパフォーマンスが良くないです。（SQLだと <code>HAVING</code> にあたる操作）</p>
+<p>そのため、可能な限り先に条件を絞り込みしておいて、aggregationsで集約するという方がパフォーマンスが向上します。</p>
+<p>(SQLで例えるならばWHEREで絞りこみをした上でGROUP BYするという意味です。)</p>
+<p><strong>３．scriptを用いたソートでパラメータをscript作成タイミングで動的に作成してしまう</strong></p>
+<p>ElasticsearchではINDEXのデータ構造で定義したフィールドの昇順、降順でソートをすることが可能です。</p>
+<p>しかし、実際に利用してみるともっと複雑な条件でソートしたいときってあると思います。</p>
+<p>その時に利用できるのがscriptという構文です。</p>
+<p>scriptを使うと <code>Painless</code> というJavaのような言語でプログラムを書くことができます。</p>
+<p>Painless で扱えるデータはINDEXの中にあるデータとは別にパラメータとしてデータを渡すことが可能です。</p>
+<p>このPainlessは実際に使われる時にコンパイルされますが、この時パラメータをPainlessの中に直接埋め込んでしまうと当然scriptの中身自体が変わるため再度コンパイルが行われます。</p>
+<p>再度コンパイルが行われるとパフォーマンスが悪くなります。</p>
+<p>また、一定時間内のコンパイル回数は制限がありますので現実的ではありません。（緩和することは可能です。）</p>
+<p>そのため、scriptにパラメータを渡す場合はしっかりとparamの要素を指定して値を渡す必要があります。</p>
+<p>param要素を指定してパラメータを渡すことでscriptの中身自体は変更されていないため再度コンパイルが走ることはなくなります。</p>
+<h3 id="最後に">最後に</h3>
+<p>簡単ではありますが、実際にElasticsearchを触っていてパフォーマンス関連でハマった部分について書いてみました。</p>
+<p>Elasticsearchは非常に一般的な全文検索エンジンであり、ドキュメンタリも充実しています。</p>
+<p>そのため、触る際はまずドキュメントの中身をしっかり把握してから実装していくのが大切だと実感しています。</p>
+<p>今回は触れていませんが、同義語辞書を使った検索ワードの揺れに対応することもできます。（これはいつか書きたい。）</p>
+<p>例えば、「ジーパン」「デニム」「ジーンズ」のような同じ意味だけど言葉が違うケースに対応するのはSQLだと困難です。
+このようなケースに対して辞書を準備することでElasticsearchでは簡単に同義語としてヒットさせることが可能になります。</p>
+<p>僕自身もまだまだElasticsearchについて知らないことが多く、勉強が必要だと感じていますが、今回の記事が役に立てば幸いです。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Elasticsearch%E3%81%AE%E3%83%91%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%B3%E3%82%B9%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%80%83%E3%81%88%E3%82%8B&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2023%2Fperformance_elasticsearch%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

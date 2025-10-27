@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>TCP/IPとは</title><meta name="description" content="TCP/IPとはに関するメモ。"><!-- OGP --><meta property="og:title" content="TCP/IPとは"><meta name="og:description" content="TCP/IPとはに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="TCP/IPとは"><meta name="twitter:description" content="TCP/IPとはに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">TCP/IPとは</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">TCP/IPとは</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-08-30T00:00:00.000Z"> 2018-08-30 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/memo-tcp-ip/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/08/30</li>
+</ul>
+<h2 id="tcpipとは">TCP/IPとは</h2>
+<ul>
+<li>通信プロトコルの総称</li>
+<li>デファクトスタンダードである。</li>
+<li>プロトコルはコンピュータがネットワークを介して通信するための現在のようなもの(約束事)</li>
+</ul>
+<h2 id="osi参照モデル">OSI参照モデル</h2>
+<ul>
+<li>
+<p>OSI参照モデルは7つの層を規定していてそれぞれがモジュールの様に干渉しない。</p>
+</li>
+<li>
+<p><strong>アプリケーション層</strong></p>
+</li>
+<li>
+<p><strong>プレゼンテーション層</strong></p>
+</li>
+<li>
+<p><strong>セッション層</strong></p>
+</li>
+<li>
+<p><strong>トランスポート層</strong></p>
+</li>
+<li>
+<p><strong>ネットワーク層</strong></p>
+</li>
+<li>
+<p><strong>データリンク層</strong></p>
+</li>
+<li>
+<p><strong>物理層</strong></p>
+</li>
+</ul>
+<p>に分けられる。</p>
+<p>※ <strong>TCP/IP</strong>のモデルでは</p>
+<ul>
+<li>アプリケーション層 → OSI参照モデルのセッション層までを担う</li>
+<li>トランスポート層</li>
+<li>インターネット層 → ネットワーク層に相当</li>
+<li>リンク層 → データリンク層と物理層に相当</li>
+</ul>
+<p>に分けられることに注意。</p>
+<h2 id="tcptransmissioncontrolprotocol">TCP(TransmissionControlProtocol)</h2>
+<ul>
+<li>TCPはOSI参照モデルに当てはめるとトランスポートポート層に当てはまる</li>
+<li>TCPはコネクション型で両端のホストでのデータの配送を保証する。</li>
+<li>UDP(UserDatagramProtocol)はTCPの様に通信の保証を行わない。
+(コネクションレス型)</li>
+</ul>
+<h2 id="ipinternetprotocol">IP(InternetProtocol)</h2>
+<ul>
+<li>IPはOSI参照モデルに当てはめるとネットワーク層に当てはまる</li>
+<li>IPはネットワークをまたいでパケットを送信するためのプロトコル</li>
+</ul>
+<h2 id="最低限覚えておくプロトコル">最低限覚えておくプロトコル</h2>
+<ul>
+<li>SSH(SecureSHell) → アプリケーション層</li>
+<li>HTML(HyperTextMarkupLanguage)</li>
+<li>HTTP(HyperTextTransferProtocol) → セッション層</li>
+<li>FTP(FileTransferProtocol) → セッション層</li>
+<li>SMTP(SimpleMailTransferProtocol) → セッション層</li>
+<li>POP3(PostOfficceProtocol ver3) → セッション層</li>
+<li>IMAP(InternetMessageAccessProtocol) → セッション層</li>
+<li>TCP, UDP → トランスポート層</li>
+<li>SSL(SecureSocketsLayer) → トランスポート層</li>
+<li>IP → ネットワーク層</li>
+<li>イーサネット → データリンク層</li>
+<li>ARP(AddressResolutionProtocol) → データリンク層</li>
+</ul>
+<p>HTMLもプロトコルと言えるんですね。</p>
+<h2 id="最後に">最後に</h2>
+<p>インフラやアーキテクチャを考えるときに知ってると知らないのでは考える選択肢が広がると思います。</p>
+<h2 id="参照">参照</h2>
+<ul>
+<li><a href="https://www.amazon.co.jp/dp/4274068765">マスタリングTCP/IP 入門編</a>
+<ul>
+<li>登竜門的なベストセラーです。</li>
+</ul>
+</li>
+</ul> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=TCP%2FIP%E3%81%A8%E3%81%AF&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Fmemo_tcp_ip%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

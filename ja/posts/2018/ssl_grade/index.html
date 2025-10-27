@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WebサイトのSSL化(HTTPS)の3つのグレード</title><meta name="description" content="WebサイトのSSL化(HTTPS)の3つのグレードに関するメモ。"><!-- OGP --><meta property="og:title" content="WebサイトのSSL化(HTTPS)の3つのグレード"><meta name="og:description" content="WebサイトのSSL化(HTTPS)の3つのグレードに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="WebサイトのSSL化(HTTPS)の3つのグレード"><meta name="twitter:description" content="WebサイトのSSL化(HTTPS)の3つのグレードに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">WebサイトのSSL化(HTTPS)の3つのグレード</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">WebサイトのSSL化(HTTPS)の3つのグレード</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-12-30T00:00:00.000Z"> 2018-12-30 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/ssl-grade/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/12/30</li>
+</ul>
+<h1 id="webサイトのssl化httpsの3つのグレード">WebサイトのSSL化(HTTPS)の3つのグレード</h1>
+<p>SSLの認証とは認証機関にWebサイトの認証をしてもらうことでurlを <code>http://ドメイン</code> の形式から <code>https://ドメイン</code> の形式にすることができます。</p>
+<p>httpsプロトコルで通信を行うことでよりセキュアなサービスを展開することができるため個人レベルのWebサービスでもSSL化をしている人は多いと思います。</p>
+<p>現在はTVやインターネットでも安全なサイトの見分け方でurlを確認してhttpsのものを選ぶとかやっていたりするのでこの辺はやっておきたいところですね。。(ちなみに結構簡単にhttpsにすることはできてしまう)</p>
+<p><strong>※httpsは既に当たり前になっているのでhttpsだから安心というわけでは無いので注意です。</strong></p>
+<p>ちなみにHerokuでWebサービスを運用するときデフォルトでhttpsのurlがもらえていると思います。</p>
+<p><strong>AWSでのWebサービス運用でもACMの設定をすることでSSL化をすることが可能です。</strong></p>
+<p>さて、SSLには3つの段階(レベル)があることを知っているでしょうか？？
+今回は3種類のSSL化について記載していきます。</p>
+<p><strong>これから先の時代httpsから始まらないurlは危険なURLとみなされてしまうこととなることが予想されますのでしっかり勉強をしておきましょう！！</strong></p>
+<h2 id="ドメイン認証型dv">ドメイン認証型(DV)</h2>
+<p>こちらは一番簡単でグレードの低いSSL化になります。</p>
+<p>ドメイン認証は人の手を介さない認証となりますのでSSL化の中でも安全性は低いものとなっております。</p>
+<p>一般的に認証機関に料金を支払うことでほぼどんなサイトでもSSL化することが可能です。</p>
+<p>Chromeで確認するとhttps通信になっているサイトのことです。</p>
+<p>ちなみにhttpプロトコルで通信を行っているサイトはChromeで保護されていない通信の様なメッセージが出力されるようになっております。</p>
+<p>AWSのACMで設定できるSSL化はこのタイプになります。</p>
+<p>SSL化していないよりはましなためこの認証をするようにしましょう！！</p>
+<h2 id="企業認証型ov">企業認証型(OV)</h2>
+<p>こちらはドメイン認証と違い人間の審査が入ります。SSL証明書を発行する際に組織情報の審査が入り、問題ないことが確認されてから証明書が発行されるためドメイン認証よりもセキュアなSSL化です。</p>
+<p>ドメイン認証よりも工数がかかるため、一般に料金は少しお高めです。</p>
+<p>Chromeで確認したときはドメイン認証となんら違いはありません(確か、現在は変わっているかも？？)</p>
+<p>企業のサイトやクライアントが使用するようなサイトに関してはこのへんをしっかりやっておきたいところではありますね！！</p>
+<h2 id="ev認証">EV認証</h2>
+<p>最後にこちらですが先述した2つのSSL化よりもセキュアな認証となっております。こちらも審査があります。そして実在認証も行うためなりすまし防止などの担保も行っているSSL化となります。</p>
+<p>EV認証を行った場合、Chromeで確認するとURLの前に企業情報が出力されます。</p>
+<p>利用者は企業の実在と安全性を確認しサイトを閲覧、使用することができるようになります。</p>
+<p>認証までの工数や安全性の担保より料金が他の2つと比べかなり高くなっております。</p>
+<p>ですが、一目でサイトの安全性を誇示できるため大企業が運営しているサイトや個人情報を扱うサイトでは是非やっていたいところではあります！</p>
+<h2 id="最後に">最後に</h2>
+<p>SSL化の3タイプについてまとめました。サイトの規模間や用途に応じて適したSSL化をしていくことが重要だと思います。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Web%E3%82%B5%E3%82%A4%E3%83%88%E3%81%AESSL%E5%8C%96(HTTPS)%E3%81%AE3%E3%81%A4%E3%81%AE%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%89&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Fssl_grade%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

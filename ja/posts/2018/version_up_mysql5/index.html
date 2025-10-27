@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MySQL5.6から5.7へバージョンアップ</title><meta name="description" content="MySQL5.6から5.7へバージョンアップに関するメモ。"><!-- OGP --><meta property="og:title" content="MySQL5.6から5.7へバージョンアップ"><meta name="og:description" content="MySQL5.6から5.7へバージョンアップに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="MySQL5.6から5.7へバージョンアップ"><meta name="twitter:description" content="MySQL5.6から5.7へバージョンアップに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">MySQL5.6から5.7へバージョンアップ</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">MySQL5.6から5.7へバージョンアップ</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-10-27T00:00:00.000Z"> 2018-10-27 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/version-up-mysql5/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/10/27</li>
+</ul>
+<h1 id="mysql56から57へバージョンアップ">MySQL5.6から5.7へバージョンアップ</h1>
+<ul>
+<li>環境はAWSのRDS環境とクラウド環境で行いました。</li>
+<li>ちなみにストーリーとしてはクラウド環境のMySQL(5.6)からAWS環境(5.7)へ移管する感じです。</li>
+</ul>
+<h2 id="背景">背景</h2>
+<ul>
+<li>MySQLのバージョンを5.6から5.7にバージョンアップするうえでレコードのバイト数の上限ができダンプが入らないという現象が起きた。</li>
+</ul>
+<h2 id="手順">手順</h2>
+<ol>
+<li>AWSのRDSではスナップショットから簡単にインスタンスの復元を行うことができるためインスタンスの復元を行う。(今回は検証として別インスタンスで進めていくこととします。)</li>
+<li>インスタンスが復元できたらインスタンスの画面に入り変更ボタンを押下、MySQLのバージョンを5.7へバージョンアップします。</li>
+<li>新規インスタンスのためセキュリティグループやパラメータグループの設定も適宜行いましょう。</li>
+<li>インスタンスが復元できたら次はクラウドからMySQLのダンプを取得します。
+<ul>
+<li>MySQLのダンプはmysqldumpコマンドで取得することができます。詳しくは他の方の記事を参考にしてください。</li>
+</ul>
+</li>
+<li>ダンプが取得できたら、AWS環境にdumpファイルを転送します。
+<ul>
+<li>ファイルの転送はftpコマンドやsftpコマンド、またはrsyncコマンドなんかでいいと思います。</li>
+</ul>
+</li>
+<li>私が行った検証ではこのままではdumpはレコードが肥大化している場合などはエラーになってしまいます。そのためこの段階で対象のテーブルの定義を変更してあげる必要があります。</li>
+<li>mysqlのプロンプトに入り、下記のコマンドを実施してテーブル定義と、ファイルフォーマットを確認します。</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SHOW TABLE STATUS LIKE 'DB_NAME'\G</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>コマンドでテーブル定義を確認できるようです。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SHOW GLOBAL VARIABLES LIKE 'innodb_file_format';</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>でファイルフォーマットを確認できます。(下記に書きます。)</p>
+<p>7.dumpファイルの転送、テーブル定義の確認ができたらdumpを使用してリストアします。</p>
+<ul>
+<li>dumpの適用にはmysqlコマンドでdumpファイルを指定してあげるだけで簡単にできます。</li>
+</ul>
+<p>この方法で私の環境ではdumpを突っ込むことができました。</p>
+<h3 id="テーブル定義とファイルフォーマットについて">テーブル定義とファイルフォーマットについて</h3>
+<p>上記にも書きましたがテーブル定義はmysqlのプロンプトで</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SHOW TABLE STATUS LIKE 'DB_NAME'\G</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>で確認できます。</p>
+<p>この時に、ROW_FORMATの項目を確認して、DYNAMICかCOMPRESSEDになっていることを確認します。</p>
+<p>COMPACTになっていると正常にdumpが入らない可能性があります。(私の環境では入りませんでした。)</p>
+<p>ファイルフォーマットの確認では <code>Antelope</code> か <code>Barracuda</code> が設定されると思います。</p>
+<p>私の環境ではMySQL5.6の方では <code>Antelope</code> が設定されており、5.7の方では <code>Barracuda</code> が設定されておりました。</p>
+<p>これはBarracudaの方が新しいためdumpが入らない場合はBarracudaの方に設定を変更してあげましょう。</p>
+<p>AWS(RDS)環境ではパラメータグループから設定できました。</p>
+<p>こんな感じで私は無事にdumpファイルを導入することができました。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=MySQL5.6%E3%81%8B%E3%82%895.7%E3%81%B8%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Fversion_up_mysql5%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

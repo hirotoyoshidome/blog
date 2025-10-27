@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Why Metabase Is Great</title><meta name="description" content="Impressions after adopting Metabase, use cases, and a quick Docker setup."><!-- OGP --><meta property="og:title" content="Why Metabase Is Great"><meta name="og:description" content="Impressions after adopting Metabase, use cases, and a quick Docker setup."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Why Metabase Is Great"><meta name="twitter:description" content="Impressions after adopting Metabase, use cases, and a quick Docker setup."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Why Metabase Is Great</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Why Metabase Is Great</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2022-11-23T00:00:00.000Z"> 2022-11-23 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2022/about_metabase/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2022/11/23</li>
+</ul>
+<h2 id="why-metabase-is-great">Why Metabase Is Great</h2>
+<h3 id="intro">Intro</h3>
+<p>I recently tried <a href="https://github.com/metabase/metabase">Metabase</a> and loved it. It is an open-source tool for visualizing and slicing data, building dashboards, and managing access. The standout feature: non-developers can query data through the GUI. Tools like <a href="https://github.com/getredash/redash">Redash</a> require you to write SQL—Metabase lets you click around to filter, join, and chart.</p>
+<h3 id="case-1-non-technical-teammates-can-access-data">Case 1: Non-technical teammates can access data</h3>
+<p>When people who cannot write SQL need data, they either learn a separate tool or ask an engineer. Accuracy matters, so having developers pull data is safe, but constant requests create delays—for the requester and for development work. Worse, different expectations around “easy” vs. “hard” queries create friction.</p>
+<p>Letting non-engineers query via the GUI closes that gap. They still need to understand table relationships and column semantics, but after a few tries they can handle most joins. As long as your queries are not riddled with subqueries, pointing and clicking works well, and the psychological barrier to asking for data disappears. Metabase also has solid permissions: you can block native SQL, limit GUI access per database or table, and GUI queries are read-only (no insert/update/delete).</p>
+<h3 id="case-2-onboarding-engineers-faster">Case 2: Onboarding engineers faster</h3>
+<p>New teammates must grasp the data model, which is often messy and poorly documented. With Metabase in place, they can explore table structures visually, inspect existing dashboards as examples, and ramp up more easily.</p>
+<h3 id="quick-setup">Quick setup</h3>
+<p>Metabase is easy to run. Because it only visualizes and queries, you still need a data source. Supported databases: <a href="https://github.com/metabase/metabase/blob/master/docs/databases/connecting.md#connecting-to-supported-databases">https://github.com/metabase/metabase/blob/master/docs/databases/connecting.md#connecting-to-supported-databases</a>.</p>
+<p>Using Docker is the fastest path:</p>
+<ol>
+<li>Pull the image:</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>docker pull metabase/metabase:latest</span></span>
+<span class="line"><span></span></span></code></pre>
+<ol start="2">
+<li>Start the container (port 3000):</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>docker run -d -p 3000:3000 --name metabase metabase/metabase</span></span>
+<span class="line"><span></span></span></code></pre>
+<ol start="3">
+<li>Visit <a href="http://localhost:3000/">http://localhost:3000/</a> to confirm it is up.</li>
+</ol>
+<p>Admins can manage users, permissions, and data sources. Google Workspace shops get bonus points—Metabase supports Google login out of the box, so no separate passwords.</p>
+<h3 id="wrap-up">Wrap-up</h3>
+<p>Metabase is under active development on GitHub. Some Japanese translations feel quirky, but that is part of the charm. For small teams where business and engineering collaborate closely, it is incredibly powerful. Being open source, the only cost is the server you run it on (and it is free to try locally). Give it a spin!</p>
+<p>See you next time.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Why%20Metabase%20Is%20Great&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2022%2Fabout-metabase%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

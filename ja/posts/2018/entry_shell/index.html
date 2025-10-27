@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>シェルスクリプトについてまとめてみた</title><meta name="description" content="シェルスクリプトについてまとめてみたに関するメモ。"><!-- OGP --><meta property="og:title" content="シェルスクリプトについてまとめてみた"><meta name="og:description" content="シェルスクリプトについてまとめてみたに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="シェルスクリプトについてまとめてみた"><meta name="twitter:description" content="シェルスクリプトについてまとめてみたに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">シェルスクリプトについてまとめてみた</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">シェルスクリプトについてまとめてみた</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-10-06T00:00:00.000Z"> 2018-10-06 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/entry-shell/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/10/06</li>
+</ul>
+<h2 id="シェルスクリプトについてまとめてみた">シェルスクリプトについてまとめてみた</h2>
+<p>これからシェルを使いそうな雰囲気がプンプンしているため初心者ながらシェルスクリプトを入門してみようと思います。</p>
+<h2 id="まずは環境の構築">まずは環境の構築</h2>
+<ul>
+<li>CentOS7</li>
+<li>Vagrant</li>
+<li>VirtualBox</li>
+</ul>
+<p>上記でシェルを実行する環境を整えます。</p>
+<ol>
+<li>VagrantとVirtualBoxをインストールする。</li>
+<li><a href="https://app.vagrantup.com/centos/boxes/7">こちら</a>よりcentos7を仮想環境として導入するスクリプトを確認する。</li>
+<li>確認したコマンドを実施して環境を整える。</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>vagrant init centos/7</span></span>
+<span class="line"><span>vagrant up</span></span>
+<span class="line"><span>vagrant ssh</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>4.sshでcentosに入れることを確認する。(もしもユーザーやらパスワードを求められたらvagrantと入力する)</p>
+<h2 id="実際にシェルスクリプトを書いて実行してみる">実際にシェルスクリプトを書いて実行してみる</h2>
+<ol>
+<li>任意のディレクトリにファイルを作成する。</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>touch hello.sh</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>2.スクリプトを書く。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>vi ./hello.sh</span></span>
+<span class="line"><span></span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>#!/bin/sh</span></span>
+<span class="line"><span>echo "helloworld"</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>3.実行する。
+実行方法は3種類</p>
+<ul>
+<li>3-1. <code>sh hello.sh</code> コマンドを実行する。</li>
+<li>3-2. <code>bash hello.sh</code>コマンドを実行する。</li>
+<li>3-3. 権限を変更して実行する。</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo chmod 755 ./hello.sh</span></span>
+<span class="line"><span>./hello.sh</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="基本的な操作binshは省略します">基本的な操作(#!/bin/shは省略します)</h2>
+<ul>
+<li>出力</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>echo 出力する文字</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>入力を求める</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>read</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>演算</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>expr 2 \+ 2</span></span>
+<span class="line"><span>expr 2 \- 2</span></span>
+<span class="line"><span>expr 2 \* 2</span></span>
+<span class="line"><span>expr 2 \/ 2</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>変数に格納</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>a=1</span></span>
+<span class="line"><span>b=2</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>結果を変数に格納する際にはバッククォートで囲む(スペース必須)</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>r=`expr $a \+ $b`</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>変数の値を出力</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>echo $r</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>if分岐</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>if [ $res -eq $zero ]; then</span></span>
+<span class="line"><span>  echo "偶数です"</span></span>
+<span class="line"><span>else</span></span>
+<span class="line"><span>  echo "奇数です"</span></span>
+<span class="line"><span>fi</span></span>
+<span class="line"><span># 同値判定は=演算子を使用する(文字列)</span></span>
+<span class="line"><span>if [ "ABC" = "ABC" ]; then</span></span>
+<span class="line"><span>  echo "equal"</span></span>
+<span class="line"><span>else</span></span>
+<span class="line"><span>  echo "not equal"</span></span>
+<span class="line"><span>fi</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>※ -epは数値の等価判定</p>
+<ul>
+<li>switch構文</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>var="red"</span></span>
+<span class="line"><span>case "$var" in</span></span>
+<span class="line"><span>  "blue" ) echo "bule" ;;</span></span>
+<span class="line"><span>  "green" ) echo "green" ;;</span></span>
+<span class="line"><span>  "red" ) echo "red" ;;</span></span>
+<span class="line"><span>esac</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>whileループ(-ltは「&#x3C;」のこと)</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>int=0</span></span>
+<span class="line"><span>while [ $int -lt 5 ]; do</span></span>
+<span class="line"><span>  echo $int</span></span>
+<span class="line"><span>  int=`expr $int \+ 1`</span></span>
+<span class="line"><span>done</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>untilループ(-gtは「>」のこと)</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>until [ ! \( $int -gt 0 \) ]; do</span></span>
+<span class="line"><span>  echo $int</span></span>
+<span class="line"><span>  int=`expr $int \- 1`</span></span>
+<span class="line"><span>done</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>forループ</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>for var in 10 11 12 ; do</span></span>
+<span class="line"><span>  echo $var</span></span>
+<span class="line"><span>done</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>関数</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>MyFunction () {</span></span>
+<span class="line"><span>  echo "関数実行"</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span># 実行</span></span>
+<span class="line"><span>MyFunction</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>関数(引数あり)</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>add () {</span></span>
+<span class="line"><span>  echo `expr $1 \+ $2`</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span># 実行</span></span>
+<span class="line"><span>add 1 3</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="最後に">最後に</h2>
+<p>シェルは避けては通れないものだと思い勉強することにしました。</p>
+<p>まだまだ新人のうちに勉強しておくことは多い。。</p>
+<p>つまずいた部分はスペースがないと正常に判定されなかったり、うっかりwindowsで書いてしまい改行コードがCRLFになっていたため実行できなかったりの部分です。</p>
+<p>Linuxでは改行コードがLFなので注意です！！</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%BE%E3%81%A8%E3%82%81%E3%81%A6%E3%81%BF%E3%81%9F&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Fentry_shell%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

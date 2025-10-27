@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>個人ブログを運営する環境について考えてみる</title><meta name="description" content="個人ブログを運営する環境について考えてみるに関するメモ。"><!-- OGP --><meta property="og:title" content="個人ブログを運営する環境について考えてみる"><meta name="og:description" content="個人ブログを運営する環境について考えてみるに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="個人ブログを運営する環境について考えてみる"><meta name="twitter:description" content="個人ブログを運営する環境について考えてみるに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">個人ブログを運営する環境について考えてみる</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">個人ブログを運営する環境について考えてみる</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-01-15T00:00:00.000Z"> 2023-01-15 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2023/think-own-blog-pattern/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2023/01/15</li>
+</ul>
+<h2 id="個人ブログを運営する環境について考えてみる">個人ブログを運営する環境について考えてみる</h2>
+<h3 id="はじめに">はじめに</h3>
+<p>今回は個人ブログを運営する時にどのような環境でやるのがベストなのか考えてみたいと思います。</p>
+<p>こちらのサイトはGitHubのGitHub PagesとPython製の静的サイトジェネレーターであるmkdocsを使っています。</p>
+<p>色々調べてこの構成に落ち着いたという形です。今回はその調べたところについて、どのような人であれば、どのような形で進めるのが良いかという点について書きたいと思います。</p>
+<h3 id="パターン1---ブログをはじめて書いてみたい人">パターン1 - ブログをはじめて書いてみたい人</h3>
+<p>プログラマをやっていると何か情報を発信したいと思うタイミングがあると思います。</p>
+<p>色々なサイトで「プログラマはアウトプットが必要だ！」「アウトプットは絶対にした方が良い！」「アウトプットしておくと転職に有利！」
+のような書き込みを見かけます。</p>
+<p>僕自身もこれには概ね同意します。やはりアウトプットはしておいた方が良いことが多いですし、アウトプットすることでさらに理解が深まることは多いと感じています。</p>
+<p>では、最初からレンタルサーバーを借りて、独自ドメインをとって運用するのが良いでしょうか？</p>
+<p>これには賛否両論あると思いますが、僕としては、最初は情報発信サービスを使うのが良いと思います。</p>
+<p>国内ですと、<a href="https://qiita.com/">Qiita</a>や<a href="https://zenn.dev/">Zenn</a>
+海外系のサービスですと、<a href="https://dev.to/">Dev Community</a>、<a href="https://medium.com/">Medium</a>
+あたりがユーザー数が多い印象です。</p>
+<p>僕も以前はQiitaやMedium(英語)で情報発信サービスをしていたことがありました。</p>
+<p>では、なぜ情報発信サービスを使うのが良いかということについて考えを書きたいと思います。</p>
+<p>まずは、その気軽さです。</p>
+<p>情報発信サービスを使うために必要なことはアカウントの作成のみです。
+ドメインの取得もサーバーのレンタルなども必要ありません。</p>
+<p>そのため、技術的なスキルが足りなかったとしてもすぐにブログをはじめることができます。
+また、運用コストも記事を公開するだけでは基本的にはかからないことがほとんどです。</p>
+<p>ブログの難しいところは継続するところだと思っていますが、更新が止まってしまうと運用コストというのは大きな負担になってきてしまい、クローズせざるを得なくなってしまいます。
+そのため気軽に低コストでまず書いてみるということができる情報発信サービスを使うことが良いと思います。</p>
+<p>また、先に挙げたサービスはユーザー数が多く、多くの人が見ているサイトでもあります。
+開発の現場でもQiitaやZennの記事を見て作業をするというケースも多いのではないかと思います。</p>
+<p>ユーザー数が多いということはそれだけモチベーションの維持につながると思っていて、例えば自分が書いた記事が評価（いいね）されたりコメントされるとモチベーションに繋がってきます。</p>
+<p>また、情報発信サービスを利用するとSEOについて考えなくても一定の確率で記事を見てもらえる可能性があります。
+基本的に独自でブログサイトを公開するとSEOについて考えなくてはいけません。
+最初の段階では誰にも見てもらえないということも実際多いです。</p>
+<p>以上のような理由よりブログをはじめて書いてみたい方や、インフラ周りの知識やSEOの知識が足りてないと思う方は情報発信サービスを利用することが良いと考えています。</p>
+<h3 id="パターン2---収益化したい場合勉強も兼ねて独自で環境を作りたい場合">パターン2 - 収益化したい場合、勉強も兼ねて独自で環境を作りたい場合</h3>
+<p>今回のテーマはここからが本題です。</p>
+<p>まず、情報発信サービスで収益化することは最近のトレンドだとできるようになってきていると感じています。</p>
+<p>例えばZennや<a href="https://note.com/">note</a>(個人的にnoteはあまりテック系の記事多くない印象です)、Mediumでは有料で記事を書くこともできます。</p>
+<p>そのため収益化という目的であれば、これらのサービスを使うことも検討できると思います。</p>
+<p>しかしアフィリエイトやGoogle広告をつけたいとなると情報発信サービスではできないことが多いです。（<a href="https://hatenablog.com/">はてなブログ</a>ではアフィリエイトはできますが、一般的にこれらのサービスでアフィリエイトはできないことが多い印象です。Google広告は多分どれもNGですね。。）</p>
+<p>そのため、収益化のためにブログを始めたい場合は情報発信サービスではなく、独自でブログを構築していく方が良いと考えています。</p>
+<p>また、独自でサイトを構築していくことは非常に大きな勉強となります。これ目的でブログをはじめて見るのも良いと思います。</p>
+<p>では、こちらの独自でブログ環境を作る場合のパターン3つを考えてみたいと思います。</p>
+<h3 id="１つ目-github-pages--静的サイトジェネレーター">１つ目 GitHub Pages + 静的サイトジェネレーター</h3>
+<p>最初に述べた通り、こちらのサイトはGitHub Pagesを使っています。</p>
+<p>また、デザイン周りではPython製の<a href="https://github.com/mkdocs/mkdocs/">mkdocs</a>というライブラリを使って作成しています。</p>
+<p>GitHub Pagesは無料で静的なコンテンツを公開できるサービスです。
+無料で利用するにはGitHubのリポジトリを公開設定にする必要がありますが、ブログは基本的に公開しているものなので、特に問題がなけばこの運用でも問題は無いと思います。</p>
+<p>また、GitHub Pagesでは独自ドメインを設定することができます。
+デフォルトではGitHubのドメインを利用することになりますが、独自ドメインを設定しておくことで、Google広告の設定もできるようになるので本格的にブログで収益を挙げたい！頑張って自分のサイトを作りたい！という場合には早めに独自ドメインを設定しておくと良いと思います。</p>
+<p>GoogleAnalyticsの設定も可能です。</p>
+<p>静的サイトジェネレーターを使うことで簡単にデザインをセットアップすることができるようになります。
+0からデザインを考えて、HTMLを書いて、JSで動きをつけてというのも面白さの醍醐味では有りますが、どうしても時間がかかってしまいます。
+その点静的サイトジェネレーターではマークダウン方式で綺麗にデザインを作ってくれるというものも多くありますので、検討する価値はあると思います。</p>
+<p>コスト面では、GitHub Pagesは公開リポジトリを使う限りは無料、静的サイトジェネレーターはOSSのため無料で利用することができます。
+そのため、かかる費用は独自ドメインを使ってもその費用だけで運用することができます。</p>
+<p>一方で、ある程度のコンテンツ量と正しいSEO対策ができていないと誰からも見てもらえないということになってしまいますので、最初は結果がでなくとも、続けていく根気が必要になります。（これは他の方法でも同様です。）</p>
+<h3 id="２つ目-レンタルサーバー--wordpress">２つ目 レンタルサーバー + Wordpress</h3>
+<p>レンタルサーバーにはWordpressを使えるものが多く存在しています。</p>
+<p>Wordpressを使った経験のある方はWordpressでサイトを公開したいと考える方も多いと思います。</p>
+<p>またWordpressには豊富なプラグインがあり、プラグインを上手く活用することでリッチなサイトを作ることも可能です。</p>
+<p>コスト面ではレンタルサーバーの費用がかかります。</p>
+<p>ランニングコストがかかってしまうため、本格的にブログをやる場合にオススメできますが、やってみたい！という段階ではランニングコストがかからない方法を取るというのが個人的にはオススメです。</p>
+<h3 id="３つ目-完全独自実装">３つ目 完全独自実装</h3>
+<p>完全に独自で実装することも可能ですが、ブログをはじめるまでにとても時間がかかってしまいます。</p>
+<p>例えば、静的なサイトを公開するだけであれば、HTMLとCSS, ちょっとしたJSだけでGitHub Pagesや<a href="https://www.netlify.com/">Netlify</a>のような静的サイトホスティングサービスを利用することで費用を抑えて運用することも可能です。</p>
+<p>DBを使ってブログのコンテンツを管理したいとなった場合には、<a href="https://jp.heroku.com/">Heroku</a>のようなWebサービスを無料で動かすことができるサービスもありますが、私が使った経験上容量がかなり少ないので、無料で使い続けることは困難だと思います。
+その場合は、有料プランにするorサーバーを借りるということが必要になってきますので少なくとも1,000-1,500円くらい月のランニングコストが発生します。（その分自由度が高くなりますが。）</p>
+<p>個人的にはブログを書き始めたい場合には、完全独自実装はオススメできません。
+一方で、勉強的なニュアンスで独自でサービスを作って運用したい！という場合には良い経験になるとは思います。</p>
+<h2 id="最後にまとめ">最後にまとめ</h2>
+<p>今回は、ブログをはじめる上で様々な方法について書いてみました。</p>
+<p>簡単にまとめると、↓のような感じですね。</p>
+<ul>
+<li>とりあえず技術系の記事を書いてみたい → Qiita, Zenn</li>
+<li>技術系の記事であわよくば収益化できたら。。 → GitHub Pages + 静的サイトジェネレーター</li>
+<li>Wordpressを使いたい → レンタルサーバー + Wordpress</li>
+<li>ブログというより個人開発的なニュアンスで。。 → 独自実装</li>
+</ul>
+<p>どのような形式でもブログは継続が大切になってくると思います。
+（僕自身も継続できてないなと思って書いたり書かなかったりしているのですが、）</p>
+<p>気長に続けていきたいと思います！</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E5%80%8B%E4%BA%BA%E3%83%96%E3%83%AD%E3%82%B0%E3%82%92%E9%81%8B%E5%96%B6%E3%81%99%E3%82%8B%E7%92%B0%E5%A2%83%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%80%83%E3%81%88%E3%81%A6%E3%81%BF%E3%82%8B&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2023%2Fthink_own_blog_pattern%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Prerequisites for Installing Rails on Windows</title><meta name="description" content="Troubleshooting the msys2 step when setting up Ruby on Windows 10."><!-- OGP --><meta property="og:title" content="Prerequisites for Installing Rails on Windows"><meta name="og:description" content="Troubleshooting the msys2 step when setting up Ruby on Windows 10."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Prerequisites for Installing Rails on Windows"><meta name="twitter:description" content="Troubleshooting the msys2 step when setting up Ruby on Windows 10."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Prerequisites for Installing Rails on Windows</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Prerequisites for Installing Rails on Windows</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-08-05T00:00:00.000Z"> 2018-08-05 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2018/install_ruby_rails_windows/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2018/08/05</li>
+</ul>
+<h2 id="setup">Setup</h2>
+<p>I tested on:</p>
+<ul>
+<li>Windows 10 (64-bit)</li>
+<li>Ruby 2.4</li>
+<li>Rails 5.2</li>
+</ul>
+<h2 id="where-it-failed">Where it failed</h2>
+<p>Running</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>gem install rails</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>from the prompt threw an error complaining that msys2 was missing, and <code>gem list --local</code> confirmed the install never completed. Naturally <code>rails -v</code> did not work either.</p>
+<h2 id="root-cause-and-fix">Root cause and fix</h2>
+<ul>
+<li>During the Ruby installer flow there is a screen that lets you install msys2. I skipped it, which caused the failure.</li>
+<li>You can apparently install msys2 separately, but I reinstalled Ruby instead.</li>
+</ul>
+<p><img src="/images/install_ruby_rails_windows.png" alt="msys2.png"></p>
+<p>After reinstalling Ruby, a prompt opens automatically. Do not press Enter immediately—follow these steps:</p>
+<ol>
+<li>Type <code>1</code> and press Enter to install.</li>
+<li>Type <code>2</code> and press Enter to update.</li>
+<li>Type <code>3</code> and press Enter to install the MINGW toolchain.</li>
+</ol>
+<p>I do not know every detail, but it seems required so Ruby can compile native extensions written in C.</p>
+<p>Finally, rerun:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>gem install rails</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>and the installation succeeds.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Prerequisites%20for%20Installing%20Rails%20on%20Windows&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2018%2Finstall-ruby-rails-windows%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>デプロイの自動化を作る</title><meta name="description" content="デプロイの自動化を作るに関するメモ。"><!-- OGP --><meta property="og:title" content="デプロイの自動化を作る"><meta name="og:description" content="デプロイの自動化を作るに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="デプロイの自動化を作る"><meta name="twitter:description" content="デプロイの自動化を作るに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">デプロイの自動化を作る</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">デプロイの自動化を作る</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-10-14T00:00:00.000Z"> 2019-10-14 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2019/github-circleci-heroku-cd/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2019/10/14</li>
+</ul>
+<h1 id="デプロイの自動化を作る">デプロイの自動化を作る</h1>
+<p>今回は、GitHubのPublicリポジトリとCircleCIを連携させて、Herokuにデプロイする仕組みを作成したいとおもいます。</p>
+<p>すべて無料枠でやっていきます。</p>
+<h2 id="githubにリポジトリを作成する">GitHubにリポジトリを作成する</h2>
+<p>今回はデプロイ自動化をすることが目的ですので、サーバー側はなんでも良いですが、</p>
+<p>最近勉強中のLaravelを利用したいと思います。</p>
+<p>GitHubでリポジトリを作成します。</p>
+<p>ちなみに作成したリポジトリは下記です。</p>
+<p><a href="https://github.com/hirotoyoshidome/learn-laravel">https://github.com/hirotoyoshidome/learn-laravel</a></p>
+<p>Laravelの準備をします。</p>
+<p>Laravelの準備はここでは省略します。</p>
+<p>以前にDockerで環境を構築しているので、ローカルを汚したくない方は下記でさくっと環境構築をすることをオススメします。</p>
+<p><a href="https://github.com/hirotoyoshidome/docker-composer-laravel-mysql">https://github.com/hirotoyoshidome/docker-composer-laravel-mysql</a></p>
+<p>環境がととのったらプロジェクトの作成をしていきます。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>php artisan create-project laravel/laravel {appname} --prefer-dist</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>※私のリポジトリではわかりやすいようにルートでアクセスが来た場合にHelloWorldを出力するように設定しております。</p>
+<p>routes/web.php</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Route::get('/', function () {</span></span>
+<span class="line"><span>    return view('hello');</span></span>
+<span class="line"><span>});</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>resources/views/hello.blade.php</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span></span></span>
+<span class="line"><span>&#x3C;!DOCTYPE html></span></span>
+<span class="line"><span>&#x3C;html lang="{{ str_replace('_', '-', app()->getLocale()) }}"></span></span>
+<span class="line"><span>    &#x3C;head></span></span>
+<span class="line"><span>        &#x3C;meta charset="utf-8"></span></span>
+<span class="line"><span>        &#x3C;meta name="viewport" content="width=device-width, initial-scale=1"></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        &#x3C;title>HelloWorld!!&#x3C;/title></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        &#x3C;!-- Fonts --></span></span>
+<span class="line"><span>        &#x3C;link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet"></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>        &#x3C;!-- Styles --></span></span>
+<span class="line"><span>        &#x3C;style></span></span>
+<span class="line"><span>            html, body {</span></span>
+<span class="line"><span>                background-color: #fff;</span></span>
+<span class="line"><span>                color: #636b6f;</span></span>
+<span class="line"><span>                font-family: 'Nunito', sans-serif;</span></span>
+<span class="line"><span>                font-weight: 200;</span></span>
+<span class="line"><span>                height: 100vh;</span></span>
+<span class="line"><span>                margin: 0;</span></span>
+<span class="line"><span>            }</span></span>
+<span class="line"><span>        &#x3C;/style></span></span>
+<span class="line"><span>    &#x3C;/head></span></span>
+<span class="line"><span>    &#x3C;body></span></span>
+<span class="line"><span>        &#x3C;h1>HelloWorld!!&#x3C;/h1></span></span>
+<span class="line"><span>        &#x3C;p>commit ! from circle ci!!!&#x3C;/p></span></span>
+<span class="line"><span>    &#x3C;/body></span></span>
+<span class="line"><span>&#x3C;/html></span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="herokuの準備をする">Herokuの準備をする。</h2>
+<p><a href="https://www.heroku.com/home">https://www.heroku.com/home</a></p>
+<p>Herokuのアカウントを作成して公式どおりにCLIのインストールをしてください(今回はインストール方法は省略いたします)</p>
+<p>インストール後</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>heroku login</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>でCLIからログインすることができます。</p>
+<p>ログインができましたら、アプリケーションを作成していきます。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>heroku create {appname} --buildpack heroku/php</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>今回はLaravelでの構築となるため、heroku/phpを指定します。</p>
+<p>Herokuでは、ルートディレクトリのProcfileを参照しますので、Procfileを作成していきます。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>web: vendor/bin/heroku-php-apache2 public/</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>パブリックルートにPublicディレクトリが設定されるように設定しました。</p>
+<p>Herokuは無料枠でもHttpsでの通信がされますので、こちらの設定をします。</p>
+<p>app/Providers/AppServiceProvider.php boot method</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>     public function boot()</span></span>
+<span class="line"><span>     {</span></span>
+<span class="line"><span>         // force https |</span></span>
+<span class="line"><span>         if (\App::environment('production')) {</span></span>
+<span class="line"><span>             \URL::forceScheme('https');</span></span>
+<span class="line"><span>         }</span></span>
+<span class="line"><span>     }</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>準備は完了です。一度手動でデプロイしてみます。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>git add .</span></span>
+<span class="line"><span>git commit -m "add Heroku settings."</span></span>
+<span class="line"><span>git remote add heroku https://git.heroku.com/{appname}.git</span></span>
+<span class="line"><span>git push heroku master</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Herokuへのプッシュができたら、Laravelではキーの生成が必要でしたので、こちらを実行してきます。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>heroku run php artisan key:generate</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>runサブコマンドを使用することでHerokuのコンテナ内で指定したコマンドを実行することができます。</p>
+<p>正しくLaravelアプリケーションが動作しているか確認をします。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>https://{appname}.herokuapp.com/</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="circle-ciの設定をする">Circle CIの設定をする</h2>
+<p>CircleCIはGitHubと簡単に連携ができますので、GitHubの認証でログインをしてください</p>
+<p><a href="https://circleci.com/">https://circleci.com/</a></p>
+<p>ログイン後、プロジェクトの追加より、作成したリポジトリを選択して作成します。</p>
+<p>CircleCIはルートディレクトリの <code>/.circleci/config.yml</code> をもとに設定をするようなので、こちらをGitHubのリポジトリへコミットしていきます。</p>
+<p>今回は下記のように作成しました。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>version: 2</span></span>
+<span class="line"><span>jobs:</span></span>
+<span class="line"><span>  build:</span></span>
+<span class="line"><span>    docker:</span></span>
+<span class="line"><span>      - image: circleci/php:7.3-node-browsers</span></span>
+<span class="line"><span>    steps:</span></span>
+<span class="line"><span>      - checkout</span></span>
+<span class="line"><span>      - run: sudo apt update</span></span>
+<span class="line"><span>      - restore_cache:</span></span>
+<span class="line"><span>          keys:</span></span>
+<span class="line"><span>            - v1-dependencies-{{ checksum "composer.json" }}</span></span>
+<span class="line"><span>            - v1-dependencies-</span></span>
+<span class="line"><span>      - run: composer install -n --prefer-dist</span></span>
+<span class="line"><span>      - save_cache:</span></span>
+<span class="line"><span>          key: v1-dependencies-{{ checksum "composer.json" }}</span></span>
+<span class="line"><span>          paths:</span></span>
+<span class="line"><span>            - ./vendor</span></span>
+<span class="line"><span>      - restore_cache:</span></span>
+<span class="line"><span>          keys:</span></span>
+<span class="line"><span>            - node-v1-{{ checksum "package.json" }}</span></span>
+<span class="line"><span>            - node-v1-</span></span>
+<span class="line"><span>      - run: yarn install</span></span>
+<span class="line"><span>      - save_cache:</span></span>
+<span class="line"><span>          key: node-v1-{{ checksum "package.json" }}</span></span>
+<span class="line"><span>          paths:</span></span>
+<span class="line"><span>            - node_modules</span></span>
+<span class="line"><span>      - run: cp .env.example .env</span></span>
+<span class="line"><span>  deploy-prod:</span></span>
+<span class="line"><span>    machine:</span></span>
+<span class="line"><span>      image: circleci/classic:edge</span></span>
+<span class="line"><span>    steps:</span></span>
+<span class="line"><span>      - checkout</span></span>
+<span class="line"><span>      - run:</span></span>
+<span class="line"><span>          name: heroku maintenance on</span></span>
+<span class="line"><span>          command: heroku maintenance:on --app ${HEROKU_APP_NAME_PROD}</span></span>
+<span class="line"><span>      - run:</span></span>
+<span class="line"><span>          name: heroku deploy</span></span>
+<span class="line"><span>          command: |</span></span>
+<span class="line"><span>            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_PROD.git master</span></span>
+<span class="line"><span>      - run:</span></span>
+<span class="line"><span>          name: heroku maintenance off</span></span>
+<span class="line"><span>          command: heroku maintenance:off --app ${HEROKU_APP_NAME_PROD}</span></span>
+<span class="line"><span>workflows:</span></span>
+<span class="line"><span>  version: 2</span></span>
+<span class="line"><span>  build_and_deploy:</span></span>
+<span class="line"><span>    jobs:</span></span>
+<span class="line"><span>      - build</span></span>
+<span class="line"><span>      - deploy-prod:</span></span>
+<span class="line"><span>          requires:</span></span>
+<span class="line"><span>          - build</span></span>
+<span class="line"><span>          filters:</span></span>
+<span class="line"><span>            branches:</span></span>
+<span class="line"><span>              only: master</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>ざっくり説明するとビルドが成功した場合に、デプロイを実行するという感じになっています。</p>
+<p>CircleCIからHerokuへデプロイする際にトークン値が必要となりますので、CircleCIの環境変数を利用して設定していきます。</p>
+<p>Viewの文言を変えてmasterブランチにコミットしてみます。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>vi vi resources/views/hello.blade.php</span></span>
+<span class="line"><span>git add vi resources/views/hello.blade.php</span></span>
+<span class="line"><span>git commit -m "check circleci action."</span></span>
+<span class="line"><span>git push origin master</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>CircleCIのコンソールよりビルドとデプロイのジョブが正常に成功し、画面レベルで変更内容が反映されていることを確認できました。</p>
+<h2 id="最後に">最後に</h2>
+<p>これまでCircleCIを触る機会がなく、今回始めて利用してみましたが、かなり簡単に設定することができました。</p>
+<p>仕事で運用となるとCircleCIの無料枠では足りなくなることが多いかもしれませんが、個人で利用する分にはかなり便利なのかなと思いました。</p>
+<p>他にも、AWSを利用している方は、AWSでもCI・CD環境を構築できる。Code Pipeline+Code Buildや、Jenkinsなどでも同様の環境が組めるかと思います。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4%E3%81%AE%E8%87%AA%E5%8B%95%E5%8C%96%E3%82%92%E4%BD%9C%E3%82%8B&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2019%2Fgithub_circleci_heroku_cd%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

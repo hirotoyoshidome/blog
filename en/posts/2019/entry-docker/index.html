@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Docker Primer</title><meta name="description" content="Fixing Docker daemon permissions, running nginx, mounting volumes, and comparing Docker with Vagrant."><!-- OGP --><meta property="og:title" content="Docker Primer"><meta name="og:description" content="Fixing Docker daemon permissions, running nginx, mounting volumes, and comparing Docker with Vagrant."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Docker Primer"><meta name="twitter:description" content="Fixing Docker daemon permissions, running nginx, mounting volumes, and comparing Docker with Vagrant."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Docker Primer</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Docker Primer</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-04-29T00:00:00.000Z"> 2019-04-29 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2019/entry_docker/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2019/04/29</li>
+</ul>
+<h1 id="getting-started">Getting started</h1>
+<p>If you see:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock ...</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>add yourself to the <code>docker</code> group and fix the socket permissions:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo gpasswd -a $(whoami) docker</span></span>
+<span class="line"><span>sudo chgrp docker /var/run/docker.sock</span></span>
+<span class="line"><span>sudo service docker restart</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Then <code>sudo docker search nginx</code> should work.</p>
+<p>Pull an image from <a href="https://hub.docker.com/search/?q=">Docker Hub</a>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker pull nginx</span></span>
+<span class="line"><span>sudo docker images</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Create a host directory to mount:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo mkdir /opt/docker</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Run the container:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker run -d -p 80:80 -v /opt/docker:/opt/ubuntu --name webserver nginx</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Flags:</p>
+<ul>
+<li><code>-d</code> – run in the background</li>
+<li><code>-p</code> – map host:container ports</li>
+<li><code>-v</code> – mount host directories</li>
+<li><code>--name</code> – name the container</li>
+</ul>
+<p>Visit <a href="http://localhost/">http://localhost/</a> and you should see “Welcome to nginx!”</p>
+<p>List running containers:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker ps</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Enter the container:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker exec -it webserver /bin/bash</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Here <code>exec</code> runs a command in the container, <code>-it</code> attaches your terminal, and <code>/bin/bash</code> starts a shell. Because we mounted <code>/opt/docker</code> to <code>/opt/ubuntu</code>, files created inside the container show up on the host.</p>
+<p>Stop/Start/Remove:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker stop webserver</span></span>
+<span class="line"><span>sudo docker start webserver</span></span>
+<span class="line"><span>sudo docker rm webserver</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="docker-vs-vagrant">Docker vs. Vagrant</h2>
+<p>Vagrant (<code>vagrant up</code> / <code>vagrant ssh</code>) provisions full VMs and can take a while to boot, especially the first time, and uses more memory. Docker is lighter and faster, so it is great when you want snappy environments. Vagrant can still be nice for full-stack dev setups managed by VirtualBox.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Docker%20Primer&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2019%2Fentry-docker%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

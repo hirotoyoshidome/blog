@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ChatGPTをWebサービスに組み込むことを考える</title><meta name="description" content="ChatGPTをWebサービスに組み込むことを考えるに関するメモ。"><!-- OGP --><meta property="og:title" content="ChatGPTをWebサービスに組み込むことを考える"><meta name="og:description" content="ChatGPTをWebサービスに組み込むことを考えるに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="ChatGPTをWebサービスに組み込むことを考える"><meta name="twitter:description" content="ChatGPTをWebサービスに組み込むことを考えるに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">ChatGPTをWebサービスに組み込むことを考える</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">ChatGPTをWebサービスに組み込むことを考える</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-09-13T00:00:00.000Z"> 2023-09-13 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2023/this-chatgpt-web-service/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2023/09/13</li>
+</ul>
+<h1 id="chatgptをwebサービスに組み込むことを考える">ChatGPTをWebサービスに組み込むことを考える</h1>
+<h3 id="はじめに">はじめに</h3>
+<p>こんにちは。</p>
+<p>最近、ChatGPTをWebサービスに組み込むということを考える機会があり、ある程度自分の中で考えが固まって来たのでここでまとめたいと思います。</p>
+<p>ChatGPTはOpenAIによって開発され、2023年に爆発的に話題になったサービスで人間のような会話がテキスト形式で行うことができるサービスです。</p>
+<p>つい1年前は、僕自身もOpenAIという会社がAIの会社であることくらいしか把握していなかったのですが、今年に入って急激に知名度が上がり開発の仕事をしている人は知らない人は少ないと思えるくらい普及したと感じています。</p>
+<p>まさしく爆発的な普及と言えると思います。</p>
+<p>また、書店に行くとChatGPTの活用本が多く出版されており、まだまだ多くの活用方法が模索されている段階だと受け止めています。</p>
+<p>つい最近では、ChatGPTのGPT-3.5というエンジンに対してFine-Tuningができるようになったという<a href="https://openai.com/blog/gpt-3-5-turbo-fine-tuning-and-api-updates">リリース</a>もありました。</p>
+<p>この記事によると2023年の秋頃にGPT-4に対してもFine-Tuningが可能になると書かれており、個人的には期待しています。</p>
+<p>※情報を漁っていますが、GPT-3.5でFine-Tuningに成功した例はまだ見ていないのですが。。</p>
+<p>今回は、WebサービスにおいてChatGPTを組み込む場合どのような可能性があるのかを考えていきます。（実際にやってみたはありません。）</p>
+<h3 id="chatgptのapiをバックエンドに組み込む方法">ChatGPTのAPIをバックエンドに組み込む方法</h3>
+<p>これは、とてもシンプルでわかりやすいですね。</p>
+<p>ChatGPTではAPIを提供しています。</p>
+<p>このAPIをWebサービスのバックエンド側でコールすることでWebサービスでChatGPTのテクノロジーを利用することができると思います。</p>
+<p>例えば、Webサービスで一般的な機能である「検索」を考えてみます。（ECサイトの検索をイメージしてみるとわかりやすいと思います。）</p>
+<p>ECサイトを例にすると、検索の手段として、キーワードやカテゴリ、価格などによる検索がありますね。</p>
+<p>例えば、2000円程度のイヤホンを検索したい場合、イヤホンとキーワードに入力するとかなりの数がヒットすることが予想できます。</p>
+<p>なので、自分の予算を考慮して、2000円以下というフィルタリングをかけます。</p>
+<p>そうすると、件数は大幅に少なくなり自分の予算にあった商品を探すことができます。</p>
+<p>これでも件数が多い場合は、さらに有線なのか無線なのかなどのカテゴリなどで絞ることでさらに絞り込みをしていくことができます。</p>
+<p>これは、多くのWebサービスでもある普通の検索機能だと思います。</p>
+<p>では、ChatGPTの機能を使うことでどのようなことができるか考えます。</p>
+<p>ChatGPTは人間のように対話ができることが強みでもあるため、文章での検索に転用することができると思います。</p>
+<p>例えば、Webサービスにチャット形式のフォームを置いて、</p>
+<p>Chat「あなたが探しているものは何ですか？」</p>
+<p>User「無線のイヤホンを探してます」</p>
+<p>Chat「予算はどれくらいですか？」</p>
+<p>User「2000円くらいで探しています。」</p>
+<p>Chat「色や音質、バッテリー駆動時間などお好みの条件があれば教えてください。」</p>
+<p>User「ブラックでできるだけバッテリーが長持ちするものが良いです。」</p>
+<p>Chat「あなたの条件にあった商品です！」</p>
+<p>のようなことができるようになると思います。</p>
+<p>この際に、ChatGPTの対話をプロンプトエンジニアリングを使ってある程度制御する必要はあると思いますが、このくらいであればそれほど大変ではないでしょう。</p>
+<p>ChatGPTには、アウトプットの形式として、Webサービスの検索にあったように出力してもらえば良いですね。</p>
+<p>このように、ChatGPTのAPIをバックエンドに直接組み込む+プロンプトエンジニアリングを使う方法でChatGPTをWebサービスで利用することができると思います。</p>
+<h3 id="fine-tuningを行う">Fine-Tuningを行う</h3>
+<p>これは冒頭でも紹介したものです。</p>
+<p>※冒頭でも述べたとおり、僕自身まだFine-Tuningで成功した例を見ていないので、あくまで理論的にはできるというくらいに捉えてください。</p>
+<p>Fine-Tuningは自分たちのデータをChatGPTのモデルに再学習させることでパラメータを調整することです。</p>
+<p>先述した、APIを使って行う方法はあくまでChatGPTの機能を上手く使うことにとどまります。</p>
+<p>一方、Fine-Tuningでは、自分たちのデータで再学習させるため、理論的にはモデル自体が自分たちに最適化されます。</p>
+<p>その結果、上手く行けばAPIを使う方法より精度が良いものができる可能性があるということですね。</p>
+<p>ただし、Fine-Tuningにどれくらいのデータが必要になるのか、学習にどれくらいのコストがかかるのかなどAPIを使う方法よりハードルはかなり高いです。</p>
+<p>個人的な見解では、現時点はFine-Tuningをプロダクトに組み込むのは難しいと感じています。</p>
+<p>学習が上手くいかない、大きなコストがかかる（ランニングコスト含め）、評価が難しいなどの課題は多いと思っています。</p>
+<h3 id="まとめ">まとめ</h3>
+<p>今回はChatGPTをWebサービスに組み込む方法について考えてみました。</p>
+<p>大きな視点でみると、APIを使うかFine-Tuningを使うかに分かれると思っています。</p>
+<p>APIを使う場合、</p>
+<ul>
+<li>インプットに対してアウトプットを最適化してもらう形で使う</li>
+<li>ChatGPT自体に結果を考えてもらう</li>
+<li>ChatGPTに要約してもらう
+など一口にAPIと言っても様々な使い方があると思います。</li>
+</ul>
+<p>この部分はある意味で発想が大事になってくる部分だと感じています。</p>
+<p>また、個人的に懸念しているのは、ChatGPTのAPIを使う場合、自分たちが持っているデータを有効に使い切れないという点です。</p>
+<p>Webサービスの場合、ユーザーの行動履歴やアイテムの情報などサービス特有のデータはとても価値のあるデータです。</p>
+<p>そのデータを使うことでそのWebサービスにしかない強みが生まれてくると思っています。</p>
+<p>一方で、ChatGPTのAPIはあくまでもChatGPTの機能を使わせて頂くということにとどまります。</p>
+<p>なので、自分たちのデータが増えることが直接ChatGPTを使ったパフォーマンスに反映されにくいという点があると考えています。</p>
+<p>そういった観点で見ると、自分たちのデータを活かしつつ、ChatGPTの良い部分も取り入れていくという視点がこれからは大事になっていくんだろうと感じました。</p>
+<p>ChatGPTは比較的安価で個人でも手の届く範囲で利用ができます。(現時点でGUIからGPT-3.5を触る分には無料で触れます。)</p>
+<p>昨今、生成系AIに関するニュースが多く飛び交っている様子からもこのニーズはかなり高いと考えているため情報のキャッチアップは大切ですね。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=ChatGPT%E3%82%92Web%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AB%E7%B5%84%E3%81%BF%E8%BE%BC%E3%82%80%E3%81%93%E3%81%A8%E3%82%92%E8%80%83%E3%81%88%E3%82%8B&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2023%2Fthis_chatgpt_web_service%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
