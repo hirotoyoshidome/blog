@@ -1,0 +1,11 @@
+{
+    "name": "blog",
+    "type": "module",
+    "version": "1.0.0",
+    "scripts": {
+        "deploy": "gh-pages -d dist"
+    },
+    "dependencies": {
+        "gh-pages": "^6.1.1"
+    }
+}
