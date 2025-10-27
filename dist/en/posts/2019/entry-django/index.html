@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Django Quickstart</title><meta name="description" content="Notes from learning the Django framework: setup, models, admin, views, tests, and packaging."><!-- OGP --><meta property="og:title" content="Django Quickstart"><meta name="og:description" content="Notes from learning the Django framework: setup, models, admin, views, tests, and packaging."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Django Quickstart"><meta name="twitter:description" content="Notes from learning the Django framework: setup, models, admin, views, tests, and packaging."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Django Quickstart</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Django Quickstart</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-05-11T00:00:00.000Z"> 2019-05-11 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2019/entry_django/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2019/05/11</li>
+</ul>
+<h1 id="what-is-django">What is Django?</h1>
+<p>A full-stack web framework for Python, on par with Ruby on Rails or Laravel.</p>
+<h2 id="setup">Setup</h2>
+<p>Install Python, then install Django via <code>pip</code>. Here is the path from install to Hello World:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>django-admin startproject sample</span></span>
+<span class="line"><span>python3 manage.py startapp hello</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Edit <code>hello/views.py</code> to return “Hello World,” add the app to <code>INSTALLED_APPS</code> in <code>sample/settings.py</code>, and wire it up in <code>sample/urls.py</code>. Run the dev server with <code>python3 manage.py runserver</code> and hit <a href="http://localhost:8000/hello/">http://localhost:8000/hello/</a>.</p>
+<p>Remember: <code>django-admin startproject</code> creates the project directory with <code>settings.py</code> (for app configuration) and <code>urls.py</code> (routing).</p>
+<h2 id="models">Models</h2>
+<p>Define schemas in <code>hello/models.py</code> (created via <code>startapp</code>). Implement <code>__str__</code>. By default we use SQLite, but you can edit <code>settings.py</code> to point to another DB. After writing the model:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>python3 manage.py makemigrations hello</span></span>
+<span class="line"><span>python3 manage.py sqlmigrate hello 0001</span></span>
+<span class="line"><span>python3 manage.py migrate</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Open a shell via <code>python3 manage.py shell</code> to poke at the ORM:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>>>> from hello.models import Choice, Question</span></span>
+<span class="line"><span>>>> Question.objects.all()</span></span>
+<span class="line"><span>>>> from django.utils import timezone</span></span>
+<span class="line"><span>>>> q = Question(question_text="What's new?", pub_date=timezone.now())</span></span>
+<span class="line"><span>>>> q.save()</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="admin-httplocalhost8000admin">Admin (<a href="http://localhost:8000/admin">http://localhost:8000/admin</a>)</h2>
+<p>Create a superuser (<code>python3 manage.py createsuperuser</code>), register your models in <code>hello/admin.py</code>, and you can edit DB rows via the admin UI. Run the server and log in.</p>
+<h2 id="views">Views</h2>
+<p>Include <code>hello/urls.py</code> inside <code>sample/urls.py</code> and map routes such as <code>hello/1/</code>, <code>hello/1/results/</code>, etc. Templates use <code>{{ var }}</code> for variables and <code>{% if %}</code>, <code>{% for %}</code> for logic. Use <code>render</code> to pass context dictionaries. Prefer <code>{% url 'namespace:view-name' %}</code> over hardcoded paths. Define <code>app_name</code> to create namespaces.</p>
+<h2 id="forms">Forms</h2>
+<p>Use <code>{% csrf_token %}</code> inside <code>&#x3C;form></code> to enable CSRF protection. <code>{{ forloop.counter }}</code> gives the loop index. Since Django follows MTV, handle logic inside views. Because <code>Question</code> and <code>Choice</code> have a 1:N relation (foreign key), you can insert data via the admin UI and test voting. Use <code>reverse()</code> to redirect without hardcoded URLs.</p>
+<h2 id="generic-views">Generic views</h2>
+<p>Django ships with generic views. In <code>urls.py</code> you can point to class-based views, inherit from <code>ListView</code>, <code>DetailView</code>, etc., set <code>template_name</code>, <code>model</code>, and override <code>get_queryset</code>. The <code>pk</code> path segment feeds into <code>DetailView</code> automatically.</p>
+<h2 id="tests">Tests</h2>
+<p>Write test cases in <code>hello/tests.py</code> and run them via <code>python3 manage.py test hello</code>.</p>
+<h2 id="static-files">Static files</h2>
+<p>Place CSS in <code>hello/static/hello/style.css</code> and load it with the <code>{% static %}</code> tag.</p>
+<h2 id="admin-customization">Admin customization</h2>
+<p>Modify <code>hello/admin.py</code> to change list displays, filters, search, and inline relationships. To override admin templates, locate Django’s source via <code>python -c "import django; print(django.__path__)"</code>, copy templates from <code>django/contrib/admin/templates</code> into your own <code>templates/</code> directory (matching the same structure), and edit away.</p>
+<h2 id="packaging">Packaging</h2>
+<p>To reuse the app, package it. Install <code>setuptools</code>, move the app directory out (<code>mv hello/ ../django-hello/</code>), create <code>README.rst</code> and <code>LICENSE</code> (BSD is common), and prepare it like any other Python package.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Django%20Quickstart&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2019%2Fentry-django%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

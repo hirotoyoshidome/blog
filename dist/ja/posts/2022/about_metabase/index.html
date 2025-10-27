@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Metabaseがいいぞって話</title><meta name="description" content="Metabaseがいいぞって話に関するメモ。"><!-- OGP --><meta property="og:title" content="Metabaseがいいぞって話"><meta name="og:description" content="Metabaseがいいぞって話に関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Metabaseがいいぞって話"><meta name="twitter:description" content="Metabaseがいいぞって話に関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Metabaseがいいぞって話</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Metabaseがいいぞって話</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2022-11-23T00:00:00.000Z"> 2022-11-23 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2022/about-metabase/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2022/11/23</li>
+</ul>
+<h2 id="metabaseがいいぞって話">Metabaseがいいぞって話</h2>
+<h3 id="はじめに">はじめに</h3>
+<p>こんにちは。</p>
+<p>今回は先日導入して感触が良かった<a href="https://github.com/metabase/metabase">Metabase</a>というツールについて書きたいと思います。</p>
+<p>Metabaseはオープンソースのツールでデータの可視化や抽出ができるものです。</p>
+<p>ダッシュボードを作成したり、権限管理もできたりします。</p>
+<p>特に特徴的なのが、DBのデータのアクセスできる部分です。</p>
+<p>例えば<a href="https://github.com/getredash/redash">Redash</a>というサービス（これもオープンソース）では、SQLを書くことはできますが、GUIで画面ぽちぽちしながらデータを抽出、可視化することができません。</p>
+<p>では、GUIでデータの抽出・可視化ができるとどのようなユースケースがあるのか見ていきたいと思います。</p>
+<h3 id="case1-非技術者がデータへアクセスできるようになる">Case1. 非技術者がデータへアクセスできるようになる</h3>
+<p>個人的に一番大きいメリットはここだと考えています。</p>
+<p>SQLが書けない非技術者がデータにアクセスするためには、それ用のツールを別途使うか技術者に依頼をすることが必要となってきます。</p>
+<p>データを抽出する時に大切なのはデータが正確であることだと考えます。間違ったデータや数字は混乱のもとであり、良い影響が一つも無いと思います。</p>
+<p>技術者側に依頼をするというのはデータ構造を把握している開発者がデータの抽出を行うためデータの正確性という面では大きなアドバンテージがあると思います。</p>
+<p>一方で、依頼が頻繁に行われると遅延に繋がってくると思います。</p>
+<p>遅延は依頼から抽出されてたものが帰ってくる間の遅延と開発者の作業自体の遅延です。</p>
+<p>また、技術サイドからすると簡単なものが非技術サイドからすると難しいと思われていたり、その逆のパターンもよくあることだと思います。</p>
+<p>そのため、認識のギャップによってこのような遅延が発生してくると考えています。</p>
+<p>では、非技術サイドがGUIでデータにアクセスできるようになるとどうでしょうか？</p>
+<p>勿論、データ構造の理解はそれなりに必要となりますが、テーブル間のJOINやカラムの名称と役割については数回触ってみることである程度対応が可能だと思います。</p>
+<p>サブクエリが頻出するような複雑な抽出条件ではない限りGUIのでポチポチしてデータが抽出できるようになるというのは大きな利点だと思います。<br>
+（依頼する側も心理的に頻度が多くなると依頼しにくくなるというのも緩和されると思います。）</p>
+<p>また、Metabaseでは、権限管理が割としっかりしており、ネイティブクエリ（普通のSQL）が書けないようにする権限やDB単位、テーブル単位でGUIのアクセスを制限する権限制御ができます。<br>
+GUIのアクセスからはデータの参照のみであり、更新や追加、削除はできません。</p>
+<h3 id="case2-新しくjoinした技術者の理解がしやすい">Case2. 新しくJOINした技術者の理解がしやすい</h3>
+<p>開発を多くの場合チームで行うと思いますが、チームで行う以上新しいメンバーが入ってくることがあります。</p>
+<p>新しくJOINしたメンバーはデータの構造を理解することが必要になってきます。</p>
+<p>DBの構成は複雑になっていることが多く、またメンテナンスもしにくい場所でなのでついついそのまま放置されていることが多いと感じています。</p>
+<p>そのため、複雑化したDBの構成を理解するのは困難な場合が多いと思います。</p>
+<p>その理解のためにMetabaseが導入されていると比較的理解が進むのではないかと思います。</p>
+<p>やはり、GUIでデータの構成が見えている点と既にダッシュボードなどで可視化されているものがサンプルとしてあると理解しやすいと思います。</p>
+<h3 id="環境構築を紹介">環境構築を紹介</h3>
+<p>環境の構築も非常に簡単にできるので是非試してみる価値はあると思います。</p>
+<p>簡単にご紹介しておきます。</p>
+<p>※Metabaseはデータを抽出・可視化するツールのため実際にデータが必要になります。<br>
+↓にサポートされているデータベースのリンクを記載しておきます。<br>
+<a href="https://github.com/metabase/metabase/blob/master/docs/databases/connecting.md#connecting-to-supported-databases">https://github.com/metabase/metabase/blob/master/docs/databases/connecting.md#connecting-to-supported-databases</a></p>
+<p>Dockerで環境を構築するのが一番簡単にできると思いますので今回はその方法を記載しておきます。</p>
+<p>１, DockerイメージをPullする</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>docker pull metabase/metabase:latest</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>２, Dockerコンテナを起動する(ポートは3000)</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>docker run -d -p 3000:3000 --name metabase metabase/metabase</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>３, <a href="http://localhost:3000/">http://localhost:3000/</a> にアクセスして起動確認する。</p>
+<p>また、管理者権限を持っているとユーザーや権限の管理、データソースの追加等ができるようになります。</p>
+<p>Google認証でのログインにも標準で対応しているため、GoogleWorkspaceを導入している企業であればPWの設定なしでログインができるようになるので便利です！！</p>
+<h3 id="さいごに">さいごに</h3>
+<p>今回はMetabaseについてご紹介しました。</p>
+<p>MetabaseはGitHub上でも頻繁に開発が行われているプロジェクトだと思います。</p>
+<p>実際に起動してみると若干日本語がおかしい部分があったりしますが、これもまた愛嬌だと思います！</p>
+<p>特にビジネス部門と開発部門の連携が多い小規模のチームにおいては強力なツールになると思います。</p>
+<p>オープンソースのツールのため運用するサーバー料金のみで運用ができます（ローカルで試す分には勿論無料です。）<br>
+先ずは試してみるのが良いと思います。</p>
+<p>では今回はこのへんで。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Metabase%E3%81%8C%E3%81%84%E3%81%84%E3%81%9E%E3%81%A3%E3%81%A6%E8%A9%B1&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2022%2Fabout_metabase%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

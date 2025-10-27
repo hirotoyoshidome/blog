@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>A Python Logging Gotcha</title><meta name="description" content="Why basicConfig bit me in a containerized web app and how using handlers fixed it."><!-- OGP --><meta property="og:title" content="A Python Logging Gotcha"><meta name="og:description" content="Why basicConfig bit me in a containerized web app and how using handlers fixed it."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="A Python Logging Gotcha"><meta name="twitter:description" content="Why basicConfig bit me in a containerized web app and how using handlers fixed it."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">A Python Logging Gotcha</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">A Python Logging Gotcha</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-08-11T00:00:00.000Z"> 2023-08-11 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2023/python_logging/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2023/08/11</li>
+</ul>
+<h1 id="a-python-logging-gotcha">A Python Logging Gotcha</h1>
+<p>While running a containerized web app, I wanted most logs to go to stdout (for <code>docker logs</code>) but some cases to write to files. Libraries handled request logging nicely, so I assumed I could configure both destinations easily.</p>
+<h2 id="setup">Setup</h2>
+<p><code>logging.basicConfig</code> with <code>stream=sys.stdout</code> sends logs to stdout. Likewise, <code>filename=...</code> sends them to a file. I tried to use both, expecting one logger per destination. Instead, everything went to the file—stdout was silent. Libraries that relied on <code>basicConfig</code> adopted the file handler as well, adding to the confusion.</p>
+<h2 id="root-cause">Root cause</h2>
+<p><code>basicConfig</code> is global. You cannot call it twice to set up different handlers; the first call wins. Re-calling it inside logger configuration does nothing, and libraries that respect the global config inherit the file-only behavior.</p>
+<h2 id="fix">Fix</h2>
+<p>Skip <code>basicConfig</code> and configure handlers explicitly:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>import logging</span></span>
+<span class="line"><span>import sys</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># stdout logger</span></span>
+<span class="line"><span>stdout_handler = logging.StreamHandler(sys.stdout)</span></span>
+<span class="line"><span>stdout_handler.setFormatter(logging.Formatter("%(message)s"))</span></span>
+<span class="line"><span>stdout_logger = logging.getLogger("stdout-logger")</span></span>
+<span class="line"><span>stdout_logger.setLevel(logging.INFO)</span></span>
+<span class="line"><span>stdout_logger.addHandler(stdout_handler)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># file logger</span></span>
+<span class="line"><span>file_handler = logging.FileHandler("/var/log/xxx/xxx.log", mode="a")</span></span>
+<span class="line"><span>file_handler.setFormatter(logging.Formatter("%(message)s"))</span></span>
+<span class="line"><span>file_logger = logging.getLogger("file-logger")</span></span>
+<span class="line"><span>file_logger.setLevel(logging.INFO)</span></span>
+<span class="line"><span>file_logger.addHandler(file_handler)</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Once I did that, stdout and file logging behaved as intended. Maybe there is a clever way to juggle multiple configurations with <code>basicConfig</code>, but explicit handlers are clearer and only need to be set once.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=A%20Python%20Logging%20Gotcha&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2023%2Fpython-logging%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

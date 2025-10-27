@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>機能の追加と削除について考える</title><meta name="description" content="機能の追加と削除について考えるに関するメモ。"><!-- OGP --><meta property="og:title" content="機能の追加と削除について考える"><meta name="og:description" content="機能の追加と削除について考えるに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="機能の追加と削除について考える"><meta name="twitter:description" content="機能の追加と削除について考えるに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">機能の追加と削除について考える</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">機能の追加と削除について考える</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-07-30T00:00:00.000Z"> 2023-07-30 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2023/think-new-function/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2023/07/30</li>
+</ul>
+<h1 id="機能の追加と削除について考える">機能の追加と削除について考える</h1>
+<p>こんにちは。</p>
+<p>Webサービスやソフトウェアを運用、保守していると新しい機能の追加や使われなくなったものなどを削除することがあると思います。</p>
+<p>私自身、スタートアップ企業で開発を行っているため、通常の企業と比べると人数も少なく、追加から削除までのサイクルが非常に早いと感じます。</p>
+<p>そこで、今回はその早いサイクルの中で感じた機能の追加と削除について考えてみたいと思います。</p>
+<h2 id="新規機能の追加の観点">新規機能の追加の観点</h2>
+<p>運用保守の経験がない人の場合、削除より追加の方が難しいと思うかもしれません。</p>
+<p>もちろん、追加する機能にもよるのですが、難しいテクノロジーを使わないようなものの場合、機能追加はそれほど難しいことではありません。</p>
+<p>システムが複雑になれば影響する範囲を確認したり、思わぬ部分が壊れるのを防ぐためテストの時間が長くなったりはしますがそれも時間がかかるというだけで難しいことはないと思っています。</p>
+<p>特にシステムが大きくなれば人員も増えることが通常のプロジェクトでは多いですし、頭数を増やし、テストの目が増えることでこの辺りは十分カバーできると考えています。</p>
+<p>そのため、特に新規機能についてはそれほど難しいことではないと思います。</p>
+<p>一方で、既存の機能の修正については新規のようには行かないことが多いと思います。</p>
+<p>既存の機能の修正や拡張は他の部分へ影響することが多いです。</p>
+<p>そのため安易に触ると壊れることがあり、十分な考慮とテスト時間の確保が大切になると思います。</p>
+<h2 id="既存機能の削除の観点">既存機能の削除の観点</h2>
+<p>では次に、既存の機能の削除について考えてみたいと思います。</p>
+<p>既存の機能を削除するのはシステム的には他への影響範囲の確認だけですむことが多いと思います。</p>
+<p>一方、例えばビジネスとして提供しているサービスである場合、既存機能を削除することはビジネス的な影響が大きいことがあります。</p>
+<p>例えばWebサービスでは、その機能が実際に使われていないのか、使われているけど反応が悪いのか、反応は悪くないが今後のことを考えて削除するのか。など削除をする理由によっても影響が変わってきます。</p>
+<p>また、一般的に機能の削除はなかなかされない傾向があると感じています。</p>
+<p>悪影響がないと感じていればリスクをおかして機能を削除するメリットが少ないと感じることも少なくないと思いますし、ビジネス的にはなかなかやりたくないところだと思います。</p>
+<p>また、機能を削除するとなると何かしらの理由が必要となります。</p>
+<p>その理由を得るために機能のパフォーマンス測定や効果の測定など評価を行う必要が出てくると思います。</p>
+<p>特に、機能追加と機能の改修または削除の大きな違いはここにあると思います。</p>
+<h2 id="評価の観点">評価の観点</h2>
+<p>先述したとおり、機能の追加と改修または削除の大きな違いは評価がプロセスに絡んでくるかどうかだと思います。</p>
+<p>しっかりと根拠を持って機能の追加をする場合、分析や既存機能の評価を軸に検討することが理想的だとは思いますが、実際では機能の追加の全てにおいてこのようなプロセスをとっていることは少ないのではないでしょうか。</p>
+<p>他のサービスにもあるから追加する。これが刺さりそうとアイディアや仮説レベルでとりあえずリリースして試してみるなど、ライトな感じで機能を追加することも多いと感じます。</p>
+<p>一方で、機能の改修または削除においては既存の機能の評価を軸に行うことがほとんどだと思います。</p>
+<p>評価をした上で「こうしたほうが良いから修正しよう」「あまり使われていない割に保守コストが大きいから削除しよう」というような理由が生まれてくると思います。</p>
+<p>そして、機能追加に重点を置いているケースほど、この評価が疎かになっていると思います。</p>
+<p>また、個人的には機能を追加していくより評価をして改修するまたは削除すると言った方が難易度が高いことだと思います。</p>
+<h2 id="最後に">最後に</h2>
+<p>今回は機能の追加と削除について考えてみました。</p>
+<p>言語化が難しいですが、簡潔にまとめると、システムを開発していくと機能の追加にフォーカスして、「追加、追加」のような状態に陥ることが多々あると感じます。</p>
+<p>一方で、追加された機能について評価を行わないとその機能の改善（改修）や撤退（削除）が上手にできません。</p>
+<p>評価は実際やってみると様々な観点からシステムを見る必要があるため求められるものは多いです。</p>
+<p>しかし、評価を定期的に行うことは大切なことであり、システムを成長させていく上でも必要不可欠なものだと感じています。</p>
+<p>時間を作ってでもやっていきたいところですね。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E6%A9%9F%E8%83%BD%E3%81%AE%E8%BF%BD%E5%8A%A0%E3%81%A8%E5%89%8A%E9%99%A4%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%80%83%E3%81%88%E3%82%8B&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2023%2Fthink_new_function%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

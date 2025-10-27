@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Java StreamAPIやってみる</title><meta name="description" content="Java StreamAPIやってみるメモ。"><!-- OGP --><meta property="og:title" content="Java StreamAPIやってみる"><meta name="og:description" content="Java StreamAPIやってみるメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Java StreamAPIやってみる"><meta name="twitter:description" content="Java StreamAPIやってみるメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Java StreamAPIやってみる</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Java StreamAPIやってみる</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-03-30T00:00:00.000Z"> 2018-03-30 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/java8-stream-api/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/03/30</li>
+</ul>
+<h2 id="サンプルコード">サンプルコード</h2>
+<p>Java8で追加されたStreamApiを使用してファイルの読み込みと書き出しを行ってみました。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>import java.io.IOException;</span></span>
+<span class="line"><span>import java.nio.charset.StandardCharsets;</span></span>
+<span class="line"><span>import java.nio.file.FileSystem;</span></span>
+<span class="line"><span>import java.nio.file.FileSystems;</span></span>
+<span class="line"><span>import java.nio.file.Files;</span></span>
+<span class="line"><span>import java.nio.file.Path;</span></span>
+<span class="line"><span>import java.nio.file.StandardOpenOption;</span></span>
+<span class="line"><span>import java.util.ArrayList;</span></span>
+<span class="line"><span>import java.util.List;</span></span>
+<span class="line"><span>import java.util.stream.Stream;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>/**</span></span>
+<span class="line"><span> * Streamのサンプル&#x3C;br /></span></span>
+<span class="line"><span> * 文字コードはUTF-8で設定(Shift_jisでは参照不可)</span></span>
+<span class="line"><span> */</span></span>
+<span class="line"><span>public class SampleStream {</span></span>
+<span class="line"><span>	/** 読込パス */</span></span>
+<span class="line"><span>	private static final String INPUT_PATH = "C:\\temp\\in.txt";</span></span>
+<span class="line"><span>	/** 出力パス */</span></span>
+<span class="line"><span>	private static final String OUTPUT_PATH = "C:\\temp\\out.txt";</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>	public static void main(String[] args) throws Exception {</span></span>
+<span class="line"><span>		// FileSystemを取得</span></span>
+<span class="line"><span>		FileSystem fs = FileSystems.getDefault();</span></span>
+<span class="line"><span>		// ファイルのパスを設定</span></span>
+<span class="line"><span>		Path path = fs.getPath(INPUT_PATH);</span></span>
+<span class="line"><span>		// 出力用のパスを設定</span></span>
+<span class="line"><span>		Path out = fs.getPath(OUTPUT_PATH);</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>		// 読み込み方その1</span></span>
+<span class="line"><span>		// Files.linesを使用して読み込む</span></span>
+<span class="line"><span>		try (Stream&#x3C;String> stream = Files.lines(path, StandardCharsets.UTF_8)) {</span></span>
+<span class="line"><span>			stream.filter(s -> s.contains("link")).map(s -> s.replace("html", "form"))</span></span>
+<span class="line"><span>					.map(s -> s.replace("action", "href")).forEach(System.out::println);</span></span>
+<span class="line"><span>		} catch (IOException e) {</span></span>
+<span class="line"><span>			System.out.println("error");</span></span>
+<span class="line"><span>		}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>		// 読み方その2</span></span>
+<span class="line"><span>		// Files.readAllLinesを使用して読み込む</span></span>
+<span class="line"><span>		List&#x3C;String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);</span></span>
+<span class="line"><span>		List&#x3C;String> output = new ArrayList&#x3C;String>();</span></span>
+<span class="line"><span>		lines.stream().filter(s -> s.contains("link")).forEach(s -> output.add(s));</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>		// 抽出したデータをListに詰めてテキストに出力</span></span>
+<span class="line"><span>		Files.write(out, output, StandardCharsets.UTF_8, StandardOpenOption.APPEND);</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>		// 出力したデータを拡張for文で出力して確認</span></span>
+<span class="line"><span>		for (String put : output) {</span></span>
+<span class="line"><span>			System.out.println(put);</span></span>
+<span class="line"><span>		}</span></span>
+<span class="line"><span>	}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>文字コードはUTF-8しかサポートしていないらしくShift_Jisで読み込もうとすると例外が投げられます。</li>
+</ul> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Java%20StreamAPI%E3%82%84%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%8B&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Fjava8_stream_api%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Fixing sqlite3 on Windows for Rails</title><meta name="description" content="How I resolved sqlite3 gem installation errors on Windows."><!-- OGP --><meta property="og:title" content="Fixing sqlite3 on Windows for Rails"><meta name="og:description" content="How I resolved sqlite3 gem installation errors on Windows."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Fixing sqlite3 on Windows for Rails"><meta name="twitter:description" content="How I resolved sqlite3 gem installation errors on Windows."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Fixing sqlite3 on Windows for Rails</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Fixing sqlite3 on Windows for Rails</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-08-25T00:00:00.000Z"> 2018-08-25 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2018/rails_server_sqlite3/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2018/08/25</li>
+</ul>
+<h2 id="environment">Environment</h2>
+<ul>
+<li>Ruby 2.5.1</li>
+<li>Ruby on Rails 5.1</li>
+</ul>
+<h2 id="what-i-tried">What I tried</h2>
+<p>Running <code>gem install sqlite3</code> complained that sqlite3 was missing. Uninstalling the gem:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>gem uninstall sqlite3</span></span>
+<span class="line"><span>Successfully uninstalled sqlite3-1.3.13-x64-mingw32</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>and reinstalling via <code>gem install sqlite3 --platform=ruby</code> still failed.</p>
+<h2 id="solution">Solution</h2>
+<p>It turned out to be a bad combination of versions and <code>sqlite3_native.so</code>.</p>
+<ol>
+<li>Uninstall the gem again:</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>gem uninstall sqlite3</span></span>
+<span class="line"><span></span></span></code></pre>
+<ol start="2">
+<li>Download the ZIPs from the <a href="https://www.sqlite.org/download.html">SQLite download page</a>: <code>sqlite-dll-win32-x86-XXXXXXX.zip</code> and <code>sqlite-amalgamation-XXXXXXX.zip</code>. Unzip the amalgamation package somewhere convenient (we will compile it later).</li>
+<li>Extract <code>sqlite3.dll</code> and place it in a directory that is on your PATH (where <code>ruby.exe</code> lives).</li>
+<li>Run:</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>gem install sqlite3 -v "=1.3.7" --platform=ruby -- --with-sqlite3-include=C:\temp\sqlite-amalgamation-3240000 --with-sqlite3-lib=C:\Ruby25-x64\bin</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>(Adjust the paths if you extracted the sources elsewhere.)</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>You need the DevKit (a C compiler) to build the native extension.</li>
+<li>The issue apparently does not happen on Ruby 2.4.</li>
+<li>Watch out for proxies. If needed, create <code>~/.gemrc</code> and set <code>http_proxy: http://proxyserver:port</code>.</li>
+</ul> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Fixing%20sqlite3%20on%20Windows%20for%20Rails&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2018%2Frails-server-sqlite3%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

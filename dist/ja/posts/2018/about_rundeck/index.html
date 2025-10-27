@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Rundeckのソースリーディング</title><meta name="description" content="Rundeckのソースリーディングに関するメモ。"><!-- OGP --><meta property="og:title" content="Rundeckのソースリーディング"><meta name="og:description" content="Rundeckのソースリーディングに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Rundeckのソースリーディング"><meta name="twitter:description" content="Rundeckのソースリーディングに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Rundeckのソースリーディング</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Rundeckのソースリーディング</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-12-24T00:00:00.000Z"> 2018-12-24 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/about-rundeck/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/12/24</li>
+</ul>
+<h2 id="経緯">経緯</h2>
+<p>私は業務でRundeckを使用してジョブの管理をしているのですがRundeckは結構厄介なことが多く、サーバーのCPU使用率が急に上昇したり、メモリを食いつぶされていたり、バックアップが大変だったりと結構困った事があります。</p>
+<p>最近もともとJavaで仕事していたこと、Groovyも触ったことがあること、そしてRailsも基本程度は抑えいていることよりRundeckのソースを読んでみました。</p>
+<p>それで若干アーキテクチャの部分も調査したためここでまとめておきたいと思います。</p>
+<p>ジョブの数多いけどいまだにcronで管理しているあなた！！必見です。</p>
+<h2 id="rundeckってなに">Rundeckってなに</h2>
+<ul>
+<li>RundeckはLinuxのcronの様に時刻にプログラムを走らせるように設定できるジョブスケジューラーの一つです。</li>
+<li>Rundeckを使用することでcrontabコマンドで見づらいジョブの管理、管理するジョブが多くなって煩雑化しているジョブ管理を視覚的にも操作的にも管理しやすくすることができる。</li>
+</ul>
+<h2 id="rundeckを使うメリットって">Rundeckを使うメリットって</h2>
+<ul>
+<li>先述したようにcrontabで管理するより見える化すること、プロジェクトごとにジョブをまとめておくことが可能、ノードの設定によりジョブを実行する対象の情報を保持することも可能なため複数サーバーに対しての実行も簡単に管理できる。</li>
+<li>SSH接続で使用する鍵の情報もRundeckサーバーで管理することが可能である。</li>
+<li>ジョブが失敗した場合の通知をSlackで通知したりなどのプラグインも揃っているためいちいちShellを書かなくてもできる。</li>
+</ul>
+<h2 id="デメリットは">デメリットは？？</h2>
+<ul>
+<li>Rundeck自体はオープンソースでソースコードを観ることもできるが、急にCPU使用率高騰やメモリの消費が激しい時などがある。(対策に関しては後述)</li>
+<li>Rundeck専用のサーバーを立てる必要がある。(複数クライアントに対してジョブを実行する場合)</li>
+<li>RundeckのGUIが結構重かったりする</li>
+</ul>
+<h2 id="rundeckのアーキテクチャ">Rundeckのアーキテクチャ</h2>
+<ul>
+<li>Rundeckはオープンソースで無料で使用することが可能なため運用コストはサーバーとDB料金だけである。</li>
+<li>Rundeck自体はGrails(JVM言語のGroovyのFW)で書かれている(Grailsの実態はSpringMVCのためSpringMVCがわかっている人はソースを見れば何となく処理を追っていくことができる)</li>
+<li>Rundeckのアプリケーションが参照するDBはデフォルトでJavaで使用される組み込み型のDBであるH2が使用されるようになっている。</li>
+<li>しかしRundeckではジョブの情報をすべてDBで保持している(ログイン情報はサーバーのファイルにて管理しているためDBでは持っていない)ため組み込みのDBを使用するとサーバーへの負荷が高まってしまうためなるべくDBサーバーを別で建ててMySQLやPostgreSQLの様なRDBを使用することが望ましい。</li>
+</ul>
+<h2 id="細かい部分のアーキテクチャ">細かい部分のアーキテクチャ</h2>
+<ul>
+<li>GrailsFWではjspならぬgspファイルでViewの部分が書かれている。</li>
+<li>TLDとしてgタグが使用できるようになっている(これでformタグやaタグなどが動的に生成することができる)</li>
+<li>実態はSpringMVCのためDIコンテナを使用しており、アプリケーションの最初の起動の際にDBを作成するようになっている。(applicationContext.xmlで記載)</li>
+<li>grails.xmlを参照するようになっており、ここにDBスキーマが記載されている</li>
+<li>grails-appディレクトリがGrailsアプリケーションの実態である</li>
+<li>DB操作にはJavaではおなじみのHibernateを使用している</li>
+<li>HibernateはORMのツールであるためSQLは直接記載されていない。</li>
+<li>DBコンソールにてEXPLAINコマンドでクエリの妥当性を確認したがクエリ設計には問題はないようにはなっていたはず。</li>
+<li>Controller層からService層の間でDBアクセスをしている記述があるためMySQLならスロークエリとかを出力するように設定してクエリを照らし合わせてみて確認することができる。</li>
+</ul>
+<h2 id="rundeckトラブルシューティング">Rundeckトラブルシューティング</h2>
+<ul>
+<li>DBへのアクセスが遅い
+<ul>
+<li>DBでアクセスの多いカラムにインデックスを貼る</li>
+</ul>
+</li>
+<li>同様に一覧画面でのDBアクセスが遅い
+<ul>
+<li>1プロジェクトに多くのジョブを入れるのではなく分割を行う(ソースを見ると確認できるが全件SELECTを実施しているため多くなれば必然的に遅くなってしまうためなるべくプロジェクト単位を小さくすることで描画速度を改善することができる)</li>
+</ul>
+</li>
+<li>CPUの使用率が高い
+<ul>
+<li>ジョブのタイムアウト設定をする</li>
+<li>単にDBの性能が低いケースも考える(メモリが十分でない場合はメモリを食いつぶした後ディスクに書き込みに行くためCPU使用率が高騰してしまう、そのため運用しているRundeckとサーバーの性能が合っているかを検討する(AWSを使用しているならインスタンスクラスを変更するとか))</li>
+</ul>
+</li>
+<li>ジョブが滞留する
+<ul>
+<li>上記のCPU使用率の観点からも考え、必要であればコネクションプールの量を増やしたりのチューニングを行う</li>
+<li>MySQLならばスロークエリを出力するように設定をして遅くなっているクエリを確認してみる(私が調査した感じではクエリに問題がある場合は少なくインデックスを貼る程度で改善ができる(そもそもJPAのような記述をしているためクエリに問題があるケースは少ないと思われ))</li>
+</ul>
+</li>
+</ul>
+<h2 id="最後に">最後に</h2>
+<p>Javaできる人はソース読むのが良いと思われる。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Rundeck%E3%81%AE%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%AA%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Fabout_rundeck%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

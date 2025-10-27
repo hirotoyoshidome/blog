@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Springのform系のタグを拡張する場合</title><meta name="description" content="Springのform系のタグを拡張する場合に関するメモ。"><!-- OGP --><meta property="og:title" content="Springのform系のタグを拡張する場合"><meta name="og:description" content="Springのform系のタグを拡張する場合に関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Springのform系のタグを拡張する場合"><meta name="twitter:description" content="Springのform系のタグを拡張する場合に関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Springのform系のタグを拡張する場合</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Springのform系のタグを拡張する場合</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-08-24T00:00:00.000Z"> 2018-08-24 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/spring-jsp-tag/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/08/24</li>
+</ul>
+<h2 id="form系のタグを拡張する場合">form系のタグを拡張する場合</h2>
+<ul>
+<li>form系のタグは全てバインドを確認するため(path属性で)Modelのデータと紐付きがないとバインドエラーが発生してしまう。</li>
+<li>ほとんどのクラスでresolveIdメソッドを使用しておりHTMLに変換された際にid属性に自動的にpathと紐付いた値が設定されてしまう。</li>
+<li>idを設定したくない場合(JavaScript等で使用させたくない等)はresolveIdをオーバーライドして設定されていない場合はnullを返すことで自動設定を回避できる。</li>
+</ul>
+<h2 id="分岐系のタグを作成する場合">分岐系のタグを作成する場合</h2>
+<ul>
+<li>分岐系のタグはタグの内部でwriteTagContentメソッドをオーバーライドしタグのBody部を評価するかしないかをreturnすることで判定をはじめとする行う。</li>
+</ul>
+<h2 id="htmlに変換された際にタグではなくそのまま出力したい場合">HTMLに変換された際にタグではなくそのまま出力したい場合</h2>
+<ul>
+<li>おすすめは出来ませんがやむを得ずそのまま出力したい場合はTagWriterは使用しません。</li>
+<li>Springタグを継承して拡張する場合には親クラスのフィールドにPageContextを持っているためこれを使用する。
+<ul>
+<li>↓でJspWriterから直接書き込む方法でそのまま出力できる。</li>
+</ul>
+</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>this.pageContext.getOut().print("文字")</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="その他howto">その他HowTo</h2>
+<ul>
+<li>requestを取得したい場合はpageContextより取得する事が可能。</li>
+<li>拡張タグを作成したらtldファイルでパッケージを含めたフルパスで対象クラスを指定する。(新規でtldファイルを作成するときはWEB-INF配下に配置すること。)</li>
+<li>使用するJSPでtld宣言(taglib)を指定することで、そのJSPで拡張タグを使用することができる。</li>
+</ul> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Spring%E3%81%AEform%E7%B3%BB%E3%81%AE%E3%82%BF%E3%82%B0%E3%82%92%E6%8B%A1%E5%BC%B5%E3%81%99%E3%82%8B%E5%A0%B4%E5%90%88&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Fspring_jsp_tag%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

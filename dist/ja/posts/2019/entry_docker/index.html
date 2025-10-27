@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Docker入門</title><meta name="description" content="Docker入門に関するメモ。"><!-- OGP --><meta property="og:title" content="Docker入門"><meta name="og:description" content="Docker入門に関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Docker入門"><meta name="twitter:description" content="Docker入門に関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Docker入門</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Docker入門</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-04-29T00:00:00.000Z"> 2019-04-29 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2019/entry-docker/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2019/04/29</li>
+</ul>
+<h1 id="docker入門">Docker入門</h1>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get http://%2Fvar%2Frun%2Fdocker.sock/v1.39/containers/json: dial unix /var/run/docker.sock: connect: permission denied</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>こんな感じのエラーが出てしまったため、</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo gpasswd -a $(whoami) docker</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>dockerのグループに追加</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo chgrp docker /var/run/docker.sock</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>権限を付与</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service docker restart</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>サービスの再起動</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker search nginx</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>で正常に検索することができた。</p>
+<p><a href="https://hub.docker.com/search/?q=">https://hub.docker.com/search/?q=</a></p>
+<p>上記DockerHubというイメージがまとまっているサイトからイメージをpullする</p>
+<p>今回はnginxをpullしてみる</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker pull nginx</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>正常にpullできたか確認する</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker images</span></span>
+<span class="line"><span>>$ sudo docker images</span></span>
+<span class="line"><span>REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span></span>
+<span class="line"><span>nginx               latest              27a188018e18        9 days ago          109MB</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span></code></pre>
+<p>できてるっぽい</p>
+<p>ホスト側にマウントしたいディレクトリを作成してみる</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo mkdir /opt/docker</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>runコマンドでコンテナの生成と起動を実施する</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker run -d -p 80:80 -v /opt/docker:/opt/ubuntu --name webserver nginx</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>ちなみに</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>-d はバックグラウンドで実行</span></span>
+<span class="line"><span>-p はホストと仮想環境とのポート</span></span>
+<span class="line"><span>-v はホスト側とのマウントするディレクトリを指定</span></span>
+<span class="line"><span>--name は起動するコンテナに名前をつける</span></span>
+<span class="line"><span>nginxは確認したイメージ</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>を指定している</p>
+<p><a href="http://localhost/">http://localhost/</a>
+にアクセスすると
+Welcome to nginx!
+が出力される。⇒これでサーバーが起動していることが確認できる。</p>
+<p>Dockerでは毎回コンテナを削除する感じで作業をすることが好まれる。
+⇒そのため-vオプションでマウント設定をしておくのがオススメ。</p>
+<p>起動しているコンテナの状態を確認するときは</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker ps</span></span>
+<span class="line"><span>$ sudo docker ps</span></span>
+<span class="line"><span>CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES</span></span>
+<span class="line"><span>e186733527b2        nginx               "nginx -g 'daemon of…"   6 minutes ago       Up 6 minutes        0.0.0.0:80->80/tcp   webserver</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span></code></pre>
+<p>現在は正常にnginxが起動していることが確認できる</p>
+<p>コンテナの中にはいってみる</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker exec -it webserver /bin/bash</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>でコンテナの中に入ることができる
+ちなみに</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>exec　は指定したコンテナに対してコマンドを実行する</span></span>
+<span class="line"><span>-it　は指定したコンテナのプロンプトをターミナルに接続する</span></span>
+<span class="line"><span>webserver は先述したコマンドで設定したコンテナの名前（任意の値を設定できる）</span></span>
+<span class="line"><span>/bin/bash　実行するコマンド</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>である。</p>
+<p>ここで先程マウント設定をしたディレクトリに対してファイルを出力してみる。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>root@e186733527b2:/opt# cd ubuntu/</span></span>
+<span class="line"><span>root@e186733527b2:/opt/ubuntu# pwd</span></span>
+<span class="line"><span>/opt/ubuntu</span></span>
+<span class="line"><span>root@e186733527b2:/opt/ubuntu# touch test</span></span>
+<span class="line"><span>root@e186733527b2:/opt/ubuntu# ls</span></span>
+<span class="line"><span>test</span></span>
+<span class="line"><span>root@e186733527b2:/opt/ubuntu# </span></span>
+<span class="line"><span></span></span></code></pre>
+<p>コンテナのターミナルを抜けてマウント先のディレクトリで確認をしてみる。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>$/opt/docker$ pwd</span></span>
+<span class="line"><span>/opt/docker</span></span>
+<span class="line"><span>$/opt/docker$ ll</span></span>
+<span class="line"><span>total 8</span></span>
+<span class="line"><span>drwxr-xr-x 2 root root 4096 Apr 26 22:23 ./</span></span>
+<span class="line"><span>drwxr-xr-x 5 root root 4096 Apr 26 22:11 ../</span></span>
+<span class="line"><span>-rw-r--r-- 1 root root    0 Apr 26 22:23 test</span></span>
+<span class="line"><span>$/opt/docker$ </span></span>
+<span class="line"><span></span></span></code></pre>
+<p>正常にマウントされている。</p>
+<p>このときexitでぬけても</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker ps</span></span>
+<span class="line"><span>$ sudo docker ps</span></span>
+<span class="line"><span>CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES</span></span>
+<span class="line"><span>e186733527b2        nginx               "nginx -g 'daemon of…"   14 minutes ago      Up 14 minutes       0.0.0.0:80->80/tcp   webserver</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>プロセスは動いている。</p>
+<p>コンテナを停止する場合は</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>$ sudo docker stop webserver</span></span>
+<span class="line"><span>$ sudo docker ps</span></span>
+<span class="line"><span>CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span></code></pre>
+<p>正常にとまる。</p>
+<p>一度runしたコンテナを起動させるには</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker start webserver</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>で起動できる。</p>
+<p>コンテナを削除する場合は</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo docker rm webserver</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>で削除ができる。</p>
+<h1 id="vagrantでの違い">Vagrantでの違い</h1>
+<p>VagrantはVagrantfileをもとに</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>vagrant up</span></span>
+<span class="line"><span>vagrant ssh</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>コマンドを実行することで仮想環境を作成することができますが、起動するまでにかなり時間がかかります。</p>
+<p>特に最初の起動では時間がかかります。</p>
+<p>メモリの使用率とかもDockerを使用したほうがかなり抑えられるようです。</p>
+<p>開発環境としてはVagrantの方がVBoxによって管理されるため、いいかもしれませんが、動作に機敏性をもたせたいなら、Dockerなのかなとか思いました。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Docker%E5%85%A5%E9%96%80&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2019%2Fentry_docker%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

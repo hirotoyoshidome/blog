@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RubyOnRailsのインストールエラー</title><meta name="description" content="RubyOnRailsのインストールエラーに関するメモ。"><!-- OGP --><meta property="og:title" content="RubyOnRailsのインストールエラー"><meta name="og:description" content="RubyOnRailsのインストールエラーに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="RubyOnRailsのインストールエラー"><meta name="twitter:description" content="RubyOnRailsのインストールエラーに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">RubyOnRailsのインストールエラー</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">RubyOnRailsのインストールエラー</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-08-05T00:00:00.000Z"> 2018-08-05 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/install-ruby-rails-windows/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/08/05</li>
+</ul>
+<h2 id="前提">前提</h2>
+<p>動作確認を行った環境は下記のとおりです。</p>
+<ul>
+<li>Windows10</li>
+<li>64bit</li>
+<li>Ruby 2.4</li>
+<li>Rails 5.2</li>
+</ul>
+<h2 id="エラーになっていた箇所">エラーになっていた箇所</h2>
+<p>プロンプトから</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>gem install rails</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>を行った際にmsys2がないためインストールできないようなエラーが出てしまった。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>gem list --local</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>で確認しても正常にインストールできていなかった。</p>
+<p>もちろん</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>rails -v</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>でも認識されず。</p>
+<h2 id="原因解決">原因＆解決</h2>
+<ul>
+<li>Rubyをインストールする際にmsys2のインストールを行ってくれる画面に行くことができるがそこでインストールを行わずスキップしてしまっていた。</li>
+<li>msys2を自分でいれて直すこともできるらしいが今回はRubyを入れなおしてみた。</li>
+</ul>
+<p><img src="/images/install_ruby_rails_windows.png" alt="msys2.png"></p>
+<ul>
+<li>Rubyのインストール後プロンプトが自動で開きこんなのが出てきたら[Enter]を押さず順番に↓をを行う。
+<ul>
+<li>1を入力して[Enter]でインストール。</li>
+<li>2を入力して[Enter]で更新。</li>
+<li>3を入力して[Enter]でMINGWのインストール？</li>
+</ul>
+</li>
+</ul>
+<p>※ 詳しいことはよくわからないがC言語で書かれたコードのコンパイラ？を使うために必要らしい。。</p>
+<ul>
+<li>正常にインストールした後にもう一度</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>gem install rails</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>で正常にインストールができた！！</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=RubyOnRails%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%82%A8%E3%83%A9%E3%83%BC&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Finstall_ruby_rails_windows%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

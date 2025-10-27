@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Trying Out Web Push Notifications</title><meta name="description" content="Minimal flow for enabling web push, caveats, and sample code."><!-- OGP --><meta property="og:title" content="Trying Out Web Push Notifications"><meta name="og:description" content="Minimal flow for enabling web push, caveats, and sample code."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Trying Out Web Push Notifications"><meta name="twitter:description" content="Minimal flow for enabling web push, caveats, and sample code."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Trying Out Web Push Notifications</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Trying Out Web Push Notifications</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2022-07-13T00:00:00.000Z"> 2022-07-13 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2022/how_to_use_web_push/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2022/07/13</li>
+</ul>
+<h2 id="trying-out-web-push">Trying Out Web Push</h2>
+<p>Notifications matter for web services. Beyond in-app notices or email, web push is another channel worth exploring. Here is a lightweight implementation flow.</p>
+<h2 id="flow">Flow</h2>
+<ol>
+<li>Load <code>serviceWorker.js</code>.</li>
+<li>In the service worker, register a handler for the <code>push</code> event.</li>
+<li>User visits the page.</li>
+<li>Browser prompts for permission; the user grants it.</li>
+<li>Use the public key to subscribe.</li>
+<li>On success you receive an endpoint and token.</li>
+<li>Send the endpoint/token to your server.</li>
+<li>When you need to notify the user, have the server POST to the endpoint with the token (encrypt the payload).</li>
+<li>If the service worker is active, it catches the push event and displays the notification.</li>
+</ol>
+<h2 id="sample-code">Sample code</h2>
+<p><a href="https://github.com/hirotoyoshidome/exp-web-push">https://github.com/hirotoyoshidome/exp-web-push</a></p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Keep the private key on the server; use it when POSTing the message.</li>
+<li>Do not expose the private key publicly.</li>
+<li>Push does not work in incognito windows (the console shows an error).</li>
+<li>If the user denies permission, you cannot force notifications—no endpoint/token is issued.</li>
+<li>In Chrome DevTools (Application tab) you can send test messages to a service worker.</li>
+<li>Server-side pushes accept only one text payload, but you can place JSON in the notification <code>data</code> field to pass URLs etc., and open pages when the user clicks the notification.</li>
+<li>Encrypt messages when pushing from the server. Use a library (Python, Node.js, etc.) to handle the details.</li>
+</ul>
+<h2 id="closing">Closing</h2>
+<p>Setting up push required more steps than I expected, but adding another notification channel can be worthwhile.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Trying%20Out%20Web%20Push%20Notifications&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2022%2Fhow-to-use-web-push%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

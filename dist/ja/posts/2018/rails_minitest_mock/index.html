@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RailsのMiniTestでMockやStubを利用する方法</title><meta name="description" content="RailsのMiniTestでMockやStubを利用する方法に関するメモ。"><!-- OGP --><meta property="og:title" content="RailsのMiniTestでMockやStubを利用する方法"><meta name="og:description" content="RailsのMiniTestでMockやStubを利用する方法に関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="RailsのMiniTestでMockやStubを利用する方法"><meta name="twitter:description" content="RailsのMiniTestでMockやStubを利用する方法に関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">RailsのMiniTestでMockやStubを利用する方法</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">RailsのMiniTestでMockやStubを利用する方法</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-12-29T00:00:00.000Z"> 2018-12-29 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/rails-minitest-mock/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/12/29</li>
+</ul>
+<h1 id="railsのminitestでmockやstubを利用する方法">RailsのMiniTestでMockやStubを利用する方法</h1>
+<p>Railsで開発をしている皆さん、こんにちは！！</p>
+<p>今までJavaで開発を行ってきたのですが転職を機にRubyやPHPを使うことになったのでRailsでの単体テストで使用されるMiniTestでモックやスタブを使用する方法について書きたいと思います。</p>
+<p>Javaで開発をしていた時はJUnitというもので単体テストのモックをしていたのですがMiniTestにもあるだろうということで探したらあったので書き残します。</p>
+<h2 id="minitestってなんぞや">MiniTestってなんぞや？</h2>
+<p>MiniTestとは</p>
+<ul>
+<li>Railsで標準で使用することのできるテスティングフレームワーク</li>
+<li>巷でデファクトスタンダード？となっているかもしれないRSpecよりも軽いらしい</li>
+<li>単体テストで使用されるもの。</li>
+</ul>
+<p>では簡単なMiniTestの使用方法から書き残します。</p>
+<h2 id="minitestの基本的な使い方">MiniTestの基本的な使い方</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>test "test case 001" do</span></span>
+<span class="line"><span>  assert_equal '期待値', 'テスト対象の値'</span></span>
+<span class="line"><span>end</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>の様にしてテストを行います。</p>
+<p>テスト対象の値の部分にテスト対象のメソッドの値や、メソッドの戻り値のデータなどを入れてテストを行います。</p>
+<p>例では、assert_equalを使用していますが、これは引数に与えられた値の同一性を検証するテストです。</p>
+<p>他にも下記の様なものがあります！</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">アサーション</th><th align="center">内容</th></tr></thead><tbody><tr><td align="center">assert</td><td align="center">引数に与えられた値がtrueのとき成功</td></tr><tr><td align="center">assert_empty</td><td align="center">引数に与えられた値がからのとき成功</td></tr><tr><td align="center">assert_raise</td><td align="center">引数に与えられたエラークラスが発生した場合に成功</td></tr></tbody></table>
+<p>基本的なテストならこれくらいで書くことができるでしょう。</p>
+<p>他にもたくさんあるようなので適宜、調べて使用してみてください！</p>
+<h2 id="mockとはなんぞや">Mockとはなんぞや？</h2>
+<ul>
+<li>Mockとは、はりぼてのことです。</li>
+<li>通常の処理をテストのときだけ処理させなかったり、テストのときだけ処理の内容を変更したりすることができます。</li>
+<li>なぜ、モックが必要なのかというと単体テストは部品のテストです。そのため、ほかのクラスであったり、外部の機能は単体テストの範囲外となります。そのためモックを使用して今回のテスト範囲外の部分をはりぼてとしてしまうのです。</li>
+</ul>
+<p>ではMockを使用した簡単な例を見てみましょう！</p>
+<h2 id="minitestmockの使用方法">MiniTest::Mockの使用方法</h2>
+<p>まず、モックを使用するには外部ファイルを読み込まなくてはいけませんのでファイルの先頭の方に</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>require 'minitest/autorun'</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>を追加しましょう。</p>
+<p>これを追加することでモックを使用することができるようになります。</p>
+<p>下の例ではConstクラスに定義されたVARという定数をモック化して書き換える処理を例として挙げます。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>class Const</span></span>
+<span class="line"><span>  VAR = 'before'</span></span>
+<span class="line"><span>end</span></span>
+<span class="line"><span></span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>test "test case 002" do</span></span>
+<span class="line"><span>  mock = MiniTest::Mock.new</span></span>
+<span class="line"><span>  mock.expect :call, "モックを使用した後に使用したい値", []</span></span>
+<span class="line"><span>  Const.stub :VAR, mock do</span></span>
+<span class="line"><span>    # この範囲内なら定数VARの値は「モックを使用した後に使用したい値」に変更される。</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span>end</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>の様に使用します。</p>
+<p>単体テストなどでカバレッジを取りたい時などに使用できるかと思います！！</p>
+<p>また、</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>test "test case 003" do</span></span>
+<span class="line"><span>  Const.stub :VAR, "モックを使用した後に使用したい値" do</span></span>
+<span class="line"><span>    # この範囲内では定数VARは「モックを使用した後に使用したい値」と設定されている。</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span>end</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>このように使用することもできます。</p>
+<p>詳しくは公式のドキュメントを参照してください。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Rails%E3%81%AEMiniTest%E3%81%A7Mock%E3%82%84Stub%E3%82%92%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Frails_minitest_mock%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Blockchain Basics in Detail</title><meta name="description" content="A long-form primer covering blockchain concepts, P2P, cryptography, consensus, and developer resources."><!-- OGP --><meta property="og:title" content="Blockchain Basics in Detail"><meta name="og:description" content="A long-form primer covering blockchain concepts, P2P, cryptography, consensus, and developer resources."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Blockchain Basics in Detail"><meta name="twitter:description" content="A long-form primer covering blockchain concepts, P2P, cryptography, consensus, and developer resources."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Blockchain Basics in Detail</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Blockchain Basics in Detail</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-12-01T00:00:00.000Z"> 2019-12-01 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2019/about_blockchain_detail/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2019/12/01</li>
+</ul>
+<h2 id="introduction">Introduction</h2>
+<p>This article targets people who have not studied blockchain yet, find it intimidating, or just started learning.</p>
+<h2 id="agenda">Agenda</h2>
+<ul>
+<li><a href="#what-is-blockchain">What is blockchain?</a></li>
+<li><a href="#p2p">What is a P2P network?</a></li>
+<li><a href="#cryptography">What are the core cryptographic techniques?</a></li>
+<li><a href="#consensus">What is a consensus algorithm?</a></li>
+<li><a href="#tools">Languages, libraries, and tools</a></li>
+<li><a href="#closing">Closing thoughts</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+<h2 id="what-is-blockchain"><a id="what-is-blockchain"></a>What is blockchain?</h2>
+<p>First, blockchain and cryptocurrency are different. Blockchain combines four pillars:</p>
+<ul>
+<li>Cryptography</li>
+<li>Peer-to-peer networking</li>
+<li>Consensus algorithms</li>
+<li>Smart contracts</li>
+</ul>
+<p>It uses DLT (Distributed Ledger Technology) to make transaction history tamper-resistant. A block bundles transactions and contains the previous block’s hash, so altering one block would require rewriting every block above it. DLT shares and stores history across the P2P network, keeping the network safe.</p>
+<p>Keep in mind that blockchain networks usually have public nets (mainnet), private nets, and test nets.</p>
+<h3 id="cryptocurrency">Cryptocurrency</h3>
+<p>Bitcoin (BTC), Ethereum (ETH), NEM, Ripple (XRP), etc., aim to become alternatives to fiat currency. Each has different goals.</p>
+<ul>
+<li><strong>Bitcoin</strong> – The first cryptocurrency, based on a paper posted by someone named Satoshi Nakamoto. It still has the most transaction volume. Units: bitcoin or satoshi.</li>
+<li><strong>Ethereum</strong> – Runs programs (smart contracts) on the Ethereum blockchain so you can build systems on-chain. Executing code consumes the coin you hold. Units: ether or wei.</li>
+<li><strong>NEM</strong> – Short for New Economic Movement. Focuses on building economic activity.</li>
+<li><strong>Ripple (XRP)</strong> – Applies blockchain ideas to international remittances. Often used as a bridge currency (e.g., JPY ⇒ XRP ⇒ USD).</li>
+</ul>
+<p>Each coin has its own philosophy and algorithm, so the world of crypto is deep.</p>
+<h3 id="centralized-vs-decentralized">Centralized vs. decentralized</h3>
+<p>Traditional systems are centralized: client-server models where the server dictates rules and permissions. Blockchain targets <strong>decentralized systems</strong>. If you tried to build a version of Uber on blockchain, driver ratings or fares would be computed by protocol rules and smart contracts, not by a central DB. The underlying platforms (Ethereum, etc.) are OSS, reducing the chance of foul play.</p>
+<h2 id="p2p-networks"><a id="p2p"></a>P2P networks</h2>
+<p>P2P = peer-to-peer: computers connect as equals rather than through a central server. Imagine a circle of computers sharing a file via Bluetooth—they authenticate one another and share resources. Each computer that joins strengthens the network because data is distributed everywhere. With HTTP, a single server failure leads to downtime; with P2P, any peer can respond as long as one copy survives.</p>
+<h2 id="cryptographic-building-blocks"><a id="cryptography"></a>Cryptographic building blocks</h2>
+<p>Blockchain relies on:</p>
+<ul>
+<li>SHA-256</li>
+<li>RIPEMD-160</li>
+<li>Public-key cryptography</li>
+</ul>
+<p>SHA-256 and RIPEMD-160 are hash functions (often combined as Hash160). A hash function generates a fixed-length random-looking value and is one-way—you cannot derive the original input. Many systems use it: login passwords are stored as hashes; Git commit IDs are hashes. Because a hash is deterministic for the same input, it is perfect for integrity checks.</p>
+<p>Public-key cryptography uses separate keys for encryption and decryption. The public key can be shared; the private key must stay secret. SSH key authentication and digital signatures are examples. Elliptic-curve cryptography underpins many implementations.</p>
+<p>Where is this used in blockchain? Wallets and transfers. Wallets store your <strong>private key</strong>; your balance is computed from UTXOs (Unspent Transaction Outputs). You collect UTXOs to see how much you own.</p>
+<h3 id="transactions-and-miners">Transactions and miners</h3>
+<ul>
+<li><strong>Transactions</strong> are the atomic units that record sending currency or claiming block rewards. Like DB transactions, they keep data consistent.</li>
+<li><strong>Miners</strong> use massive compute resources to solve the puzzles defined by the consensus algorithm and package transactions into blocks. They earn coins as a fee for doing so.</li>
+</ul>
+<p>Bitcoin, for example, asks miners to find a double-hashed value below a target. Because hashes are one-way, the only strategy is brute force, which is why it consumes so much compute power.</p>
+<p>Each transaction output (UTXO) can become the input of the next transaction. When you get change during a payment, the input references your previous outputs and the change becomes part of the new outputs. Because everything is modeled as input/output pairs, you never end up in a state where one side updates without the other.</p>
+<h2 id="consensus-algorithms"><a id="consensus"></a>Consensus algorithms</h2>
+<p>The trickiest pillar is consensus. Wikipedia defines it as a protocol that lets distributed nodes agree on a single value/state. In short, it is the rulebook for forming consensus. Bitcoin uses PoW (Proof of Work); Ethereum currently uses PoS (Proof of Stake).</p>
+<h3 id="proof-of-work-pow">Proof of Work (PoW)</h3>
+<p>Literally “proof of work.” Miners include transactions in blocks by solving the PoW puzzle. The computed value (called the nonce) must satisfy the difficulty target. Neighboring nodes verify the result and propagate it outward. Once the network agrees it is correct, the block is accepted. This is how Bitcoin forms consensus.</p>
+<h3 id="proof-of-stake-pos">Proof of Stake (PoS)</h3>
+<p>PoS shifts from “whoever has more compute wins” to “whoever stakes more coins earns the right to validate.” Validators lock coins, propose blocks, and are rewarded (or slashed) based on behavior. Energy consumption is far lower and the system is less prone to 51% attacks.</p>
+<p>Many other consensus algorithms exist (DPoS, PBFT, etc.), and each blockchain picks one that fits its goals.</p>
+<h2 id="languages-libraries-and-tools"><a id="tools"></a>Languages, libraries, and tools</h2>
+<p>Because Ethereum popularized smart contracts, most docs are in English. Useful resources include:</p>
+<ul>
+<li>Solidity (smart contract language)</li>
+<li>Web3.js / web3.py</li>
+<li>Truffle, Remix, Hardhat</li>
+<li>Go-Ethereum (geth)</li>
+<li>Bitcoin Core</li>
+</ul>
+<p>To run a private net, you typically spin up geth (Go) or parity (Rust). For smart contract dev you will write Solidity, test with JavaScript/Python harnesses, and deploy via CLI tools.</p>
+<h2 id="closing-thoughts"><a id="closing"></a>Closing thoughts</h2>
+<p>Japanese information on blockchain is still scarce, so you often have to read papers, wikis, or talks in English (e.g., Bettina Warburg’s TED talk or Satoshi Nakamoto’s original paper). Still, the technology has plenty of potential beyond cryptocurrencies. I hope more people take interest—it will accelerate progress.</p>
+<h2 id="references"><a id="references"></a>References</h2>
+<ul>
+<li>All links mentioned in the text</li>
+<li>堅牢なスマートコントラクト開発のためのブロックチェーン技術入門 (Gijutsu-Hyoronsha)</li>
+<li>ブロックチェーンアプリケーション開発の教科書 (Mynavi)</li>
+</ul> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Blockchain%20Basics%20in%20Detail&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2019%2Fabout-blockchain-detail%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

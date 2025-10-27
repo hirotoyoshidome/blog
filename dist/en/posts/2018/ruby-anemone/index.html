@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Using anemone in Ruby</title><meta name="description" content="How to crawl pages with the anemone gem and how to configure it behind a proxy."><!-- OGP --><meta property="og:title" content="Using anemone in Ruby"><meta name="og:description" content="How to crawl pages with the anemone gem and how to configure it behind a proxy."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Using anemone in Ruby"><meta name="twitter:description" content="How to crawl pages with the anemone gem and how to configure it behind a proxy."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Using anemone in Ruby</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Using anemone in Ruby</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-09-04T00:00:00.000Z"> 2018-09-04 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2018/ruby_anemone/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2018/09/04</li>
+</ul>
+<h2 id="what-is-anemone">What is anemone?</h2>
+<ul>
+<li>anemone is a Ruby crawling framework.</li>
+<li>Install it via <code>gem install anemone</code>.</li>
+</ul>
+<h2 id="sample-usage">Sample usage</h2>
+<ol>
+<li>Require the library from your Ruby script.</li>
+<li>Provide a URL (or domain) and anemone will follow links and run your logic.</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>require 'anemone'</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># Simple crawler that returns URLs</span></span>
+<span class="line"><span>class Crawl</span></span>
+<span class="line"><span>  # Only traverse one level deep</span></span>
+<span class="line"><span>  def find_url(domain)</span></span>
+<span class="line"><span>    urls = []</span></span>
+<span class="line"><span>    Anemone.crawl(domain, depth_limit: 1) do |anemone|</span></span>
+<span class="line"><span>      anemone.on_every_page do |page|</span></span>
+<span class="line"><span>        urls.push(page.url)</span></span>
+<span class="line"><span>      end</span></span>
+<span class="line"><span>    end</span></span>
+<span class="line"><span>    urls</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span>end</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>The method above receives a domain, crawls one level, and returns the discovered URLs as an array.</p>
+<h3 id="options">Options</h3>
+<p>You can pass options to <code>Anemone.crawl</code>:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">Option</th><th align="center">Purpose</th></tr></thead><tbody><tr><td align="center"><code>depth_limit</code></td><td align="center">Number of levels to traverse</td></tr><tr><td align="center"><code>delay</code></td><td align="center">Wait time (seconds) between requests</td></tr><tr><td align="center"><code>skip_query_strings</code></td><td align="center">Ignore query strings when <code>true</code></td></tr></tbody></table>
+<p>Other helpers:</p>
+<ul>
+<li><code>on_every_page</code> lets you run logic for every visited page.</li>
+<li><code>focus_crawl</code> narrows down which pages <code>on_every_page</code> receives.</li>
+<li><code>on_pages_like</code> runs only on URLs that match a regex.</li>
+<li><code>skip_links_like</code> excludes URLs that match a regex.</li>
+<li>You can fetch the URL, raw HTML (<code>body</code>), or a Nokogiri-ready doc (<code>doc</code>).</li>
+</ul>
+<p>See the <a href="https://github.com/sparklemotion/nokogiri">GitHub README</a> for details.</p>
+<h2 id="crawling-behind-a-proxy">Crawling behind a proxy</h2>
+<p><strong>This tripped me up.</strong> When you set proxy options, the values differ from what Nokogiri expects.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="center">Option</th><th align="center">Value</th></tr></thead><tbody><tr><td align="center"><code>proxy_host</code></td><td align="center">Only the proxy host name</td></tr><tr><td align="center"><code>proxy_port</code></td><td align="center">Port number as a string</td></tr></tbody></table>
+<p>Unlike Nokogiri—where you pass <code>http://xxx.co.jp:80</code>—anemone expects just the host portion (<code>xxx.co.jp</code>). Including the protocol (e.g., <code>http://</code>) breaks the proxy configuration even though the option is called “host.”</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://github.com/sparklemotion/nokogiri">https://github.com/sparklemotion/nokogiri</a></li>
+<li><a href="https://www.amazon.co.jp/dp/4797380357/">Ruby Web Crawler Techniques</a></li>
+</ul> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Using%20anemone%20in%20Ruby&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2018%2Fruby-anemone%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

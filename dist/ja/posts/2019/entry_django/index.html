@@ -1,0 +1,214 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Djangoエントリー</title><meta name="description" content="Djangoエントリー"><!-- OGP --><meta property="og:title" content="Djangoエントリー"><meta name="og:description" content="Djangoエントリー"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Djangoエントリー"><meta name="twitter:description" content="Djangoエントリー"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Djangoエントリー</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Djangoエントリー</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-05-11T00:00:00.000Z"> 2019-05-11 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2019/entry-django/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2019/05/11</li>
+</ul>
+<h1 id="djangoとは">Djangoとは</h1>
+<p>DjangoとはPythonのフルスタックWEBフレームワークです。</p>
+<p>RubyのRubyOnRails, PHPのLaravelと並ぶ、有名なフレームワークです。</p>
+<h2 id="環境の構築方法">環境の構築方法</h2>
+<p>まずはPythonを入れましょう。</p>
+<p>pip経由でDjangoをインストールすることができます。</p>
+<h2 id="helloworld出力まで">HelloWorld出力まで</h2>
+<p>djangoのインストールとかは事前に実施済みの想定</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>django-admin startproject sample</span></span>
+<span class="line"><span>python3 manage.py startapp hello</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>hellp/viewsを編集してHelloWorldを出力するように修正する</p>
+<p>プロジェクトディレクトリ配下のsettings.pyのINSTALLED_APPSの部分に追加したアプリケーションを設定して認識させる</p>
+<p>プロジェクト配下のurls.pyにルーティングの設定をしてパスに対してhelloアプリケーションの方を参照するように設定をする</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>python3 manage.py runserver</span></span>
+<span class="line"><span></span></span></code></pre>
+<p><a href="http://localhost:8000/hello/">http://localhost:8000/hello/</a> にアクセスして正常に出力されるかを確認する。</p>
+<h3 id="最初だけ実施するコマンドわかったこと">最初だけ実施するコマンド＆わかったこと</h3>
+<p>プロジェクトのディレクトリが</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>django-admin startproject {projectname}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>のコマンドで生成される。</p>
+<p>上記のコマンドで生成されたディレクトリ配下のsettings.pyでアプリケーションの管理設定ができるみたい</p>
+<p>urls.pyでルーティングの設定ができるが、参照しているのはプロジェクト配下のurls.pyである（自動で生成されるもの）</p>
+<h2 id="model">Model</h2>
+<ul>
+<li>startappコマンドで生成されたディレクトリ配下（今回ではhello）にmodels.pyが存在しているためこのファイルにデータベースのスキーマに相当する記述を行う</li>
+</ul>
+<p>※ <code>__str__</code> メソッドは実装しておくこと</p>
+<p>※プロジェクトディレクトリ（今回ではsample）配下のsettings.pyファイルでDBについ設定することができるけど、今回は標準のSQLiteを使用する。</p>
+<ul>
+<li>hello/models.pyにスキーマ情報を記載したら、sample/setting.pyのINSTALLED_APPの部分にHelloConfigを読み込む設定を追記する</li>
+<li>マイグレートファイルを作成する</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>python3 manage.py makemigrations hello</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>マイグレートファイルのSQLの確認を実施する</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>python3 manage.py sqlmigrate hello 0001</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>※0001はマイグレーションファイルの番号で識別する</p>
+<ul>
+<li>マイグレートを実施する</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>python3 manage.py migrate</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="model確認おまけ">model確認（おまけ）</h3>
+<ul>
+<li>APIモードに入ってDBを操作してみる</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>python3 manage.py shell</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>下記コマンドで確認できる</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>>>> from hello.models import Choice, Question</span></span>
+<span class="line"><span>>>> Question.objects.all()</span></span>
+<span class="line"><span>>>> from django.utils import timezone</span></span>
+<span class="line"><span>>>> q = Question(question_text="What's new?", pub_date=timezone.now())</span></span>
+<span class="line"><span>>>> q.save()</span></span>
+<span class="line"><span>>>> q.id</span></span>
+<span class="line"><span>>>> q.question_text</span></span>
+<span class="line"><span>>>> q.pub_date</span></span>
+<span class="line"><span>>>> quit</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="admin画面httplocalhost8000admin">admin画面(<a href="http://localhost:8000/admin">http://localhost:8000/admin</a>)</h2>
+<ul>
+<li>下記コマンドでスーパーユーザを追加する</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>python3 manage.py createsuperuser</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>プロンプトに従ってユーザーを追加する</p>
+<ul>
+<li>hello/admin.pyに作成したスキーマ（models.pyに記載してあるclass）を読み込むように設定をする</li>
+<li>サーバーを起動してadmin画面にログインをすることで画面からDBを操作できるようになる</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>python3 manage.py runserver</span></span>
+<span class="line"><span>http://localhost:8000/admin</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="view">View</h2>
+<ul>
+<li>
+<p>公式のチュートリアルに合わせるようにアプリケーション内のurls.py(hello/urls.py)をプロジェクトのurls.py(sample/urls.py)でincludeして読み込む</p>
+</li>
+<li>
+<p>/で区切った値を取得できるようにするためにhello/urls.pyに記載することで取得できるようになる</p>
+</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>http://localhost:8000/hello</span></span>
+<span class="line"><span>http://localhost:8000/hello/1/</span></span>
+<span class="line"><span>http://localhost:8000/hello/1/results/</span></span>
+<span class="line"><span>http://localhost:8000/hello/1/vote/</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>にアクセスすることでそれぞれのルーティングにアクセスすることが可能</p>
+<ul>
+<li>テンプレートファイルを使用して読み込むとき変数は <code>{{ var  }}</code> のような感じで読み込むことができる</li>
+<li>画面に出力しないものに関しては <code>{% if x %}{% endif %}</code> , <code>{% for x in xx %}{% endfor %}</code> のような感じで簡単な分岐、ループができる</li>
+<li>renderメソッドを使用することで簡単にテンプレートにレンダリングすることができ、引数で辞書型の値を渡すことでテンプレートファイルから変数を使用できるようになる</li>
+<li>テンプレートファイルではハードコーディングしたくないため、urlメソッドを使用してviews.pyのメソッド名を渡すことでパスを記載する</li>
+<li>名前空間(app_nameで定義)を使用することで同一名でもきれいにまとめられる</li>
+</ul>
+<h2 id="form関連">form関連</h2>
+<ul>
+<li>templateの部分でfor文のインデックスを取得したい場合は{{ forloop.counter }}を使用することで取得できる</li>
+<li>formを作成する場合は、HTML標準のタグを使用して、その中でpythonを記述することができる</li>
+<li>CSRF対策として{% csrf_token %}を記述することでトークンが自動的に設定できる（formタグ内に記載すること）</li>
+<li>MTVモデルのためコントローラの概念はなくViewのファイルに処理を記載すること</li>
+<li>Question : Choice = 1 : nの関係に紐づくようにModelファイルで外部キーが設定されているため、管理画面(admin)からデータをインサートして投票の確認をすることができる</li>
+<li>リダイレクト処理をするときにreverseメソッドを使用することでハードコーディングを防ぐことができるため、使用すること</li>
+</ul>
+<h2 id="汎用ビュー">汎用ビュー</h2>
+<ul>
+<li>Djangoには標準で汎用的に使用できるViewが用意されている</li>
+<li>urls.pyで汎用のビューを継承したviews.pyに定義されたclassを指定することで簡単簡潔に処理を記載することができる</li>
+<li>urls.pyのpkはプライマリーキーのことでDetailView内で使用される値のためquestion_idから変更して、記載している</li>
+<li>views.pyでは継承したクラスを設定するため、class定義の引数に継承する汎用ビューのクラスを記載する</li>
+<li>template_nameにはテンプレートの名前を設定する</li>
+<li>modelにはモデルクラスを指定する</li>
+<li>定義したget_querysetメソッドをcontext_object_nameで設定したlistの呼び出しの際に呼び出されている（裏で上書きがされている）</li>
+</ul>
+<h2 id="テストコード">テストコード</h2>
+<ul>
+<li>アプリケーションのディレクトリのtests.pyにテストケースを記述する</li>
+<li>テストを実行する場合は下記にコマンドを実行する</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>python3 manage.py test hello</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="静的コンテンツ">静的コンテンツ</h2>
+<ul>
+<li>cssを導入するときは <code>hello/static/hello/style.css</code> のようにディレクトリを切って配置してstaticメソッドをテンプレートで使用して絶対パスを指定する</li>
+<li>それを使用してcssファイルを読み込むように設定をする</li>
+</ul>
+<h2 id="管理画面">管理画面</h2>
+<ul>
+<li>hello/admin.pyを編集することで管理画面の出力方法を変更することができる</li>
+<li>カラムの出力順序やリレーションの貼られているモデルの表示方式、レコードの出力方式、フィルター、検索機能を追加することができる（実装済み）</li>
+<li>管理画面のテンプレートは</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>python -c "import django; print(django.__path__)"</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>コマンドでdjangoのソースファイルの場所を確認して、<code>django/contrib/admin/templates</code> 配下に存在している。</p>
+<ul>
+<li>これをsample/settings.pyのTEMPLATESのdirで設定したディレクトリ（今回はtemplates/配下）に同様のディレクトリ階層で配置することで上書きをすることができる</li>
+</ul>
+<h2 id="パッケージング">パッケージング</h2>
+<ul>
+<li>アプリケーションをパッケージングすることで再利用可能とする</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pip3 install setuptoola</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>を事前にインストールしておく</p>
+<ul>
+<li>アプリケーションのディレクトリごと外部のディレクトリに移動する</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>cd sampleDjango</span></span>
+<span class="line"><span>mkdir ../django-hello</span></span>
+<span class="line"><span>mv hello/ ../django-hello/</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>README.rstを作成する</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>cd ../django-hello</span></span>
+<span class="line"><span>touch README.rst</span></span>
+<span class="line"><span>vi README.rst</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>LICENSEファイルを作成する</li>
+</ul>
+<p>⇒　公開する際はライセンスをつけること</p>
+<p>⇒　多くはBSDライセンスの元に配布される</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>touch LICENSE</span></span>
+<span class="line"><span>vi LICENSE</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>setup.pyを作成する
+<ul>
+<li>アプリケーションがどのようにビルド・インストールされるかを提供するもの</li>
+</ul>
+</li>
+<li>MANIFEST.inファイルを作成する
+<ul>
+<li>どのファイルをパッケージに含めるかを設定するファイル</li>
+</ul>
+</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>touch MANIFEST.in</span></span>
+<span class="line"><span>vi MANIFEST.in</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>パッケージをビルドする</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>python3 setup.py sdist</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>distディレクトリにパッケージが生成される</p>
+<ul>
+<li>自分のパッケージを利用するには</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pip3 install --user django-hello/dist/django-hello-0.1.tar.gz</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>アンインストールするには</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pip3 uninstall django-hello</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>ここまででチュートリアル終了</p>
+<h2 id="最後に">最後に</h2>
+<p>チュートリアルのものをそのまま実施して、適宜コメントを追加したものです。
+GitHubにも同様のものが上がっています。
+<a href="https://github.com/hirotoyoshidome/sample-django">https://github.com/hirotoyoshidome/sample-django</a></p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Django%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AA%E3%83%BC&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2019%2Fentry_django%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

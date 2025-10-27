@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Upgrading MySQL 5.6 to 5.7</title><meta name="description" content="Notes from migrating an RDS instance from MySQL 5.6 to 5.7 and fixing dump import issues."><!-- OGP --><meta property="og:title" content="Upgrading MySQL 5.6 to 5.7"><meta name="og:description" content="Notes from migrating an RDS instance from MySQL 5.6 to 5.7 and fixing dump import issues."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Upgrading MySQL 5.6 to 5.7"><meta name="twitter:description" content="Notes from migrating an RDS instance from MySQL 5.6 to 5.7 and fixing dump import issues."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Upgrading MySQL 5.6 to 5.7</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Upgrading MySQL 5.6 to 5.7</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-10-27T00:00:00.000Z"> 2018-10-27 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2018/version_up_mysql5/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2018/10/27</li>
+</ul>
+<h1 id="upgrading-mysql-56-to-57">Upgrading MySQL 5.6 to 5.7</h1>
+<p>I migrated from MySQL 5.6 on a cloud VM to MySQL 5.7 on AWS RDS. Along the way I hit an issue where dumps failed because of row size limits, so here is what I did.</p>
+<h2 id="background">Background</h2>
+<ul>
+<li>The plan was to move data from a MySQL 5.6 server in the cloud to an AWS RDS instance running 5.7.</li>
+<li>Using <code>mysqldump</code> straight away failed when tables with large rows were involved.</li>
+</ul>
+<h2 id="steps">Steps</h2>
+<ol>
+<li>RDS makes it easy to restore from a snapshot, so I restored the instance (for verification I used a separate instance).</li>
+<li>Once restored, I opened the console, clicked Change, and upgraded MySQL to 5.7.</li>
+<li>Because it was a new instance I also set the security group and parameter group as needed.</li>
+<li>Obtained a dump from the cloud MySQL server with <code>mysqldump</code> (see other articles for details).</li>
+<li>Transferred the dump file to AWS via FTP/SFTP/rsync—any tool works.</li>
+<li>In my test the dump still failed because the row format was incompatible, so I altered the table definitions before importing.</li>
+<li>Logged into MySQL and checked the table definitions and file format:</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SHOW TABLE STATUS LIKE 'DB_NAME'\G</span></span>
+<span class="line"><span></span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SHOW GLOBAL VARIABLES LIKE 'innodb_file_format';</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>After verifying, I re-imported the dump. If <code>mysqldump</code> errors, you can often fix it by adjusting the table definitions and re-running the restore.</p>
+<h2 id="table-definition-and-file-format-notes">Table definition and file format notes</h2>
+<p><code>SHOW TABLE STATUS LIKE 'DB_NAME'\G</code> shows <code>ROW_FORMAT</code>. Make sure it is <code>DYNAMIC</code> or <code>COMPRESSED</code>; <code>COMPACT</code> caused my dump to fail. For file format, <code>SHOW GLOBAL VARIABLES LIKE 'innodb_file_format';</code> typically returns <code>Antelope</code> or <code>Barracuda</code>. My 5.6 server used <code>Antelope</code> and 5.7 used <code>Barracuda</code>, so switching to Barracuda resolved the issue. On RDS you can change it via the parameter group.</p>
+<p>After these tweaks, I successfully imported the dump.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Upgrading%20MySQL%205.6%20to%205.7&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2018%2Fversion-up-mysql5%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

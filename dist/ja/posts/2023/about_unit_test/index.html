@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>僕たちはなぜ単体テストを書くのか</title><meta name="description" content="僕たちはなぜ単体テストを書くのかに関するメモ。"><!-- OGP --><meta property="og:title" content="僕たちはなぜ単体テストを書くのか"><meta name="og:description" content="僕たちはなぜ単体テストを書くのかに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="僕たちはなぜ単体テストを書くのか"><meta name="twitter:description" content="僕たちはなぜ単体テストを書くのかに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">僕たちはなぜ単体テストを書くのか</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">僕たちはなぜ単体テストを書くのか</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-07-08T00:00:00.000Z"> 2023-07-08 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2023/about-unit-test/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2023/07/08</li>
+</ul>
+<h2 id="僕たちはなぜ単体テストを書くのか">僕たちはなぜ単体テストを書くのか</h2>
+<p>こんにちは。</p>
+<p>今回はタイトルの通り、「単体テスト」について書きたいと思います。</p>
+<p>単体テストは書いていますか？</p>
+<p>僕は、Webサービスを作っていく場合でも、小さなバッチ処理を書く場合でも基本的には単体テストは書いた方が良いと考えています。</p>
+<p>もちろん、使い捨てのスクリプトレベルにも単体テストを書け！というようなことではなく、あくまでプロダクトとして残り続けるもの。
+とりわけ、複数人で触る可能性があるソースに関しては単体テストがあった方が良いと思っています。</p>
+<p>経験が数年〜ベテランの人にとっては、「単体テストを書くのは当たり前ではないか！」と感じる人もいるかもしれませんが、
+今回はあえて、「単体テストの持つチカラ」について考えてみたいと思います。</p>
+<h3 id="1-プロダクトの品質が向上する">1. プロダクトの品質が向上する</h3>
+<p>まず、多くの場合の単体テストを書く目的となっている品質の部分です。</p>
+<p>単体テストでは、正常系としてINPUTに対して期待するOUTPUTがしっかりと戻ってくるか、また異常系として想定されていないINPUTに対してハンドリングができているかという観点が書いていくことが多いかと思います。</p>
+<p>例えばif文を使っている箇所があれば、if文がtrue,falseの両方の場合をテストケースとして定義してあげることが望ましいですね。</p>
+<p>複数のif文がある場合はプロダクトによってc0,c1,c2のどこまでを担保するのかというものが変わってくると思います。</p>
+<p>一つの目安となるのがテストカバレッジです。</p>
+<p>例えばJavaではJUnitを使ってテストカバレッジ計測をしたことがある人は多いのではないでしょうか？</p>
+<p>Pythonでも<a href="https://pypi.org/project/coverage/">coverage</a>というライブラリを利用することでテストカバレッジを取得することができます。</p>
+<p>このテストカバレッジの値をCIの指標として扱うケースも多いかと思います。</p>
+<p>テストケースがプロダクトのコードのどれくらいをカバーしていて、どれくらいの品質が担保されるかという観点では単体テストを書く必要性があると思います。</p>
+<h3 id="2-変更に強いプロダクトになる">2. 変更に強いプロダクトになる</h3>
+<p>次は、仕様変更などの改修に強いプロダクトになるということです。</p>
+<p>システムは小さい内は修正が及ぼす影響は小さいですが、システムが大きくなるにつれ複雑化し修正が与える影響は読めなくなってきます。</p>
+<p>そこで役に立つのが単体テストです。</p>
+<p>修正後に単体テストを通しで実行することで影響の範囲を洗い出すことができます。</p>
+<p>もちろんこれは、正しく単体テストが書かれているという前提のもの成り立つのですが、カバレッジを通すような単体テストの書き方をしている場合でもある程度は有効に働くと思っています。</p>
+<p>そのため、できればエッジケースも含めテストケースを書いておくと良いと思いますが、最低でもカバレッジを通しておくくらいのでテストケースは書いておくのが大切だと思います。</p>
+<p>実際、テストケースがないシステムの改修は影響範囲の把握が大変で触りたくないというのが本当の気持ちでしょう。</p>
+<p>現在は一人で開発しているものもチームで扱うようになった場合にテストケースの有無で扱いやすさに差が出ると思います。</p>
+<h3 id="3-再利用を促すことができる">3. 再利用を促すことができる</h3>
+<p>最後に関数などの部品の再利用を促進することができるということです。</p>
+<p>チームで開発していると、往々にして似たロジックや全く同じ関数がコピペで複製されていくというケースがあります。</p>
+<p>コードレビューのタイミングで指摘ができればまだ良い方ですが、大体の場合はレビューで弾くのは困難です。</p>
+<p>このようなことが起こる原因として考えられるのは、</p>
+<ul>
+<li>関数レベルでのテストが書かれていない</li>
+<li>関数レベルのテストを書く文化がない</li>
+<li>共通化の文化がない</li>
+</ul>
+<p>などが考えられますが、要は関数レベルでテストを書いておくことが必要ということですね。</p>
+<p>例えば、MVCモデルでいうと、ModelにあるDBアクセスの関数、Controllerにあるリクエスト処理の関数にはテストケースあることが多いでしょう。</p>
+<p>しかし、Controllerから呼び出されているファイルアップロード用の関数やバリデーション用の関数などにテストケースはありますか？</p>
+<p>こういったメインストリームから呼び出される関数にテストケースがかかれていないことが多く、コピペで複製されているケースが多いと思います。</p>
+<p>そのため、同じようなロジックは可能な限り共通化した上でテストケースを書いておくことで再利用を促す作用があると考えています。</p>
+<p>テストケースが存在しない関数は基本的には触りたくないため、再利用されることは少ないでしょう。</p>
+<h3 id="最後に">最後に</h3>
+<p>今回は、単体テストを書く意味について改めて考えてみました。</p>
+<p>普段なんとなく書いている単体テストでも、インシデントが発生した場合や、大きなシステム変更が入る場合はとてもチカラを発揮すると思います。</p>
+<p>また、個人レベルでのプロダクトでも単体テストを書くことは品質の向上だけでなく、バグの発見や開発期間が長くなった場合でも実装を忘れないという効果があると思います。</p>
+<p>テスト大事。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E5%83%95%E3%81%9F%E3%81%A1%E3%81%AF%E3%81%AA%E3%81%9C%E5%8D%98%E4%BD%93%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E6%9B%B8%E3%81%8F%E3%81%AE%E3%81%8B&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2023%2Fabout_unit_test%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

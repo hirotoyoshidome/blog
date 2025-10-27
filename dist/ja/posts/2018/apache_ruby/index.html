@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ApacheでRubyを起動したい</title><meta name="description" content="ApacheでRubyを起動したいに関するメモ。"><!-- OGP --><meta property="og:title" content="ApacheでRubyを起動したい"><meta name="og:description" content="ApacheでRubyを起動したいに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="ApacheでRubyを起動したい"><meta name="twitter:description" content="ApacheでRubyを起動したいに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">ApacheでRubyを起動したい</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">ApacheでRubyを起動したい</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-06-16T00:00:00.000Z"> 2018-06-16 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2018/apache-ruby/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2018/06/16</li>
+</ul>
+<h1 id="apacheでrubyを起動したい">ApacheでRubyを起動したい</h1>
+<p>PHPの様にApacheでRubyファイルを実行できたらと思い、動作確認を行ってみました。</p>
+<p>Railsは使用していません、疎通確認のみです。</p>
+<h2 id="行った環境">行った環境</h2>
+<ul>
+<li>Ruby 2.5.1</li>
+<li>Apache 2.4</li>
+<li>Windows 10</li>
+</ul>
+<h2 id="実際の手順">実際の手順</h2>
+<p>apacheとRubyに関してはすでに環境構築済みとなっていることを前提で話します。</p>
+<p>1). apacheのhttpdファイル
+<code>C:\Apache24\conf\httpd.conf</code> にあるhttpd.confファイルをテキストエディタで開きます。</p>
+<p>2). 大体380行目らへんにある</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;Directory "c:/Apache24/cgi-bin"></span></span>
+<span class="line"><span>        AllowOverride None</span></span>
+<span class="line"><span>        Options None</span></span>
+<span class="line"><span>        Require all granted</span></span>
+<span class="line"><span>&#x3C;/Directory></span></span>
+<span class="line"><span></span></span></code></pre>
+<p>をコメントアウトして</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;Directory "c:/Apache24/htdocs"></span></span>
+<span class="line"><span>        AllowOverride All</span></span>
+<span class="line"><span>        Options +ExecCGI</span></span>
+<span class="line"><span>        Order allow,deny</span></span>
+<span class="line"><span>        Allow from all</span></span>
+<span class="line"><span>        Require all granted</span></span>
+<span class="line"><span>&#x3C;/Directory></span></span>
+<span class="line"><span></span></span></code></pre>
+<p>を追加します。</p>
+<p>3). 大体430行目らへんにある</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>#AddHandler cgi-script .cgi</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>がコメントアウトされているためこの下に</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>AddHandler cgi-script .cgi .rb</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>を追加する。</p>
+<p>ここまでの設定で拡張子rbのファイルをcgiとして処理できるようになる。</p>
+<p>4). rbファイルの配置</p>
+<p>ファイルは <code>C:\Apache24\htdocs</code> の配下に置く</p>
+<p>ファイルは</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>#!C:/Ruby25-x64/bin/ruby.exe</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>#rubyのexeファイルを実行時に指定すること</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>puts "Content-type: text/html\n\n"; #\n\nを加えないとエラーになってしまう(ログを見て確認)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>puts "&#x3C;html>&#x3C;head>&#x3C;/head>&#x3C;body>Hello&#x3C;/body>&#x3C;/html>"</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>のような感じで作成する。</p>
+<p>この時先頭にRubyの実行環境についてしていすることとContent-typeを設定することを忘れずに!</p>
+<p>5). 動作確認</p>
+<p>最後にサーバーを立ち上げて
+<code>http://localhost/ファイル名.rb</code> にアクセスし正常にHelloが出力されることを確認出来たら成功!!</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Apache%E3%81%A7Ruby%E3%82%92%E8%B5%B7%E5%8B%95%E3%81%97%E3%81%9F%E3%81%84&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2018%2Fapache_ruby%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

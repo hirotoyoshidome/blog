@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>半年前の私</title><meta name="description" content="半年前の私に関するメモ。"><!-- OGP --><meta property="og:title" content="半年前の私"><meta name="og:description" content="半年前の私に関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="半年前の私"><meta name="twitter:description" content="半年前の私に関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">半年前の私</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">半年前の私</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-03-08T00:00:00.000Z"> 2019-03-08 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2019/look-back-infra/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2019/03/08</li>
+</ul>
+<h2 id="はじめに">はじめに</h2>
+<p>こんにちは！タイトルにもあるように今回はインフラをメインに仕事をやり始めて半年が経過したため振り返ってみたいと思います。</p>
+<p>私は約半年前に東京でプログラマ(アーキ面)として働いていたのですが若いうちしかできないと思い、思い切って札幌のWeb系の会社に転職をしました。</p>
+<p>そこでインフラチームに配属され、現在でもメインでインフラをやっています。</p>
+<p>インフラに興味がある方、開発がメインでインフラの気持ちが知りたいかたなどに読んでいただけたら嬉しいです！！</p>
+<h2 id="半年前の私">半年前の私</h2>
+<p>実際に東京で働いていた時はSIerの会社で働いていてメインはJavaとOracleという典型的なSIerで開発をしていました。</p>
+<p>先述したように、ゴリゴリ開発をした経験はあまりなく、どちらかというとアーキテクトチームに所属していたため <strong>CSRFのためトークンを！</strong> とか <strong>セッションダンプとってこれどう？？</strong> とかばっかりやっていました。</p>
+<p>他にもツールを作成したり、オフショアにやってもらったテスト受け入れだったりな感じの仕事が多かったです。(実際、かなり成長できました！！)</p>
+<p>そんなこんなで <strong>もっと開発したい</strong> と思うようになり、Web系の会社に転職することを決めました。(結局インフラチームとなりましたが。)</p>
+<p>転職先を探しているときに札幌が目に入り、幼少期北海道に住んでいたこともあり転職をきめました。</p>
+<p>さて、前置きが長くなりましたが半年前の私のスペックを下記に示します。</p>
+<ul>
+<li>Java</li>
+<li>SpringMVC</li>
+<li>Oracle</li>
+<li>Mysql</li>
+</ul>
+<p>もちろん、自分のPCにLinuxを入れているなんてことはなく、インフラ面はほとんど初心者の様な感じだったのです。</p>
+<p>幸いにもアプリケーションのデプロイはしたことがあったのでLinuxのコマンド(基本的なものに限る)は触ったことがあり、少しはできたのですがそれ以外はほぼわからない状態でした。</p>
+<h2 id="インフラ回りの勉強を必死に">インフラ回りの勉強を必死に！！</h2>
+<p>入社したての頃はそんな感じでインフラの知識はかなり弱く、とてもやっていける状態ではありませんでした。</p>
+<p>そんな経験があったからこそ、突如インフラやってといわれたときのために <strong>これだけは押さえておけ！！</strong> というものを書きたいと思います。</p>
+<h3 id="その１-ssh">その１ SSH</h3>
+<p>Linuxのコマンドでサーバー内を色々できないと話になりません。</p>
+<p>その前にssh関連のことを勉強しましょう！！</p>
+<p>sshはインフラ回りをやるうえでは必須です。</p>
+<p>そのため、 <strong>公開鍵、秘密鍵、known_host, authorized_keys</strong> は最低でも押さえておきましょう。</p>
+<h3 id="その２-aws">その２ AWS</h3>
+<p>AWSはもうどの現場でも必須の知識となっているでしょう。</p>
+<p>AWSでは様々ばサービスが提供されていますが中でも</p>
+<ul>
+<li>EC2(サーバー)</li>
+<li>RDS(データベース)</li>
+<li>CloudWatch(監視)</li>
+<li>S3(ストレージ)</li>
+<li>IAM(権限回り(ユーザーとか))</li>
+<li>VPC(ネットワーク)</li>
+</ul>
+<p>は知識として知っておかないといけないきがします。</p>
+<p>⇒インフラな人と話すときはこれくらいはないとAWSの話はできません。</p>
+<p>+αとしてRoute53(DNS周り)、ELB(ロードバランサー)、Lambda(サーバーレスランタイム)とかもあると良いかもしれません。</p>
+<h3 id="その３-仮想化">その３ 仮想化</h3>
+<p>KubernatesやDocker, Vagrant(VBox)などWindowsまたはMacの中に仮想環境を作成してその中で開発をすることが多いです。</p>
+<p>そのため、これらの知識もあるに越したことはありません。</p>
+<p>Vagrantとかは導入も簡単ですぐにCentOSやUbuntuの環境をマシンに入れることができるためオススメです！！</p>
+<h3 id="その４-shell-bash">その４ Shell, Bash</h3>
+<p>これはいろいろなコマンドをファイルとしてまとめて処理を自動化しようというものです。拡張子.shのものです。</p>
+<p>インフラをやっていると結構、自動化したいものが多く、shellを書くことが多いです。そのため基本的なshellの書き方はインターネットとかでもたくさんあるので勉強をしておくと役に立ちます！！</p>
+<h3 id="おまけ">おまけ</h3>
+<p>私の所属するチームでは他にもさまざまなツールを使用していますが、中でも多様しているのがansibleです。</p>
+<p>これは構成管理ツールで、管理対象のサーバーに対してansibeで記述した処理を実行することができます。</p>
+<p>ansibleによって環境構築を自動化したり、大量のファイル転送の自動化、何より自動でやってくれるため、人的エラーの発生を抑えることができます。(人間がやると何かしら不手際が発生することが多いため自動化が大好きです)</p>
+<p>ansibleもドキュメントはかなりたくさんあるため、オススメです！！</p>
+<h2 id="最後に">最後に</h2>
+<p>最近はオンプレからAWSへの移管タスクが結構降ってきて移管作業に追われています。</p>
+<p>移管作業に伴いDNSまわりの知識やSSL化の知識、、などなどの知識も必要となってくるため、日々勉強になっております。</p>
+<p>インフラは開発者からすると結構煙たがられることが多い感じがしますが、インフラは基盤であり大事であると思います。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E5%8D%8A%E5%B9%B4%E5%89%8D%E3%81%AE%E7%A7%81&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2019%2Flook_back_infra%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

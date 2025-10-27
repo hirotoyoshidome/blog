@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>How I Approach Data Analysis</title><meta name="description" content="A personal checklist: understanding available data, visualizing it, and computing basic statistics."><!-- OGP --><meta property="og:title" content="How I Approach Data Analysis"><meta name="og:description" content="A personal checklist: understanding available data, visualizing it, and computing basic statistics."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="How I Approach Data Analysis"><meta name="twitter:description" content="A personal checklist: understanding available data, visualizing it, and computing basic statistics."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">How I Approach Data Analysis</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">How I Approach Data Analysis</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2022-07-16T00:00:00.000Z"> 2022-07-16 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2022/how_to_analyze_data/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2022/07/16</li>
+</ul>
+<h2 id="how-i-approach-data-analysis">How I Approach Data Analysis</h2>
+<h3 id="intro">Intro</h3>
+<p>How often do you look at data? If you run a web service, that might mean Google Analytics, application logs, search histories, or browse logs. Even if you do not, there is open data—public datasets released by governments and large organizations to encourage reuse.</p>
+<p>My go-to sites:</p>
+<ul>
+<li><a href="https://www.e-stat.go.jp/">https://www.e-stat.go.jp/</a></li>
+<li><a href="https://cio.go.jp/">https://cio.go.jp/</a></li>
+</ul>
+<p>For example, the Ministry of Land, Infrastructure, Transport and Tourism publishes vehicle ownership numbers in Excel format. You can view pre-aggregated statistics right away. Even without direct access to proprietary data, you can use open data to add value to services.</p>
+<p>Here is the approach I take when I start analyzing data.</p>
+<h3 id="step-1-inventory-the-data">Step 1: Inventory the data</h3>
+<p>You cannot fight what you do not understand, and not every dataset is useful. Clarify why you need the data and which datasets support that goal. Suppose you want to forecast sales—you will likely need past monthly sales and related metrics (customer counts, foot traffic, etc.).</p>
+<p>Figure out how to retrieve it, too: raw SQL from your database, Google Analytics exports, or understanding the quirks of open data providers. This exploratory step takes time and is worth the effort.</p>
+<h3 id="step-2-visualize">Step 2: Visualize</h3>
+<p>Once you know which data to use, visualize it. Raw numbers rarely reveal patterns at a glance. Start with line charts and scatter plots. If a line chart shows a linear trend, you can reason about future values. Scatter plots can reveal relationships even when the data is not linear.</p>
+<p>Remember qualitative data exists as well—say, free vs. paid members. Group by category and analyze the quantitative metrics per group. In code, you often encode categories as numbers (paid=1, free=0), but do not treat them like continuous values; the magnitude is meaningless. Visualizations should respect that.</p>
+<h3 id="step-3-compute-statistical-indicators">Step 3: Compute statistical indicators</h3>
+<p>(Again, only for quantitative data.) After visualizing, compute basic statistics. Here are the ones I use most often:</p>
+<ul>
+<li><strong>Mean</strong> – sum divided by count. Beware of outliers when samples are few.</li>
+<li><strong>Median</strong> – the middle value when sorted. Less sensitive to outliers.</li>
+<li><strong>Mode</strong> – the most frequent value (or class). Shows common outcomes when grouped into buckets.</li>
+<li><strong>Variance</strong> – average of squared deviations from the mean. Indicates spread.</li>
+<li><strong>Standard deviation</strong> – square root of variance. Easier to interpret; used for z-scores.</li>
+</ul>
+<p>If the data looks linear (x/y pairs), add:</p>
+<ul>
+<li><strong>Slope</strong> – computed via variance/covariance or <code>SLOPE()</code> in Excel/Sheets; shows how steeply the value rises or falls.</li>
+<li><strong>Intercept</strong> – where the line crosses the y-axis (<code>INTERCEPT()</code> in Excel/Sheets). Together with slope, it defines the best-fit line for simple predictions.</li>
+</ul>
+<h3 id="closing-thoughts">Closing thoughts</h3>
+<p>Calculating these numbers is just the opening move. The real work is forming hypotheses, testing them, and extracting insights. In the age of machine learning frameworks, anyone can throw data at a model, but without understanding the basics you quickly hit a wall with real-world data. Mastering the fundamentals pays off.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=How%20I%20Approach%20Data%20Analysis&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2022%2Fhow-to-analyze-data%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cacheのヒット率測定ツール</title><meta name="description" content="Cacheのヒット率測定ツールに関するメモ。"><!-- OGP --><meta property="og:title" content="Cacheのヒット率測定ツール"><meta name="og:description" content="Cacheのヒット率測定ツールに関するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Cacheのヒット率測定ツール"><meta name="twitter:description" content="Cacheのヒット率測定ツールに関するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Cacheのヒット率測定ツール</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Cacheのヒット率測定ツール</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-09-15T00:00:00.000Z"> 2019-09-15 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2019/cache-hit-rate/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2019/09/15</li>
+</ul>
+<h1 id="cacheのヒット率測定ツール">Cacheのヒット率測定ツール</h1>
+<p>Webアプリケーションのインフラを考えるうえで、静的コンテンツ等をCDN配信にする選択肢を取ることが多いかと思います。</p>
+<p>（例えば、さくらCDNやAWS CloudFrontなど）</p>
+<p>運用していくうえで、画面ごと(URLごと)に <strong>キャッシュのヒット率</strong> や <strong>キャッシュされていないコンテンツを洗い出す</strong> ツールを作成しました。</p>
+<p><a href="https://github.com/hirotoyoshidome/hit-rate">https://github.com/hirotoyoshidome/hit-rate</a></p>
+<p>※ Docker化していますが、seleniumを利用していてchromediriverのバージョンによっては上手く動かない場合があります。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>* selenium</span></span>
+<span class="line"><span>* requests</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>↑のみ利用しています。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Cache%E3%81%AE%E3%83%92%E3%83%83%E3%83%88%E7%8E%87%E6%B8%AC%E5%AE%9A%E3%83%84%E3%83%BC%E3%83%AB&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2019%2Fcache_hit_rate%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

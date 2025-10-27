@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MySQL Implicit Casts Broke an UPDATE</title><meta name="description" content="A small lesson on implicit string-to-number conversion in MySQL and why it bit me."><!-- OGP --><meta property="og:title" content="MySQL Implicit Casts Broke an UPDATE"><meta name="og:description" content="A small lesson on implicit string-to-number conversion in MySQL and why it bit me."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="MySQL Implicit Casts Broke an UPDATE"><meta name="twitter:description" content="A small lesson on implicit string-to-number conversion in MySQL and why it bit me."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">MySQL Implicit Casts Broke an UPDATE</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">MySQL Implicit Casts Broke an UPDATE</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-07-04T00:00:00.000Z"> 2023-07-04 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2023/mysql_type_convert/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2023/07/04</li>
+</ul>
+<h2 id="mysql-implicit-casts-can-bite-updates">MySQL implicit casts can bite updates</h2>
+<p>Sometimes we store comma-separated IDs in a text column (not ideal, but it happens). Say we have <code>item</code> rows with <code>tag_id_list</code> defined as <code>VARCHAR</code>, and we want all items that only have tag <code>1</code>. Because MySQL silently casts types, the following works:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SELECT *</span></span>
+<span class="line"><span>FROM item</span></span>
+<span class="line"><span>WHERE tag_id_list = 1;</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Strictly speaking it should be:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SELECT *</span></span>
+<span class="line"><span>FROM item</span></span>
+<span class="line"><span>WHERE tag_id_list = '1';</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>The gotcha arises when updating. Suppose we want to append tag <code>2</code> to every item whose list is just <code>1</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>UPDATE item</span></span>
+<span class="line"><span>SET tag_id_list = '1,2'</span></span>
+<span class="line"><span>WHERE tag_id_list = 1;</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>This throws an error. You must treat the WHERE clause as a string:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>UPDATE item</span></span>
+<span class="line"><span>SET tag_id_list = '1,2'</span></span>
+<span class="line"><span>WHERE tag_id_list = '1';</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Implicit casting, in both databases and programming languages, can produce surprises if you are not mindful of types. Know your language and avoid unintended conversions.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=MySQL%20Implicit%20Casts%20Broke%20an%20UPDATE&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2023%2Fmysql-type-convert%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

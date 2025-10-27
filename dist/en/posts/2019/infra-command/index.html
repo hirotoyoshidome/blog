@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ops Command Cheatsheet</title><meta name="description" content="Linux, shell, Apache, DNS, MySQL, and cron commands I often need when working on infrastructure."><!-- OGP --><meta property="og:title" content="Ops Command Cheatsheet"><meta name="og:description" content="Linux, shell, Apache, DNS, MySQL, and cron commands I often need when working on infrastructure."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Ops Command Cheatsheet"><meta name="twitter:description" content="Linux, shell, Apache, DNS, MySQL, and cron commands I often need when working on infrastructure."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Ops Command Cheatsheet</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Ops Command Cheatsheet</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-04-06T00:00:00.000Z"> 2019-04-06 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2019/infra_command/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <ul>
+<li>2019/04/06</li>
+</ul>
+<h2 id="linux">Linux</h2>
+<ul>
+<li>Check for zombie processes</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>ps aux | grep [\&#x3C;]defunct\></span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Show parents/children</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>ps auxf</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Kill a process</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo kill -9 {PID}</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Disk usage</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>du -sh /path/to/dir</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Free space</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>df -h /path/to/dir</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>CPU usage</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>top</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Memory usage</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>free -m</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>List files sorted by mtime</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>ls -lrt</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>List users</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo cat /etc/passwd</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Switch user</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo su - username</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>SSH bastion config</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>cat ~/.ssh/config</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>CPU details</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo less /proc/cpuinfo</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="shell">Shell</h2>
+<ul>
+<li>Capture <code>ls</code> output into an array and loop:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>items=(`ls -l`)</span></span>
+<span class="line"><span>for item in ${items[@]}</span></span>
+<span class="line"><span>do</span></span>
+<span class="line"><span>  # work</span></span>
+<span class="line"><span> done</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Discard stdout:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>./script.sh > /dev/null</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Append stdout to a file:</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>./script.sh >> filename.log</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="apache">Apache</h2>
+<ul>
+<li>Service status</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service httpd status</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Test config (vhosts, etc.)</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service httpd configtest</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Graceful restart</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service httpd graceful</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="dns">DNS</h2>
+<ul>
+<li>Query records</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>dig domain.com</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Lookup domain info</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>nslookup domain.com</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Check ownership</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>whois domain.com</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="mysql">MySQL</h2>
+<ul>
+<li>Service status / restart</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service mysqld status</span></span>
+<span class="line"><span>sudo service mysqld restart</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Log in</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>mysql -u USER -h HOST -p</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Show databases / tables</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SHOW DATABASES;</span></span>
+<span class="line"><span>SHOW TABLES;</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>Show global variables</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SHOW GLOBAL VARIABLES;</span></span>
+<span class="line"><span>SHOW GLOBAL VARIABLES LIKE 'pattern';</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>List users / grants</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>SELECT Host, User FROM mysql.user;</span></span>
+<span class="line"><span>SHOW GRANTS FOR 'user';</span></span>
+<span class="line"><span></span></span></code></pre>
+<h2 id="cron">Cron</h2>
+<ul>
+<li>Service status</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo service crond status</span></span>
+<span class="line"><span></span></span></code></pre>
+<ul>
+<li>View jobs</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>crontab -l</span></span>
+<span class="line"><span></span></span></code></pre> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Ops%20Command%20Cheatsheet&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fen%2Fposts%2F2019%2Finfra-command%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

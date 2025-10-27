@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>よるあるWebのAWS</title><meta name="description" content="よるあるWebのAWS"><!-- OGP --><meta property="og:title" content="よるあるWebのAWS"><meta name="og:description" content="よるあるWebのAWS"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="よるあるWebのAWS"><meta name="twitter:description" content="よるあるWebのAWS"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">よるあるWebのAWS</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">よるあるWebのAWS</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2019-04-20T00:00:00.000Z"> 2019-04-20 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#engineering </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2019/aws-basic-design/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <ul>
+<li>2019/04/20</li>
+</ul>
+<h2 id="イメージ">イメージ</h2>
+<p><img src="/images/aws_basic_design.png" alt="AWSネットワーク図.png"></p>
+<h2 id="awsの各サービスについて">AWSの各サービスについて</h2>
+<h3 id="ec2">EC2</h3>
+<p>EC2とはサーバーのことです。</p>
+<p>基本構成ではWebサーバー（アプリケーション）、batchサーバー（定期実行関連）、FTPサーバー（外部連携とか）とかを設定したいと思いますでのこれらのサーバーはEC2を使用して設定をします。</p>
+<p>※ なおここではインスタンスクラスや料金、EBS, EFSに関しては触れないものとします。</p>
+<h3 id="rds">RDS</h3>
+<p>RDSとはデータベースのことです。一般的に広く使用されているリレーショナルデータベースを使用することができます。（MySQL、PostgreSQL、Oracle等も使用することができます。）</p>
+<p>RDSではマスターとリードレプリカ（スレーブとして使用）での運用を想定しています。</p>
+<p>マスターで書き込まれたデータをスレーブに同期させる構成です。</p>
+<p>※ こちらでもインスタンスクラスや料金に関して、DynamoDB等には触れません</p>
+<h3 id="s3">S3</h3>
+<p>S3はストレージのことです。</p>
+<p>画像や圧縮ファイルなどはこちらに配置して利用することを想定しています。</p>
+<p>S3ではバケット単位で（ディレクトリのようなもの）ファイルを管理することができるため、オンプレのファイルサーバーとかと同様なイメージで使用することができます。</p>
+<p>AWSのEC2を使用してアプリケーションを構築している場合、SDKを使用することでかんたんにS3にアップロードすることができます。</p>
+<p>※　こちらでは料金、Glacier等については触れません。</p>
+<h3 id="vpc">VPC</h3>
+<p>VirtualPrivateCloudのことでネットワークを切り分けることができます。</p>
+<p>今回はVPCは1つで設計したいと思います。</p>
+<p>通常はFTPサーバーを使用する場合は外部からのアクセスがあるため、切り分けた方がいいかもしれません。</p>
+<h3 id="elb">ELB</h3>
+<p>ロードバランサーのことです。</p>
+<p>複数のWebサーバーに対してアクセスをバランシングしてリクエストの負荷を分散します。</p>
+<p>ロードバランサーを設定する上でサブネット等が関連してくると思いますが今回は省略します。</p>
+<h3 id="acm">ACM</h3>
+<p>無料でSSL化をすることができる、証明書のことです。</p>
+<p>これを使用することでSSL化を実施する想定です。</p>
+<h3 id="cloudfront">CloudFront</h3>
+<p>CDNサーバーです。S3に直接アクセスが行くと、通信料金が莫大なものとなってしまうためCDN経由（CF経由）で通信を行います。</p>
+<p>CFを経由させることでデータがキャッシュされ、通信速度の改善にもなります。</p>
+<h3 id="route53">Route53</h3>
+<p>DNSサーバーの役割をするものです。こちらにAレコード、CNAMEレコード等を設定します。</p>
+<p>今回はメール関連の情報は設定しないものとします。（AWSにはメールの送信サービスであるSESというサービスもあります。）</p>
+<h3 id="lambda">Lambda</h3>
+<p>トリガーを設定して関数を実行することができます。詳しい使用方法は他の記事を参考にしてください。</p>
+<h3 id="cloudwatch">CloudWatch</h3>
+<p>各リソースの監視をすることができます。</p>
+<p>例えばEC2のCPU使用率、メモリ使用率、RDSのメモリ使用率、SESのバウンス率、各死活監視関連などを設定し、通知設定をすることができます。</p>
+<p>詳しい設定方法はこれも他の記事を参考にしてください。</p>
+<h3 id="codedeploy">CodeDeploy</h3>
+<p>GitのホスティングサービスのBitBucketやGitHubから設定をすることで、ボタン1つでデプロイができるようになるサービスです。</p>
+<p>もちろん、DEV、STG、PRODのように切り分けを行うこともできます。</p>
+<h3 id="iam">IAM</h3>
+<p>各サービスにアクセスの認可をするためにEC2やアプリケーション側でIAMの設定をする必要があります。</p>
+<p>こちらは省略とします。需要があれば別途記事にします。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E3%82%88%E3%82%8B%E3%81%82%E3%82%8BWeb%E3%81%AEAWS&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fja%2Fposts%2F2019%2Faws_basic_design%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
