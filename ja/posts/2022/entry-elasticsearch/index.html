@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Elasticsearch導入秘話</title><meta name="description" content="Elasticsearchを導入するまでの話をまとめました"><!-- OGP --><meta property="og:title" content="Elasticsearch導入秘話"><meta name="og:description" content="Elasticsearchを導入するまでの話をまとめました"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Elasticsearch導入秘話"><meta name="twitter:description" content="Elasticsearchを導入するまでの話をまとめました"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Elasticsearch導入秘話</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Elasticsearch導入秘話</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2022-10-26T00:00:00.000Z"> 2022-10-26 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Elasticsearch </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#AWS </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2022/entry-elasticsearch/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <p>業務で行った検索ロジックをElasticsrachに置き換えた話について書きたいと思います。</p>
+<p>Elasticsearchの導入前はRDBよりSQLを使って商品の検索ロジックを組み立てていました。</p>
+<p>しかし商品数の増加に伴い</p>
+<ul>
+<li>より柔軟な検索の必要性</li>
+<li>ニーズに合った検索ロジックの実現</li>
+<li>検索パフォーマンスの低下</li>
+</ul>
+<p>といった課題が浮かび上がってきました。これらの課題をクリアするためElasticsearchの導入に至りました。</p>
+<p>今回の記事では先日行ったElasticsearch導入について実際にどんなことをしたのか、ハマりポイントについて書きたいと思います。</p>
+<h2 id="elasticsearchの導入にかかるインフラ">Elasticsearchの導入にかかるインフラ</h2>
+<p>インフラとしてAWSを採択していました。DNS情報からサーバー、DBまで全てAWSのサービスを利用しています。</p>
+<p>導入を決めた時点ではElasticsearchについてもAWS OpenSearchを利用する予定でした。</p>
+<p>AWS OpenSearchはElasticsearchから派生したオープンソースプロジェクトであり、Elasticsearchとは別物です。AWS公式ドキュメントにもOpenSearchのロードマップはElasticsearchのロードマップと独立していると記載があるため、将来的にも違うものと考えていた方が良いと思います。</p>
+<p><a href="https://aws.amazon.com/jp/what-is/opensearch/">https://aws.amazon.com/jp/what-is/opensearch/</a></p>
+<p>当初はOpenSearchでの構築を検討していましたが、今回の要望で利用したいElasticsearch用のプラグインがOpenSearchでは利用できないことが調査の過程で判明し、OpenSearchの利用はやめてEC2上にElasticsearchを構築することにしました。</p>
+<p>EC2上で構築する場合、クラスタの設定や監視の設定も独自で行う必要があります。そのため初期コストは比較的高いと感じます。</p>
+<p>事前に使いたいプラグインがOpenSearchに対応しているか確認することや本当にEC2で運用する方が良いのか検討をすることが大切だと思います。</p>
+<p>※余談ですがAWS OpenSearchでもKibanaのようなサービスとしてOpenSearch DashboardsがありGUIで操作が可能となっています。</p>
+<h2 id="今回の導入で実現したかったこと">今回の導入で実現したかったこと</h2>
+<p>次にElasticsearchを導入することで期待していたことについてです。</p>
+<p>検索のデータを見ていると、検索ワードによる揺れにより上手く検索結果が表示されていないケースが多くありました。</p>
+<p>例)</p>
+<ul>
+<li>「お出かけ」と検索したときに、商品名に「おでかけ」とひらがなで入っていると当たらなくなるというもの</li>
+<li>「・」(中黒) が商品名に入っているとつなげたキーワードで当たらなくなるというもの</li>
+<li>また、同義語での検索についてもうまく検索できないというケースがありました。例)
+<ul>
+<li>「釣り」と「フィッシング」で検索結果が大きく異なる</li>
+<li>「映画館」と「シネマ」で検索結果が大きく異なる</li>
+</ul>
+</li>
+</ul>
+<p>このような検索揺れを改善することで検索精度の向上を目指すというのが大きな目的でした。</p>
+<p>同義語については、同義語辞書をメンテナンスしていくことも検討しましたが、辞書のメンテナンスは想像以上に時間とコストがかかります。</p>
+<p>同義語辞書の難しさはサービスにおいて同義語となるものとならないものが変わるケースがあることだと思います。一般的に「医者」と「病院」は同義語ではありませんが、検索においては「医者」と「病院」は同義語とみて検索した方が検索の揺れという観点では少なくなります。</p>
+<p>このような問題が際限なく発生するため同義語辞書のメンテナンスは非常に困難だと考えました。</p>
+<p>当初はAWS OpenSearchでも利用できる kuromoji という辞書を利用することを検討していましたが、検索に当てはめてみるとイマイチしっくりこないという状態でした。</p>
+<p>微妙な検索の調整をするためにユーザー定義辞書という自分たちで設定した辞書を適用することもできたのですが、コストがかかりすぎます。</p>
+<p>そこで、辞書については kuromoji ではなく、別の辞書を利用することにしました。利用している辞書はsudachi-dictというものでGithubで公開されています。※こちらの辞書はAWS OpenSearchでは使うことができません。(導入段階では)</p>
+<p><a href="https://github.com/WorksApplications/SudachiDict">https://github.com/WorksApplications/SudachiDict</a></p>
+<p>また、n-gramによる検索手法も取り入れました。これにより、ヒット件数の母数を増やすことができます。n-gramで設定する分割の閾値は小さすぎるとノイズが多くなりかえって検索精度を低下させる可能性がありますが、適切な値に調整することで、例えば「・」のような問題に対応することが可能です。</p>
+<p>このようにして検索をElasticsearchにリプレイスしました。</p>
+<h2 id="ハマりポイント">ハマりポイント</h2>
+<p>次にハマりポイントについてです。</p>
+<p>1つ目は、EC2上でのElasticsearchクラスタの構築です。</p>
+<p>クラスタを構築するためにはEC2インスタンス間での連携が必要となります。また、Elasticsearchはデータを保持するため、できる限りプライベートな環境に配置することが望まれます。</p>
+<p>複数のEC2インスタンスは同一ネットワークに存在しているためプライベートな環境でも連携は問題ないはずなのですが、なかなか連携できずハマりました。よく調べてみるとAWSのネットワークの問題より、Elasticsearchの公式よりEC2用のプラグインを使う必要があるとのことでこちらを使い連携をしました。</p>
+<p><a href="https://www.elastic.co/docs/reference/elasticsearch/plugins/discovery-ec2">https://www.elastic.co/docs/reference/elasticsearch/plugins/discovery-ec2</a></p>
+<p>2つ目は、Elasticsearchに Master-Slaveの概念がないことです。</p>
+<p>Elasticsearchの場合、1台が決まってMasterになるのではなく、クラスタを形成しているノードの中でMasterを選出する投票が行われ、Masterノードができるという仕組みをとっています。※そのため、エンドポイントにも工夫が必要です。</p>
+<p>また、投票形式のため2台構成ではHA構成にはなりません。この点も注意が必要だと思います。</p>
+<p>先にこの仕組みを知らなかったために後からインフラ構成を変更することになってしまったので、先に調べておくことが大切だと思います。</p>
+<h3 id="導入後の成果">導入後の成果</h3>
+<p>今回、Elasticsearchを導入したことにより検索のパフォーマンスについても改善がみられました。</p>
+<p>ALBのレスポンスタイムが常時0.5秒を超えていたような状態から現在は0.1秒を切る程度に安定しています。これはElasticsearchに変更したことでDBへの負荷を削減することができたためと考えています。</p>
+<p>ALB平均レスポンスタイム</p>
+<h2 id="最後に">最後に</h2>
+<p>今回は先日実施したElasticsearchの導入についてでした。</p>
+<p>検索をリプレイスすることは簡単ではありませんが、検索の精度はとても重要な機能の一つです。これからもより検索しやすく、求めているものが見つかる検索を目指していきたいと考えています。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Elasticsearch%E5%B0%8E%E5%85%A5%E7%A7%98%E8%A9%B1&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2022%2Fentry-elasticsearch%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

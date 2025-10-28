@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Handling Library Version Upgrades</title><meta name="description" content="Thoughts on how we tackle library version upgrades."><!-- OGP --><meta property="og:title" content="Handling Library Version Upgrades"><meta name="og:description" content="Thoughts on how we tackle library version upgrades."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Handling Library Version Upgrades"><meta name="twitter:description" content="Thoughts on how we tackle library version upgrades."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Handling Library Version Upgrades</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Handling Library Version Upgrades</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-05-23T00:00:00.000Z"> 2023-05-23 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Product Development </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#OSS </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Productivity </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2023/versionup_libs/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <p>If you develop, operate, and maintain a web service, you need to keep upgrading the libraries you depend on. Our team batches library upgrades on a regular cadence.</p>
+<p>This post covers a recent round of upgrade work we did at work.</p>
+<h2 id="why-we-upgrade">Why we upgrade</h2>
+<p>In my view, library upgrades serve two major purposes: addressing vulnerabilities and adopting new features.</p>
+<h3 id="addressing-vulnerabilities">Addressing vulnerabilities</h3>
+<p>When a vulnerability is discovered, a fix is often released. If you are on an older version, you run the risk of being unable to apply the patch right away.</p>
+<p>You also need to keep track of each library’s support window.</p>
+<p>When you fall out of support, vulnerabilities may never be fixed, which is unacceptable from a security standpoint.</p>
+<p>That is why I believe it is important to stay within the supported version range.</p>
+<h3 id="adopting-new-features">Adopting new features</h3>
+<p>Major releases—especially those that bump the major version—tend to ship new functionality, whether that means features that make development easier or improvements that boost performance.</p>
+<p>New capabilities also keep motivation high for those of us building with the library, which I consider another benefit.</p>
+<p>For those reasons we try to use recent versions to keep development productive.</p>
+<h2 id="our-upgrade-workflow">Our upgrade workflow</h2>
+<p>Here is the workflow we follow in the product we are building.</p>
+<ol>
+<li><strong>Review the release notes</strong></li>
+</ol>
+<p>We use Django, a Python web framework. Whenever a new version comes out, the official site publishes release notes.</p>
+<p>For example, the LTS release of Django 4.2 in April has notes here:</p>
+<p><a href="https://docs.djangoproject.com/en/4.2/releases/4.2/">https://docs.djangoproject.com/en/4.2/releases/4.2/</a></p>
+<p>We read the notes to identify areas that might affect our system.</p>
+<p>Deprecated logic is particularly important. Classes and methods marked as deprecated are frequently removed in future releases, so we try to update our code to the recommended approach as soon as they are deprecated.</p>
+<p>We take the same approach with other libraries: if release notes are available, we review them and assess the impact.</p>
+<ol start="2">
+<li><strong>Upgrade locally and verify behavior</strong></li>
+</ol>
+<p>After we understand the impact and fix the deprecated pieces, we run the application.</p>
+<p>We start by verifying behavior on our own machines. This is where we identify and fix code that no longer works or behaves unexpectedly.</p>
+<p>Upgrading web application frameworks and front-end libraries can touch a wide surface area, so we take our time testing.</p>
+<p>We also run the test suite locally. Tests can fail because of the upgrades, and running them helps reveal impacted areas. When tests break, we review and fix them.</p>
+<p>Having a solid test suite really pays off during upgrades. Writing tests regularly keeps the system resilient to change.</p>
+<ol start="3">
+<li><strong>Verify on infrastructure that matches production</strong></li>
+</ol>
+<p>Once the local upgrade and fixes are complete, we test on infrastructure that mirrors production.</p>
+<p>We deploy to AWS, just like production.</p>
+<p>It is common to see issues in production-like environments that never appear locally. That is why we always test in an environment that matches production as closely as possible.</p>
+<p>We use Docker locally and Fargate in production to keep things aligned, but we still run into bugs that only surface on AWS. For that reason we prioritize verification in the production-like setup even more than local testing.</p>
+<ol start="4">
+<li><strong>Deploy to production after all verifications pass</strong></li>
+</ol>
+<h2 id="examples-of-issues-we-encountered-this-time">Examples of issues we encountered this time</h2>
+<p>Here are two concrete issues we ran into during the upgrade.</p>
+<h3 id="html-changes-not-updating-locally">HTML changes not updating locally</h3>
+<p>After the Django upgrade, HTML modifications no longer showed up in the local environment. Starting with Django 4.1, template caching is enabled by default.</p>
+<p><a href="https://docs.djangoproject.com/en/4.1/ref/templates/api/#django.template.loaders.cached.Loader">https://docs.djangoproject.com/en/4.1/ref/templates/api/#django.template.loaders.cached.Loader</a></p>
+<p>To fix this we disabled template caching specifically for the local environment.</p>
+<p>Because we upgraded Django from 3.2 to 4.2, we had to read all release notes in between as well.</p>
+<h3 id="stack-traces-missing-from-server-error-logs">Stack traces missing from server error logs</h3>
+<p>We also noticed that stack traces for 500-level server errors stopped appearing in the logs.</p>
+<p>We closely monitor server errors to maintain quality. When they occur, we receive alerts, investigate the root cause, and remediate.</p>
+<p>Django provides a built-in error page for server errors, and we extend that in our service.</p>
+<p>During the upgrade our custom extensions ended up swallowing the stack trace for server errors, preventing it from being logged. We fixed this by explicitly logging the stack trace as an error.</p>
+<p>As you can see, upgrading impactful libraries can trigger issues in unexpected places. That is why I believe multi-faceted testing is essential.</p>
+<h2 id="closing-thoughts">Closing thoughts</h2>
+<p>This was a look at how we handle library upgrades.</p>
+<p>Web development almost always involves external libraries. If you rely on them, you have to upgrade them intentionally and stay within the supported window to reduce incident risk.</p>
+<p>Many of us still remember the Log4j vulnerability from December 2021. Keeping your dependencies up to date makes it easier to apply patches quickly. It is a strong reminder of how important it is to stay on top of upgrades.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Handling%20Library%20Version%20Upgrades&url=https%3A%2F%2Fhirotoyoshidome.com%2Fen%2Fposts%2F2023%2Fversionup_libs%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

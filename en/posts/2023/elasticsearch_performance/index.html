@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Performance Tuning with Elasticsearch</title><meta name="description" content="Digging into performance tuning when using Elasticsearch."><!-- OGP --><meta property="og:title" content="Performance Tuning with Elasticsearch"><meta name="og:description" content="Digging into performance tuning when using Elasticsearch."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Performance Tuning with Elasticsearch"><meta name="twitter:description" content="Digging into performance tuning when using Elasticsearch."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Performance Tuning with Elasticsearch</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Performance Tuning with Elasticsearch</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-01-27T00:00:00.000Z"> 2023-01-27 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Elasticsearch </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Performance </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Optimization </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Scalability </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2023/elasticsearch_performance/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <p>This time I would like to take a deeper look at Elasticsearch search performance.</p>
+<p>The content comes from performance work I handled for our product.</p>
+<h2 id="background-for-the-improvement-effort">Background for the improvement effort</h2>
+<p>Elasticsearch is a full-text search engine built on Apache Lucene. It stores data as documents and enables flexible search. In RDB terms, an index is like a table and a document is like a row.</p>
+<p>Documents can contain strings and numbers, of course, but also arrays and objects. That flexibility can come at a cost: as the number of documents grows or document structures become more complex and bloated, performance can degrade.</p>
+<p>For those reasons our search had stopped delivering the performance we expected, and we kicked off a performance improvement project.</p>
+<h2 id="reviewing-the-elasticsearch-document-structure">Reviewing the Elasticsearch document structure</h2>
+<p>In our service we store the ads we publish in two units: “media” and “products”. Conceptually, a media item has a one-to-many relationship with products.</p>
+<p>Search results are displayed at the media level, while the search itself starts at the product level. Because of this, we had to examine whether the documents we store in the index should be media-based or product-based.</p>
+<p>To put it concretely, we had two options to consider:</p>
+<ul>
+<li>Store documents in the index per media item and display the results as-is.</li>
+<li>Store documents in the index per product and aggregate them into media using aggregations.</li>
+</ul>
+<p>Products carry multiple pieces of normalized information: where they are listed, price, the stations they are associated with, whether they belong to an entire railway line rather than a single station, and so on. This makes search even more complicated.</p>
+<p>As a result, we could not immediately decide which document structure would be better.</p>
+<p>We therefore measured search speed using both structures and compared how much performance each delivered.</p>
+<h2 id="pattern-1-documents-per-media-item-three-nested-levels">Pattern 1: Documents per media item (three nested levels)</h2>
+<p>When you search for Elasticsearch performance tips you will often see warnings about using nested fields to hold child and grandchild elements because it can hurt performance.</p>
+<p>If we store documents per media item, a single document can hold the media, child elements (products), and grandchild elements (data attached to each product)—three levels deep.</p>
+<p>One characteristic of nested fields is that even if you update only a child or grandchild element, Elasticsearch updates the entire document. This hurts write performance.</p>
+<p>That said, on Apache Lucene—the engine backing Elasticsearch—the data in nested fields is stored as individual documents. Mapping costs are high, so write performance suffers, but in our tests we did not observe search latency (likely because we do not have an extreme number of nested fields).</p>
+<p>Reference:<br>
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.17/nested.html#_limits_on_nested_mappings_and_objects">https://www.elastic.co/guide/en/elasticsearch/reference/7.17/nested.html#_limits_on_nested_mappings_and_objects</a></p>
+<p>Write performance degradation is a real concern. We also anticipated that the data we keep in nested fields would grow, so we ran tests where we increased the number of products and product-specific data. In those tests we hit performance issues with inner hits when retrieving the nested fields.</p>
+<p>This likely happened because the documents in the index were media-based and we were not narrowing the search down at the product level, so the number of nested fields inspected via inner hits was large.</p>
+<h2 id="pattern-2-documents-per-product-two-nested-levels">Pattern 2: Documents per product (two nested levels)</h2>
+<p>Next we tried storing documents per product and aggregating them by media using aggregations.</p>
+<p>Even after switching to product-based documents we still needed to keep data tied to each product, so nested fields remained. The depth shrank by one level, leaving us with parent and child—two levels.</p>
+<p>Once we switched to product-based documents, write performance improved dramatically. Updates could be made per product, which drastically lowered the cost for media that have large product counts.</p>
+<p>In terms of search, we do not view aggregations themselves as slow. However, we found that performance degraded heavily when the number of aggregated documents grew large.</p>
+<p>Some media have tens of thousands of associated products. Every time such a media item is returned, Elasticsearch needs to aggregate tens of thousands of products into a single media entry, which is very expensive.</p>
+<p>On top of that, when we retrieve inner hits, they are fetched per document. That means we would have to fetch tens of thousands of inner hits as well.</p>
+<p>So at this point we still cannot declare which document structure is superior. The takeaway is to monitor performance closely and choose the structure that best fits the real-world workload.</p>
+<h2 id="tips-for-using-aggregations">Tips for using aggregations</h2>
+<p>Here are three pain points we ran into when working with aggregations.</p>
+<p>Aggregations are used to group multiple documents, similar to <code>GROUP BY</code> in SQL.</p>
+<p>For example, dashboards often rely on aggregations to display reports.</p>
+<ol>
+<li><strong>Inner hits are unavailable</strong></li>
+</ol>
+<p>Elasticsearch queries return documents that match the search conditions, and you control how many are returned using the <code>size</code> parameter. When you use aggregations the results are grouped, so you typically set <code>size</code> to 0. That means you cannot retrieve inner hits. It seems obvious because the results are aggregated, but we could not read inner hits even per bucket.</p>
+<p>Consequently, if we need inner hits we issue a query without aggregations. As long as you properly narrow the target documents, performance should remain acceptable.</p>
+<ol start="2">
+<li><strong>Filter as much as possible before aggregating</strong></li>
+</ol>
+<p>You can apply filters after aggregating, analogous to <code>HAVING</code> in SQL.</p>
+<p>The idea is the same as SQL: performance improves if you do as much filtering as possible before aggregating.</p>
+<p>The same principle applies to inner hits. The key is to remove unnecessary documents ahead of time.</p>
+<ol start="3">
+<li><strong>Sorting works a bit differently</strong></li>
+</ol>
+<p>Aggregations let you sort after grouping. You can sort by fields defined in the aggregation.</p>
+<p>We use <code>bucket_sort</code> for sorting, but in our tests we could not use scripts inside the sort clause the way we can in a normal Elasticsearch query.</p>
+<p>To work around this we defined the value we wanted using <code>bucket_script</code> inside the aggregation and then referenced that from <code>bucket_sort</code>. It works differently than standard queries, so watch out for that detail.</p>
+<h2 id="infrastructure-configuration">Infrastructure configuration</h2>
+<p>The first thing to address on the infrastructure side is storage. Having ample disk space is a given, but using HDDs risks performance degradation.</p>
+<p>The official documentation for indexing and search explicitly recommends SSDs, so it is worth considering them.</p>
+<p>Reference:</p>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/8.6/tune-for-indexing-speed.html#_use_faster_hardware">https://www.elastic.co/guide/en/elasticsearch/reference/8.6/tune-for-indexing-speed.html#_use_faster_hardware</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/8.6/tune-for-search-speed.html#_use_faster_hardware_2">https://www.elastic.co/guide/en/elasticsearch/reference/8.6/tune-for-search-speed.html#_use_faster_hardware_2</a></li>
+</ul>
+<p>We had already chosen SSDs during the initial build, so we did not run comparative tests this time.</p>
+<p>A quick aside for those running on AWS EC2: for EBS SSD (general purpose) you can choose between gp2 and gp3. gp2 offers burst capability, while gp3 does not but lets you configure IOPS and throughput in advance.</p>
+<p>The maximum IOPS and throughput for gp2 when bursting depend on the EBS volume size. Because our volumes are not that large, we concluded gp3 was a better fit than relying on gp2 bursts.</p>
+<p>When you use gp3 with the default IOPS and throughput, it is also cheaper than gp2. We recommend picking between gp2 and gp3 based on the EBS size you need.</p>
+<p>Next is shard count. Shards are where the data is actually stored, and you can split an index across multiple shards.</p>
+<p>Splitting an index across shards enables parallel execution, which can improve performance.</p>
+<p>On the other hand, increasing shard size affects server load, so you should adjust shard size carefully.</p>
+<p>The Elasticsearch documentation has a good summary, so if you are reviewing shard counts it is worth a read.</p>
+<p>Reference:</p>
+<ul>
+<li><a href="https://www.elastic.co/docs/deploy-manage/production-guidance/optimize-performance/size-shards">https://www.elastic.co/docs/deploy-manage/production-guidance/optimize-performance/size-shards</a></li>
+<li><a href="https://www.elastic.co/guide/jp/elasticsearch/reference/current/gs-basic-concepts.html">https://www.elastic.co/guide/jp/elasticsearch/reference/current/gs-basic-concepts.html</a></li>
+</ul>
+<h2 id="other-observations">Other observations</h2>
+<p>If you have Kibana, you can inspect queries using the profiler (Kibana -> Dev Tools -> Search Profiler). It shows the queries actually executed on Apache Lucene and measures execution time. If you configure multiple shards you can also see how long each shard takes.</p>
+<p>I recommend giving it a try if you have access to Kibana.</p>
+<p>It is equally important to monitor real server load. Even though I focused on Elasticsearch search performance here, it is not uncommon to discover the root cause elsewhere.</p>
+<p>When you work on performance improvements, the first step is to identify the bottleneck. If Elasticsearch is the culprit, you can then decide whether to optimize the query, tune parameters, or scale the infrastructure.</p>
+<p>Start by observing the server metrics to determine where the bottleneck is.</p>
+<h2 id="closing-thoughts">Closing thoughts</h2>
+<p>This post covered Elasticsearch performance.</p>
+<p>For services with search functionality, performance is always a critical topic. A slow service can be extremely stressful for users and can have a huge impact overall.</p>
+<p>As data grows and logic evolves, we have to keep watching performance closely.</p>
+<p>I hope this write-up helps anyone working with Elasticsearch.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Performance%20Tuning%20with%20Elasticsearch&url=https%3A%2F%2Fhirotoyoshidome.com%2Fen%2Fposts%2F2023%2Felasticsearch_performance%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
