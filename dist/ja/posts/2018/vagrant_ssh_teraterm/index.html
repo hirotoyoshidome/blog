@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Vagrantで立ち上げたVBoxにTerraTermで接続する</title><meta name="description" content="Vagrantで立ち上げたVBoxにTerraTermで接続するメモ。"><!-- OGP --><meta property="og:title" content="Vagrantで立ち上げたVBoxにTerraTermで接続する"><meta name="og:description" content="Vagrantで立ち上げたVBoxにTerraTermで接続するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Vagrantで立ち上げたVBoxにTerraTermで接続する"><meta name="twitter:description" content="Vagrantで立ち上げたVBoxにTerraTermで接続するメモ。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/blog/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/blog/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/blog/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Vagrantで立ち上げたVBoxにTerraTermで接続する</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Vagrantで立ち上げたVBoxにTerraTermで接続する</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-09-09T00:00:00.000Z"> 2018-09-09 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Vagrantで立ち上げたVBoxにTerraTermで接続する</title><meta name="description" content="Vagrantで立ち上げたVBoxにTerraTermで接続するメモ。"><!-- OGP --><meta property="og:title" content="Vagrantで立ち上げたVBoxにTerraTermで接続する"><meta name="og:description" content="Vagrantで立ち上げたVBoxにTerraTermで接続するメモ。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Vagrantで立ち上げたVBoxにTerraTermで接続する"><meta name="twitter:description" content="Vagrantで立ち上げたVBoxにTerraTermで接続するメモ。"><link rel="icon" type="image/png" href="/blog/images/favicon.ico"><link rel="stylesheet" href="/blog/_astro/_page_.C60xkf-5.css"></head> <body class="prose prose-neutral mx-auto p-6">  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/blog/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/blog/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Vagrantで立ち上げたVBoxにTerraTermで接続する</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Vagrantで立ち上げたVBoxにTerraTermで接続する</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2018-09-09T00:00:00.000Z"> 2018-09-09 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
 #CLI </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
 #Tips </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
 #Troubleshooting </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
@@ -58,7 +58,7 @@
 <p>インストールが完了したら起動し下記の様に設定をします。</p>
 </li>
 </ul>
-<p><img src="/images/vagrant_ssh_teraterm1.png" alt="connect.png"></p>
+<p><img src="/blog/images/vagrant_ssh_teraterm1.png" alt="connect.png"></p>
 <ul>
 <li>OKを押下するとユーザー名とパスワードが求められます。</li>
 </ul>
@@ -82,12 +82,12 @@
 
 <table><thead><tr><th align="center">user</th><th align="center">password</th></tr></thead><tbody><tr><td align="center">vagrant</td><td align="center">vagrant</td></tr><tr><td align="center">root</td><td align="center">vagrant</td></tr></tbody></table>
 <p>が使用できるそうです。</p>
-<p><img src="/images/vagrant_ssh_teraterm2.png" alt="auth.png"></p>
+<p><img src="/blog/images/vagrant_ssh_teraterm2.png" alt="auth.png"></p>
 <ul>
 <li>認証を行い正常に入ることができれば成功です。</li>
 </ul>
 <p>↓成功時
-<img src="/images/vagrant_ssh_teraterm3.png" alt="login.png"></p>
+<img src="/blog/images/vagrant_ssh_teraterm3.png" alt="login.png"></p>
 <p>※ TeraTerm小技
 あまりやらない方がいいかもですがTeraTermのショートカットでプロパティのリンク先欄の引数としてユーザー名と引数を渡すことで自動的にログインできるようにすることができます。</p>
 <p><code>"C:\Program Files (x86)\teraterm\ttermpro.exe" 127.0.0.1:2222 /auth=vagrant /user=vagrant /passwd=vagrant</code></p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Vagrant%E3%81%A7%E7%AB%8B%E3%81%A1%E4%B8%8A%E3%81%92%E3%81%9FVBox%E3%81%ABTerraTerm%E3%81%A7%E6%8E%A5%E7%B6%9A%E3%81%99%E3%82%8B&url=https%3A%2F%2Fhirotoyoshidome.github.io%2Fblog%2Fja%2Fposts%2F2018%2Fvagrant_ssh_teraterm%2F" rel="noopener">
