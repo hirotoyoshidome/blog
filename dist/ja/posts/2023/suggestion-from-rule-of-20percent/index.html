@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>20%ルールから提案した話</title><meta name="description" content="20%ルールから提案した話"><!-- OGP --><meta property="og:title" content="20%ルールから提案した話"><meta name="og:description" content="20%ルールから提案した話"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="20%ルールから提案した話"><meta name="twitter:description" content="20%ルールから提案した話"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">20%ルールから提案した話</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">20%ルールから提案した話</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-09-25T00:00:00.000Z"> 2023-09-25 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Product Development </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Startup </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Productivity </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Career </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2023/suggestion-from-rule-of-20percent/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <p>Googleの20%ルールという文化をご存知でしょうか？Googleでは、業務時間の20%を普段の自分の仕事以外に充てても良いというルールがあります。</p>
+<p>私が所属するチームでもこの文化に倣って、20%ルールを初期のころから導入しています。そのためチームの中では、「20%ルールでやってみます！」「20%ルールでやってみたら?」というような会話がしばしば発生します。</p>
+<p>今回は、20%ルールからプロダクトに反映された事例について書きたいと思います。</p>
+<h2 id="20ルールから発見へ">20%ルールから発見へ</h2>
+<p>開発しているサービスでは会員向けのレコメンド機能として、商品ページやトップ画面などに商品のレコメンド機能があります。私は8月ごろから20%ルールでレコメンドに関するデータを観察していました。</p>
+<p>データを観察していた目的は、</p>
+<ul>
+<li>個人的な推薦システムへの興味</li>
+<li>サービスとレコメンド機能の親和性が高いと感じており、もっと良い仕組みでユーザーに提供できないかと感じていた</li>
+</ul>
+<p>という背景です。</p>
+<p>データの観察を進めていくにしたがって、いくつか気になったことがありチーム内で共有をしました。</p>
+<p>そうすると「A/Bテストでできそうならやってみてもいいんじゃない？」という提案をいただき、A/Bテストで回せるようにさらにデータを細かくみていきました。</p>
+<p>そうすると、</p>
+<p>レコメンドの表示位置が上位の方がクリックされやすい。しかし、特定のレコメンド枠に関しては下位に表示されているのにもかかわらずクリック率が良い！</p>
+<p>レコメンドをクリックしたユーザーとクリックしなかったユーザーのデータを比べていくと現在のレコメンドのロジックでは組み込まれていないデータに価値があるかもしれない。</p>
+<p>といった発見がありました。</p>
+<p>まさに、A/Bテストで試すべき良い題材です。</p>
+<h2 id="発見から提案へ">発見から提案へ</h2>
+<p>発見した内容をもとに「商品ページのレコメンド枠の順序を入れ替えるA/Bテスト」を提案しました。</p>
+<p>期待としては、</p>
+<ul>
+<li>下位に表示されているがクリック率が良いレコメンド枠を上位に持ってくることでさらにクリック率が上昇すること。</li>
+<li>上位に、より反応が良いレコメンド枠を持ってくることでユーザーの興味を持続させ、結果的にページ全体のレコメンドのクリック率が上昇すること。</li>
+</ul>
+<p>という2つの可能性をA/Bテストで検証することになりました。</p>
+<p>また、「現行のレコメンドロジックに組み込まれていない情報を組み込むA/Bテスト」も提案しました。</p>
+<p>この提案では、現在のレコメンドのロジックでは組み込まれていないデータに価値があるという発見より、このデータを組み込むことでレコメンドの精度が上がり、クリック率が上昇することが期待できます。</p>
+<p>これら2つの提案は、実際にA/Bテストとして行われることになり、20%ルールからプロダクトへ反映された事例となりました。</p>
+<h2 id="結果">結果</h2>
+<p>「商品ページのレコメンド枠の順序を入れ替えるA/Bテスト」はすでに実施が終了しており、結果としては「順序を入れ替えた後の方がページ全体のレコメンド枠のクリック率が高くなる」という成果となりました。</p>
+<p>私個人としては提案した内容が良い結果だったため少しほっとしたと同時に、これまでこういった提案が少なかったことは反省するべき点であると感じています。</p>
+<p>データベースで保持しているデータを開発チーム以外の人でも見ることができるようにBIツールを導入していますが、複雑な条件でのデータ取得の場合はBIツールでは困難なことが多いです。</p>
+<p>例えば、ログデータに関してはデータ量が多くパフォーマンス的な懸念もあるためBIツールでは限界があり、開発チームでないと十分なアクセスができないことが挙げられます。また、実際のサービスの内部ロジックやインフラの状態の状態などもプロダクト開発チームしかアクセスできないデータだと言えるでしょう。</p>
+<p>今回の結果より、このような開発チームでしか十分なアクセスできないデータでも「ユーザーのための視点」「サービスの品質向上の視点」を持ってデータを観察すると、開発をしているだけだとわからなかったものが見えてくることがあり、発見や疑問が生まれそれが有意義な結果へと結びつくことがあるという知見を得ました。</p>
+<h2 id="最後に">最後に</h2>
+<p>今回は、20%ルールという文化から提案へつながり、プロダクトへ反映されたという出来事について書きました。</p>
+<p>20%ルールは、「興味があることをやってみたけど成果は出なかった」という場合がほとんどです。しかし、このフランクさこそが大切な要素であり「興味があるからとりあえずやってみたい」という意思が尊重される文化やそれができる環境は恵まれていると改めて感じました。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=20%25%E3%83%AB%E3%83%BC%E3%83%AB%E3%81%8B%E3%82%89%E6%8F%90%E6%A1%88%E3%81%97%E3%81%9F%E8%A9%B1&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2023%2Fsuggestion-from-rule-of-20percent%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

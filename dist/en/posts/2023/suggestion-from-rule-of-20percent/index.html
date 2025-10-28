@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>A Proposal Born from the 20% Rule</title><meta name="description" content="How an idea from the 20% rule made its way into the product."><!-- OGP --><meta property="og:title" content="A Proposal Born from the 20% Rule"><meta name="og:description" content="How an idea from the 20% rule made its way into the product."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="A Proposal Born from the 20% Rule"><meta name="twitter:description" content="How an idea from the 20% rule made its way into the product."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">A Proposal Born from the 20% Rule</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">A Proposal Born from the 20% Rule</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-09-25T00:00:00.000Z"> 2023-09-25 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Product Development </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Startup </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Productivity </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Career </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2023/suggestion-from-rule-of-20percent/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <p>Have you heard about Google’s 20% rule? At Google, employees are allowed to spend 20% of their working hours on projects outside their usual responsibilities.</p>
+<p>Our team adopted a similar culture early on. It is common to hear things like “I’ll try that under the 20% rule” or “Why don’t you tackle it with your 20% time?”</p>
+<p>This post describes a case where something born from the 20% rule made its way into the product.</p>
+<h2 id="from-the-20-rule-to-discovery">From the 20% rule to discovery</h2>
+<p>In the service we are building, we recommend products to members on product pages, the home page, and more. Starting around August I used my 20% time to observe the data behind those recommendations.</p>
+<p>My motivations were:</p>
+<ul>
+<li>a personal interest in recommender systems</li>
+<li>a sense that recommendations are highly compatible with our service, and a desire to deliver a better experience to users</li>
+</ul>
+<p>As I dug into the data, a few questions emerged, so I shared them with the team.</p>
+<p>Someone said, “If we can run an A/B test, why not try it?” That prompted me to examine the data in even more detail to see if we could run experiments.</p>
+<p>I found that:</p>
+<ul>
+<li>Recommendation slots shown higher on the page tend to receive more clicks. However, there was one slot that still had a strong click rate even when it appeared lower on the page.</li>
+<li>When I compared users who clicked recommendations versus those who did not, it looked like data not currently used in the recommendation logic might actually be valuable.</li>
+</ul>
+<p>In other words, we had a great candidate for an A/B test.</p>
+<h2 id="from-discovery-to-proposal">From discovery to proposal</h2>
+<p>Based on what I found, I proposed “an A/B test that swaps the order of recommendation slots on the product page.”</p>
+<p>Our expectations were:</p>
+<ul>
+<li>If we move the highly effective slot up from the bottom, the click-through rate should improve even further.</li>
+<li>By placing the most engaging slots at the top, we may keep users interested longer and ultimately raise the click-through rate for the entire page.</li>
+</ul>
+<p>I also proposed “an A/B test that incorporates information not currently used in the recommendation logic.”</p>
+<p>Because we discovered potentially valuable data that the current logic ignores, we expected that using it would make recommendations more accurate and boost click-throughs.</p>
+<p>Both experiments ended up being approved, making them examples of 20% time ideas flowing into the product.</p>
+<h2 id="results">Results</h2>
+<p>The A/B test that reordered the product page slots has already finished. The variant with the reordered slots delivered a higher click-through rate across all recommendation areas on the page.</p>
+<p>I was relieved that the proposal produced good results, but I also reflected on the fact that I had not made many suggestions like this before.</p>
+<p>We have a BI tool so people outside the development team can view data, but complex queries are often difficult to run there.</p>
+<p>For example, log data is huge and raises performance concerns, so BI tools have limitations. Likewise, only the product development team can usually access the internal logic of the service or the state of the infrastructure.</p>
+<p>From this experience I learned that, even when only the development team has full access to the data, having a “user-first” and “quality improvement” mindset while observing the data can reveal insights that are invisible when you only focus on building features. Those insights and questions can lead to meaningful outcomes.</p>
+<h2 id="closing-thoughts">Closing thoughts</h2>
+<p>This was a story about how our 20% rule culture led to a proposal and ultimately a product change.</p>
+<p>More often than not, the 20% rule ends with “I tried something I was curious about but it didn’t pan out.” That informality is the whole point: it fosters a culture where “I want to explore this because I’m interested” is respected. Having an environment that makes that possible is a real privilege, and this experience reminded me of its value.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=A%20Proposal%20Born%20from%20the%2020%25%20Rule&url=https%3A%2F%2Fhirotoyoshidome.com%2Fen%2Fposts%2F2023%2Fsuggestion-from-rule-of-20percent%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>How We Brought In Elasticsearch</title><meta name="description" content="A look back at the journey to introducing Elasticsearch."><!-- OGP --><meta property="og:title" content="How We Brought In Elasticsearch"><meta name="og:description" content="A look back at the journey to introducing Elasticsearch."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="How We Brought In Elasticsearch"><meta name="twitter:description" content="A look back at the journey to introducing Elasticsearch."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">How We Brought In Elasticsearch</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">How We Brought In Elasticsearch</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2022-10-26T00:00:00.000Z"> 2022-10-26 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Elasticsearch </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#AWS </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2022/entry-elasticsearch/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <p>I want to share the story of how we replaced the search logic we had built for work with Elasticsearch.</p>
+<p>Before adopting Elasticsearch, we were composing the product search logic with SQL on top of an RDB.</p>
+<p>As the number of products grew, however, several issues surfaced:</p>
+<ul>
+<li>the need for more flexible search options</li>
+<li>the desire to implement logic tailored to user needs</li>
+<li>declining search performance</li>
+</ul>
+<p>To overcome these challenges we decided to bring in Elasticsearch.</p>
+<p>In this post I will walk through what we actually did during the recent Elasticsearch rollout and the pitfalls we ran into.</p>
+<h2 id="infrastructure-required-for-elasticsearch">Infrastructure required for Elasticsearch</h2>
+<p>We had already standardized on AWS for infrastructure. From DNS to servers and databases, everything ran on AWS services.</p>
+<p>When we first decided to adopt Elasticsearch, we planned to use AWS OpenSearch.</p>
+<p>AWS OpenSearch is an open-source project that forked from Elasticsearch, and it is a different product. The AWS documentation states that the OpenSearch roadmap is independent from the Elasticsearch roadmap, so I believe it is best to treat them as separate products over the long term.</p>
+<p><a href="https://aws.amazon.com/jp/what-is/opensearch/">https://aws.amazon.com/jp/what-is/opensearch/</a></p>
+<p>Initially we evaluated building on OpenSearch, but during our investigation we discovered that the Elasticsearch plug-in we wanted was not available on OpenSearch. As a result we abandoned that plan and chose to run Elasticsearch directly on EC2.</p>
+<p>If you build on EC2, you also have to configure the cluster and monitoring yourself, so the initial cost felt relatively high.</p>
+<p>It is important to confirm ahead of time whether the plug-ins you want are compatible with OpenSearch and to assess whether you truly want to run the cluster on EC2.</p>
+<p><em>Side note:</em> AWS OpenSearch also offers a GUI called OpenSearch Dashboards, similar to Kibana, so you can work visually.</p>
+<h2 id="what-we-wanted-to-achieve-with-this-rollout">What we wanted to achieve with this rollout</h2>
+<p>Here is what we were hoping for by bringing in Elasticsearch.</p>
+<p>While examining search data, we noticed many cases where fluctuations in search keywords prevented relevant results from showing up.</p>
+<p>Examples:</p>
+<ul>
+<li>Searching for “お出かけ” (going out) would miss a product if the name contained the hiragana “おでかけ”.</li>
+<li>If a product name contained the middle dot “・”, a concatenated keyword would no longer match.</li>
+<li>Synonyms were also an issue. For example:
+<ul>
+<li>“釣り” and “フィッシング” produced very different results.</li>
+<li>“映画館” and “シネマ” produced very different results.</li>
+</ul>
+</li>
+</ul>
+<p>Our primary goal was to improve search accuracy by mitigating this kind of keyword variance.</p>
+<p>We considered maintaining a synonym dictionary, but upkeep takes far more time and cost than expected.</p>
+<p>What makes synonym dictionaries challenging is that whether two words are synonyms depends on the service. “Doctor” and “hospital” are not synonyms in the general sense, but treating them as synonyms in search can reduce keyword variance.</p>
+<p>Because these issues can occur endlessly, we felt that maintaining a synonym dictionary would be extremely demanding.</p>
+<p>At first we evaluated the <code>kuromoji</code> dictionary that also works with AWS OpenSearch, but it did not feel precise enough when we applied it to our search use case.</p>
+<p>Although we could have used a user-defined dictionary to fine-tune the search, the maintenance cost would have been too high.</p>
+<p>So we chose to use a different dictionary instead of <code>kuromoji</code>. We landed on <code>sudachi-dict</code>, which is published on GitHub. <em>This dictionary was not available on AWS OpenSearch at the time of adoption.</em></p>
+<p><a href="https://github.com/WorksApplications/SudachiDict">https://github.com/WorksApplications/SudachiDict</a></p>
+<p>We also incorporated search via n-grams. This increases the number of potential hits. If you make the n-gram size too small you introduce noise and risk hurting accuracy, but tuning it to the right value lets you handle issues such as the middle dot example above.</p>
+<p>That is how we ultimately replaced search with Elasticsearch.</p>
+<h2 id="pitfalls">Pitfalls</h2>
+<p>Here are the main pitfalls we encountered.</p>
+<p><strong>1. Building an Elasticsearch cluster on EC2</strong></p>
+<p>To build a cluster you need the EC2 instances to communicate with each other. Because Elasticsearch stores data, it is preferable to place the nodes in as private an environment as possible.</p>
+<p>Even though the instances were on the same network and should have been able to communicate privately, we kept running into issues. After more research we found that, rather than an AWS networking issue, the official Elasticsearch guidance was to use the EC2 discovery plug-in. Once we installed it the nodes formed a cluster successfully.</p>
+<p><a href="https://www.elastic.co/docs/reference/elasticsearch/plugins/discovery-ec2">https://www.elastic.co/docs/reference/elasticsearch/plugins/discovery-ec2</a></p>
+<p><strong>2. Elasticsearch has no master-slave concept</strong></p>
+<p>In Elasticsearch there is no fixed master node. Instead, the nodes forming the cluster vote to elect a master. <em>This means you also need to be thoughtful about how you expose the endpoint.</em></p>
+<p>Because the election requires a quorum, a two-node cluster is not highly available. This is another point to keep in mind.</p>
+<p>We had not understood this mechanism beforehand, so we ended up changing the infrastructure design later. It is crucial to research this early.</p>
+<h3 id="results-after-the-rollout">Results after the rollout</h3>
+<p>After introducing Elasticsearch we also saw improved search performance.</p>
+<p>Average ALB response times, which had consistently exceeded 0.5 seconds, now stay below roughly 0.1 seconds. We believe this improvement comes from reducing the load on the database by switching to Elasticsearch.</p>
+<p>ALB average response time</p>
+<h2 id="closing-thoughts">Closing thoughts</h2>
+<p>This was a look back at our recent Elasticsearch rollout.</p>
+<p>Replacing a search engine is not easy, but search accuracy is a critical feature. We will keep aiming to make search easier to use and to help users find what they are looking for.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=How%20We%20Brought%20In%20Elasticsearch&url=https%3A%2F%2Fhirotoyoshidome.com%2Fen%2Fposts%2F2022%2Fentry-elasticsearch%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

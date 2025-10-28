@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ライブラリのバージョンアップ対応について</title><meta name="description" content="ライブラリのバージョンアップ対応について"><!-- OGP --><meta property="og:title" content="ライブラリのバージョンアップ対応について"><meta name="og:description" content="ライブラリのバージョンアップ対応について"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="ライブラリのバージョンアップ対応について"><meta name="twitter:description" content="ライブラリのバージョンアップ対応について"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">ライブラリのバージョンアップ対応について</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">ライブラリのバージョンアップ対応について</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-05-23T00:00:00.000Z"> 2023-05-23 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Product Development </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#OSS </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Productivity </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2023/versionup_libs/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <p>Webサービスの開発・運用・保守をしていると、使用しているライブラリのバージョンアップ対応を継続的に行う必要があります。私のチームではある程度の間隔で定期的にライブラリのバージョンアップ対応を行っています。</p>
+<p>今回は、直近に業務で行ったライブラリのバージョンアップ対応について書きたいと思います。</p>
+<h2 id="バージョンアップの目的">バージョンアップの目的</h2>
+<p>ライブラリのバージョンアップには大きく、「脆弱性への対応」と「新機能の利用」の2つの目的があると考えています。</p>
+<h3 id="脆弱性への対応">脆弱性への対応</h3>
+<p>脆弱性が発見された場合、修正パッチが配布されるケースが多いです。その際、利用しているライブラリのバージョンが古い状態だと、修正パッチがすぐに当てられないというリスクを抱えてしまいます。</p>
+<p>また、ライブラリのサポート期間についても把握しておく必要があります。</p>
+<p>サポート対象から外れたバージョンでは、脆弱性が見つかったときに修正が行われないことが多く、セキュリティ的観点では良くありません。</p>
+<p>そのため、サポート期限内のバージョンの利用を徹底することが大切だと考えています。</p>
+<h3 id="新機能の利用">新機能の利用</h3>
+<p>特にメジャーバージョンが変わるような大きなリリースがある時は、新しい機能が追加されることが多いです。新しい機能とは、より便利な機能が簡単に作れるようなものやパフォーマンスが向上するようなものなど様々です。</p>
+<p>新しい機能は、ライブラリを使って開発する側からするとモチベーションが高くなるポイントでもあると考えています。</p>
+<p>そのため、開発効率を高めるためにもできる限り新しいバージョンを使うことが望ましいと考えています。</p>
+<h2 id="バージョンアップ対応の流れ">バージョンアップ対応の流れ</h2>
+<p>ここでは、実際に開発中のサービスで行っているバージョンアップ対応の流れについて書きたいと思います。</p>
+<p>１. リリースノートを見る</p>
+<p>開発中のサービスではWebアプリケーションフレームワークとしてPython製の「Django」を採用しています。Djangoでは、新しいバージョンのリリースに併せてリリースノートが公式サイトで見れます。</p>
+<p>たとえば、今年の4月にLTSとしてリリースされたDjango 4.2のリリースノートは↓です。</p>
+<p><a href="https://docs.djangoproject.com/en/4.2/releases/4.2/">https://docs.djangoproject.com/en/4.2/releases/4.2/</a></p>
+<p>まずは、リリースノートの中身を見て、自分たちが開発しているシステムに大きな影響がないかを調べていきます。</p>
+<p>特に大切なのは、非推奨になったロジックの部分です。非推奨になったクラスやメソッドは、今後のバージョンアップで完全に削除されるケースが多いです。そのため、非推奨になったタイミングで推奨されている書き方に変更することが望ましいと考えています。</p>
+<p>他のライブラリについても同様に、リリースノートがある場合はチェックして影響範囲を確認しています。</p>
+<p>２. ローカル開発環境で実際にバージョンアップして動作確認する</p>
+<p>ある程度影響範囲を把握した後に、非推奨ロジックなどの修正するべきポイントを修正し、動作確認を行います。</p>
+<p>まずは、自分のPCで動作確認を行います。ここである程度、動かなくなってしまった部分や想定外の挙動をする部分などを修正します。</p>
+<p>特にWebアプリケーションフレームワークやフロントエンドのライブラリをバージョンアップする際は、影響を受ける部分が大きくなります。そのため、時間をかけて動作確認をしています。</p>
+<p>また、ローカル開発環境でのテストコードの実行も行います。ライブラリのバージョンアップに伴いテストケースが壊れてしまうことがあります。テストコードを実行することで、影響がある部分を把握することも可能です。テストコードが壊れていた場合は、内容を確認し修正を行います。</p>
+<p>テストコードによる品質の担保はバージョンアップの際にも力を発揮します。変更に強いシステムを保つためにも、普段からテストコードを書いておくことが大切だと思います。</p>
+<p>３. 本番環境と同じインフラ構成で検証する</p>
+<p>ローカル開発環境でバージョンアップと修正が完了したら、本番環境と同じインフラ構成で検証を行います。</p>
+<p>このサービスでは、AWSを利用しているため、AWS環境にデプロイして動作確認を行います。</p>
+<p>ローカル開発環境では発生しなかった誤作動が本番環境のインフラ構成では発生することはよくあります。そのため、必ず本番環境と同じインフラ構成でテストを行うようにしています。</p>
+<p>本番環境とローカル開発環境をできるだけ同じにしようと、ローカル開発環境ではDocker、本番環境ではFargateを採用していますが、それでもAWS環境でしか発生しないバグというのは発生します。</p>
+<p>そのため、ローカル開発環境でのテストより本番環境と同じインフラ構成でのテストに重きを置いています。</p>
+<p>４. 1-3の全ての動作確認で問題がなくなれば本番環境に反映します。</p>
+<p>今回のバージョンアップ対応で起こった問題の例</p>
+<p>次に今回のバージョンアップ対応をしていく中で実際に影響があり、修正した部分を2つご紹介します。</p>
+<p>ローカル開発環境でhtmlの更新が反映されない</p>
+<p>Djangoのバージョンアップをしたことでローカル開発環境でhtmlの変更が反映されなくなっていました。原因としては、Djagnoのバージョン4.1より、デフォルトでテンプレートキャッシュが行われるようになっていたためでした。</p>
+<p><a href="https://docs.djangoproject.com/en/4.1/ref/templates/api/#django.template.loaders.cached.Loader">https://docs.djangoproject.com/en/4.1/ref/templates/api/#django.template.loaders.cached.Loader</a></p>
+<p>これを受けてローカル開発環境ではテンプレートをキャッシュしないように修正が必要でした。</p>
+<p>今回のバージョンアップ対応で、Djangoのバージョンは3.2から4.2に変更しているため、Djangoのリリースノートもその間の全てを参照する必要がありました。</p>
+<p>サーバーエラーログにスタックトレースが出力されなくなっていた</p>
+<p>次にサーバーエラー(HTTPステータスコード500系)のスタックトレースがログに出力されなくなっていました。</p>
+<p>サービス品質向上のため、常にサーバーエラーを監視しています。サーバーエラーが発生すると、通知が来るように仕組みを整えておりサーバーエラーの原因とその対処を行っています。</p>
+<p>また、Djangoではサーバーエラーが発生すると専用の画面を表示させる仕組みが提供されていますが、このサービスではその仕組みを拡張して利用しています。</p>
+<p>今回のバージョンアップ対応に伴い、拡張している部分でサーバーエラー時のスタックトレースを揉み消してしまっており、ログに出力されないようになってしまっていました。これを受けて、明示的にエラーログとしてスタックトレースを出力する修正が必要となりました。</p>
+<p>このように、影響範囲の大きいライブラリのバージョンアップでは思わぬところで問題が発生する可能性があります。そのため、多角的な視点から動作確認をすることは大切だと考えています。</p>
+<h2 id="最後に">最後に</h2>
+<p>今回はライブラリのバージョンアップ対応についてでした。</p>
+<p>Webサービスを開発していく上で、外部のライブラリを使うケースは非常に多いと思います。外部のライブラリを使う以上、バージョンアップは意識して行う必要があり、しっかりサポート期限内のバージョンに対応しておくことが、インシデントを減らすことにもつながってくると考えています。</p>
+<p>2021年12月にLog4jの脆弱性が大きな話題になったことも記憶に新しいと思います。このような脆弱性に対しても、使っているライブラリが最新バージョンになっていると修正パッチがすぐに当てられるので改めてバージョンアップ対応は大切だと感じます。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%AE%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%82%A2%E3%83%83%E3%83%97%E5%AF%BE%E5%BF%9C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2023%2Fversionup_libs%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

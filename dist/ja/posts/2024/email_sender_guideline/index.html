@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>2024年2月からのメール送信者ガイドラインに対応</title><meta name="description" content="2024年2月からのメール送信者ガイドラインに対応"><!-- OGP --><meta property="og:title" content="2024年2月からのメール送信者ガイドラインに対応"><meta name="og:description" content="2024年2月からのメール送信者ガイドラインに対応"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="2024年2月からのメール送信者ガイドラインに対応"><meta name="twitter:description" content="2024年2月からのメール送信者ガイドラインに対応"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">2024年2月からのメール送信者ガイドラインに対応</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">2024年2月からのメール送信者ガイドラインに対応</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-01-30T00:00:00.000Z"> 2023-01-30 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Tips </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Learning </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2024/email_sender_guideline/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <p>Googleは2024年2月から、Yahooは2024年の第一四半期からメール送信者向けのガイドラインが変更となります。</p>
+<p>参考</p>
+<p>▼Google<br>
+<a href="https://blog.google/products/gmail/gmail-security-authentication-spam-protection/">https://blog.google/products/gmail/gmail-security-authentication-spam-protection/</a></p>
+<p>▼Yahoo<br>
+<a href="https://blog.postmaster.yahooinc.com/post/730172167494483968/more-secure-less-spam">https://blog.postmaster.yahooinc.com/post/730172167494483968/more-secure-less-spam</a></p>
+<p>所属するチームでもいくつか対応を行ったため、今回はその内容について書きたいと思います。</p>
+<h2 id="ガイドライン変更点">ガイドライン変更点</h2>
+<ul>
+<li>電子メールの送信元ドメイン認証</li>
+<li>ワンクリックの購読解除</li>
+<li>迷惑メール率の監視</li>
+</ul>
+<p>主にこの3点が変更となります。対象はGoogleやYahooメールアドレスへのメール一斉配信を行っている場合のため、メルマガ配信を行っている場合などは対象になると思います。</p>
+<h2 id="電子メールの送信元ドメイン認証">電子メールの送信元ドメイン認証</h2>
+<p>送信元ドメイン認証は、メールの送信者がなりすましではないことを確認するための仕組みです。SPF、DKIM、DMARCのような業界標準の認証を設定することがガイドラインに記されています。</p>
+<p>SPF認証は送信元メールサーバーのIPアドレスをチェックする仕組みです。送信するメールドメインのDNSにSPFレコードを設定することになります。</p>
+<p>DKIM認証は電子署名を利用してメール送信元とメール内容の改竄が行われていないかをチェックします。送信元ドメインのDNSに公開鍵を設定する必要があります。※メール送信方法によって鍵の登録方法は異なります。</p>
+<p>SPF、DKIMの設定は既に行っていたため、DMARCの設定を今回実施しました。</p>
+<p>DMARCはSPF、DKIMの認証が失敗した場合に送信したメールをどのように処理するかを決めておく仕組みです。DMARCでは認証自体は行われません。</p>
+<p>処理の内容としては、メールを受信したクライアントに任せる(none) or 迷惑メールフォルダなどに隔離する(quarantine)、拒否する(reject) の3パターンが設定できます。また、DMARCのオプションの設定でレポートメールを受け取ることができます。</p>
+<p>DMARCの設定はDNSに決められた値を設定することで対応可能です。</p>
+<p>▼参考<br>
+<a href="https://support.google.com/a/answer/2466580?sjid=5098527858957601333-AP&#x26;visit_id=638972364462958937-398180878&#x26;rd=1">https://support.google.com/a/answer/2466580?sjid=5098527858957601333-AP&#x26;visit_id=638972364462958937-398180878&#x26;rd=1</a></p>
+<h2 id="ワンクリックの購読解除">ワンクリックの購読解除</h2>
+<p>これはメールの文中に配信停止のリンクがあるだけでは不十分です。</p>
+<p>メールヘッダに</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>List-Unsubscribe-Post: List-Unsubscribe=One-Click</span></span>
+<span class="line"><span>List-Unsubscribe: &#x3C;購読解除処理のURL>`</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>を埋め込む必要があります。</p>
+<p>上記を正しくメールヘッダに埋め込むとメールクライアントで購読解除用のリンクが提供され、そこから購読解除ができるようになります。※Gmailの場合、メーリングリストの登録解除 というリンクが表示されます。</p>
+<p>こちらは未対応であったため対応を行いました。</p>
+<h2 id="迷惑メール率の監視">迷惑メール率の監視</h2>
+<p>チーム内で週次で行っている定例会議で迷惑メール率のチェックを行っています。GoogleのPostmaster Tool や SESのメトリクス(アプリケーションからの送信はAWS SESを使っている) より苦情メール率やバウンスメール率もチェックしています。</p>
+<p>ガイドラインにも迷惑メール率の閾値が記載されているため、その値を上回ることがないようにチェックし、必要であれば対策をしていくことが重要です。</p>
+<p>▼参考<br>
+<a href="https://support.google.com/a/answer/9981691?hl=ja">https://support.google.com/a/answer/9981691?hl=ja</a></p>
+<h2 id="最後に">最後に</h2>
+<p>フィッシングメールなどへの対策強化の動きは非常に大切だと思います。メール配信は多くのサービスにとって重要な役割を担っていることが多く、送信したメールが迷惑メールに振り分けされてしまうとブランドイメージを毀損する原因になることもあります。そのため、情報をキャッチアップしてガイドラインに沿って対策をしていくことが重要だと再認識しました。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=2024%E5%B9%B42%E6%9C%88%E3%81%8B%E3%82%89%E3%81%AE%E3%83%A1%E3%83%BC%E3%83%AB%E9%80%81%E4%BF%A1%E8%80%85%E3%82%AC%E3%82%A4%E3%83%89%E3%83%A9%E3%82%A4%E3%83%B3%E3%81%AB%E5%AF%BE%E5%BF%9C&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2024%2Femail_sender_guideline%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

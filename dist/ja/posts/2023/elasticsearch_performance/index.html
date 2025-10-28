@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Elasticsearchを使ったパフォーマンス</title><meta name="description" content="Elasticsearchを使ったパフォーマンスについて"><!-- OGP --><meta property="og:title" content="Elasticsearchを使ったパフォーマンス"><meta name="og:description" content="Elasticsearchを使ったパフォーマンスについて"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Elasticsearchを使ったパフォーマンス"><meta name="twitter:description" content="Elasticsearchを使ったパフォーマンスについて"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Elasticsearchを使ったパフォーマンス</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Elasticsearchを使ったパフォーマンス</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2023-01-27T00:00:00.000Z"> 2023-01-27 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Elasticsearch </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Performance </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Optimization </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Scalability </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2023/elasticsearch_performance/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <p>今回は、Elasticsearchの検索パフォーマンスについて、より詳細に書きたいと思います。</p>
+<p>業務で取り組んだ検索パフォーマンスの一環としての内容になります。</p>
+<h2 id="パフォーマンス改善を実施する背景">パフォーマンス改善を実施する背景</h2>
+<p>ElasticsearchはApache Luceneベースの全文検索エンジンです。ドキュメントという単位でデータを保持し柔軟に検索をすることが可能です。RDBで例えるとINDEXがテーブル、ドキュメントがレコードというイメージです。</p>
+<p>ドキュメントには単一の文字列や数値はもちろん、配列やオブジェクトを持たせることもできます。しかし、ドキュメント自体の増加やドキュメント構造の複雑化・肥大化によってパフォーマンスが出なくなってくることがあります。</p>
+<p>上記のような理由から、思ったようにパフォーマンスが出なくなってきたという背景より、パフォーマンス改善を実施することになりました。</p>
+<h2 id="elasticsearch-のドキュメント構成について検討">Elasticsearch のドキュメント構成について検討</h2>
+<p>今回のサービスではでは掲載している広告を「媒体」と「商品」という2つの単位でデータ保持しています。データ構造的には、媒体と商品が1:nの関係で紐づくイメージです。</p>
+<p>検索に表示されるのは媒体単位であり、検索自体は商品単位レベルから行われます。そのため、INDEXでデータ管理する際にドキュメントが、媒体単位なのか商品単位なのかについて検討する必要がありました。</p>
+<p>より具体的には、</p>
+<ul>
+<li>INDEXで保持するドキュメントを媒体単位にし、結果をそのまま表示する。</li>
+<li>INDEXで保持するドキュメントを商品単位にし、媒体単位に集約(Aggregations)して表示する。</li>
+</ul>
+<p>という2パターンを考える必要があるという意味です。</p>
+<p>商品の掲載される場所や価格等の情報、駅系の媒体であればどの駅に紐づいているのか、特定の駅ではなく路線全体に紐づく商品なのかなど。1媒体、1商品に対して複数の情報をできるだけ正規化した形で保持しているため、検索はさらに複雑になります。</p>
+<p>そのため一概にドキュメントの構成はどちらが良いと判別できない状態にありました。</p>
+<p>そこで、検索パフォーマンスの向上をするために両方の構成で速度を確認し、どちらがどれくらいパフォーマンスが出るのかという検証を行いました。</p>
+<h2 id="ドキュメントを媒体単位にするパターンnestedが3階層">ドキュメントを媒体単位にするパターン(nestedが3階層)</h2>
+<p>まず、Elasticsearchのパフォーマンスについて検索すると多くヒットするのが、nestedフィールドという形で子要素、孫要素の形でデータを保持するのがパフォーマンス劣化につながるというものです。</p>
+<p>例に媒体単位でドキュメントをINDEXに保持する場合、媒体 - 子要素（商品）- 孫要素（商品に紐づくデータ）といった形で1ドキュメントにつき3階層までデータが大きくなることになります。</p>
+<p>nestedフィールドの特徴として、nestedフィールドのデータ（子要素 or 孫要素）を更新する場合にも、ドキュメント全体が更新されるという仕組みになっているため、更新に対してパフォーマンスが悪くなります。</p>
+<p>ただし、Elasticsearchの裏側で採用されているApache Lucene上ではnestedフィールドのデータは1つのドキュメントとして保持されるそうです。マッピングのコストが高いため更新パフォーマンスは悪くなりますが、検索パフォーマンスに関しては行った検証では遅延は認められませんでした。(nestedフィールドの数がそれほど多くないという理由もあると考えています。)</p>
+<p>参考 :<br>
+<a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.17/nested.html#_limits_on_nested_mappings_and_objects">https://www.elastic.co/guide/en/elasticsearch/reference/7.17/nested.html#_limits_on_nested_mappings_and_objects</a></p>
+<p>更新時のパフォーマンスが劣化するというのも比較的大きな問題になると考えられます。また、今後nestedフィールドで保持するデータが増えた場合を考慮し、商品数と商品に紐づくデータを増やしたテストを行った結果、ヒットしたnestedフィールドを取得する inner hits でパフォーマンスの問題が発生しました。</p>
+<p>これはINDEXで保持するドキュメントが媒体単位になっており、商品単位レベルでの絞り込みが行われていないため、inner hitsで検索するnestedフィールドの数が多いためと考えています。</p>
+<h2 id="ドキュメントを商品単位にするパターンnestedが2階層">ドキュメントを商品単位にするパターン(nestedが2階層)</h2>
+<p>次に、INDEXで保持するドキュメントを商品単位に変更してAggregationsを使って集約する方法を検証しました。</p>
+<p>商品単位に変更しても、商品に紐づくデータを保持する必要がありますので、nestedフィールドは存在します。ただし、階層が1つ減って子要素までの2階層構成になります。</p>
+<p>商品単位に変更後、更新時のパフォーマンスはとても良くなりました。商品単位での更新が可能になるため、特に商品が多く紐づいている媒体に関しては更新コストが大きく低下します。</p>
+<p>検索に関しては、Aggregations自体はそれほどパフォーマンスが悪くないというのが現状の認識ですが、集約されるデータの件数が多くなった場合に非常にパフォーマンスが劣化することが分かりました。</p>
+<p>具体的には1媒体に紐づく商品数が数万件レベルの媒体が存在します。検索にヒットするたびに数万件の商品を1メディアに集約する可能性があり、コストは非常に大きいです。</p>
+<p>さらに inner hits を取得する際にも、inner hits はドキュメント単位で取得するため、数万件のinner hitsを取得する必要が出てきます。</p>
+<p>そのため、INDEXで保持するドキュメントの構成はどのようにするのが良いか一概に言えないというのが現状の検証結果です。</p>
+<p>パフォーマンスをシビアに観察し、適切なドキュメント構成にしていくことが大切だと感じます。</p>
+<h2 id="aggregationsを使う時の注意点">Aggregationsを使う時の注意点</h2>
+<p>次にAggregationsを使う際に、注意する点について実際にハマった部分を3つほど挙げたいと思います。</p>
+<p>AggregationsはSQLで言うところのGROUP BYに相当し複数のドキュメントを集約をするために用います。</p>
+<p>例えば、ダッシュボードなどでレポートを表示するケースなどでは利用する機会があると思います。</p>
+<p>１. inner hitsは使えない</p>
+<p>Elasticsearchのクエリでは検索条件に一致したドキュメントが返却されますが、返却される件数を size パラメータで設定することができます。Aggregationsを使う場合、返却結果が集約されるため一般的にsizeは0に設定しますが、これの影響でinner hitsが取得できません。集約しているので、取得できないというのは当たり前のような感じですが、集約単位でのinner hitsの参照もできませんでした。</p>
+<p>そのため、inner hitsを利用したい場合はAggregationsを使わないクエリを発行するという結論に至りました。パフォーマンス面では、しっかりと検索対象の件数を制限することで大きな問題にはならないと考えています。</p>
+<p>２. 基本的に事前に絞り込みをする方が良い</p>
+<p>Aggregationsを利用する際に、集約したものをさらに絞り込みすることが可能です。これはSQLだとHAVINGに相当します。</p>
+<p>SQLと考え方は同じですが、基本的に集約前にできる限り絞り込みをしておいた方がパフォーマンスはよくなります。</p>
+<p>これはinner hitsでも同様のことが言えます。いかに無駄なドキュメントを事前に省くことができるかというのがポイントになると考えています。</p>
+<p>３. ソートが少し特殊</p>
+<p>Aggregationsでは集約したあとにソートをかけることが可能です。ソートでは集約に関して指定したフィールドを利用することができます。</p>
+<p>ソートにはbucket_sortを利用しますが、検証した結果、通常のElasticsearchクエリのようにソートの構文の中でscriptが使えませんでした。</p>
+<p>そのため、Aggregationsの中でbucket_scriptを利用し、集約後のフィールドとして定義した上でこれをbucket_sortで利用する形で対応しました。通常のクエリでは可能ですがbucket_sortでできないという点は少し注意が必要です。</p>
+<h2 id="インフラ設定周り">インフラ設定周り</h2>
+<p>まず、インフラ設定に関して最初にやっておくべきなのはストレージです。十分なディスク容量があることは大前提ですが、HDDを使っている場合はパフォーマンスが劣化する可能性があるようです。</p>
+<p>インデキシングと検索の公式ドキュメントにも明記されているため、SSDを検討してみるのが良いと思います。</p>
+<p>参考 :</p>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/8.6/tune-for-indexing-speed.html#_use_faster_hardware">https://www.elastic.co/guide/en/elasticsearch/reference/8.6/tune-for-indexing-speed.html#_use_faster_hardware</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/8.6/tune-for-search-speed.html#_use_faster_hardware_2">https://www.elastic.co/guide/en/elasticsearch/reference/8.6/tune-for-search-speed.html#_use_faster_hardware_2</a></li>
+</ul>
+<p>初期構築のタイミングからSSDを採用していたため、今回変更によるパフォーマンス検証はしておりません。</p>
+<p>すこし脱線しますが、AWS EC2を使っている場合、EBSのSSD（汎用）の選択肢としてgp2とgp3が選択可能です。gp2はバースト機能があり、gp3はバーストがありませんがIOPS、スループットの値を事前に設定しておくことが可能です。</p>
+<p>また、gp2のバーストした時の最大IOPS、スループットはEBSの設定サイズによるようです。今回の場合、EBSのサイズがそれほど大きくないため、gp2でバースト機能があるものよりもgp3を利用した方が良いという結論に至りました。</p>
+<p>また、gp3をデフォルトのIOPS、スループットで利用する場合はgp2よりもコストが抑えられるため、EBSのサイズと相談してgp2、gp3を選択するのが良いと思います。</p>
+<p>次にシャードの数です。シャードはデータを実際に保持しているところであり、INDEXをいくつかのシャードに分割させて保持させることが可能です。</p>
+<p>複数のシャードにINDEXを持たせることによって並列実行ができるようになるため、パフォーマンスの改善に働く可能性があります。</p>
+<p>一方で、シャードのサイズを大きくすることはサーバー負荷に影響を与えるため、サイズの調整は慎重に行った方が良いです。</p>
+<p>詳細についてはElasticsearch公式のドキュメントにまとまっているため、シャード数の設定を検討中の場合は一読することをオススメします。</p>
+<p>参考 :</p>
+<ul>
+<li><a href="https://www.elastic.co/docs/deploy-manage/production-guidance/optimize-performance/size-shards">https://www.elastic.co/docs/deploy-manage/production-guidance/optimize-performance/size-shards</a></li>
+<li><a href="https://www.elastic.co/guide/jp/elasticsearch/reference/current/gs-basic-concepts.html">https://www.elastic.co/guide/jp/elasticsearch/reference/current/gs-basic-concepts.html</a></li>
+</ul>
+<h2 id="その他">その他</h2>
+<p>Kibanaを導入している場合、プロファイラ機能でクエリ自体を検証してみることができます。(Kibana -> Dev Tools -> Search Profiler)実際にApache Luceneで実行されているクエリが参照できたり、クエリの実行速度が測定できたりします。シャード数を複数設定するとそれぞれのシャードでどれくらいの時間がかかっているかも参照することが可能です。</p>
+<p>手元にKibanaの環境がある場合は一度見てみると良いかと思います。</p>
+<p>次に、実際のサーバー負荷を見ることはとても大切だということです。今回は、主にElasticsearchの検索パフォーマンスに着目して書きましたが、Elasticsearchに問題があると思っていたら別の箇所に問題があったという話も珍しくないと感じます。</p>
+<p>パフォーマンスの改善をしていく中で、ボトルネックがどこにあるのかを特定することが第一ステップだと考えています。さらに、Elasticsearchサーバーに問題があるケースであれば、クエリ自体の改善なのか、パラメータレベルのチューニングで対応できるのか、インフラのスケールアップが必要なのか。などなど</p>
+<p>まずは実際にサーバーの負荷を見て、ボトルネックがどこにあるのかということについて調査することが大切だと考えています。</p>
+<h2 id="最後に">最後に</h2>
+<p>今回はElasticsearchのパフォーマンスについてでした。</p>
+<p>検索機能があるサービスにとって、パフォーマンス問題は切り離せない問題だと感じています。パフォーマンスが劣化したサービスはユーザーにとって大きなストレスを与えかねず、サービス全体に与える影響が非常に大きいと考えています。</p>
+<p>そのため、データの増加やロジックの追加変更に伴いとてもシビアにチェックしてく必要がある部分だと考えています。</p>
+<p>Elasticsearchを利用している方にとって、少しでも助けになれば幸いです。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Elasticsearch%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E3%83%91%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%B3%E3%82%B9&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2023%2Felasticsearch_performance%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
