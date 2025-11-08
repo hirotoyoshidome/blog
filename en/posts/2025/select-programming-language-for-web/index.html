@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Choosing a Programming Language for a New Web Service</title><meta name="description" content="Thinking through programming language selection for a new web service."><!-- OGP --><meta property="og:title" content="Choosing a Programming Language for a New Web Service"><meta name="og:description" content="Thinking through programming language selection for a new web service."><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Choosing a Programming Language for a New Web Service"><meta name="twitter:description" content="Thinking through programming language selection for a new web service."><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Choosing a Programming Language for a New Web Service</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Choosing a Programming Language for a New Web Service</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2025-11-08T00:00:00.000Z"> 2025-11-08 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Engineering Philosophy </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Product Development </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2025/select-programming-language-for-web/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <h2 id="choosing-a-programming-language-for-a-new-web-service">Choosing a Programming Language for a New Web Service</h2>
+<p>Picking a programming language becomes a critical decision when launching a new web service.</p>
+<p>If you are building something on your own, it is natural to gravitate toward the language you already know best.</p>
+<p>Or you might seize the chance to self-study a language that interests you but rarely appears in your day job.</p>
+<p>However, when you are delivering a product as a company or founding a business around it, language selection matters even more.</p>
+<p>Here I want to summarize how I think about language selection from both technical and non-technical angles.</p>
+<p>※ The scope here is limited to backend development.</p>
+<h2 id="technical-considerations">Technical Considerations</h2>
+<p>When evaluating technology, scalability is what matters most.</p>
+<p>The requirements of a massive, mission-critical project differ from those of a PoC or a subsystem.</p>
+<p>Popular web backend languages today include Java, PHP, Ruby, Go, Python, and Node.js.</p>
+<p>Java tends to be favored in contract development, while interpreter languages like Ruby and PHP feel common in web companies.</p>
+<p>Recently even web companies lean toward statically typed languages such as Go and Kotlin. (That is the zone I am focusing on here.)</p>
+<p>Given the premise of a brand-new web service, let us assume:</p>
+<ul>
+<li>small team</li>
+<li>speed is paramount</li>
+<li>features are added and removed rapidly</li>
+</ul>
+<p>In other words, think of an early-stage startup.</p>
+<p>I have helped choose the tech stack at this stage and, a few years later, felt that the choice was a mistake. That experience is the lens for this post.</p>
+<p>Back then our reasoning was:</p>
+<ul>
+<li>Small team → keep the language simple</li>
+<li>Need speed → interpreter languages feel faster to iterate in</li>
+<li>Prefer something un-opinionated that anyone with prior language experience can pick up</li>
+</ul>
+<p>So we chose Python.</p>
+<p>For the framework we adopted Django, the full-stack web framework.</p>
+<p>If this had been Ruby it would have been Rails; for PHP, Laravel.</p>
+<p>Development speed is excellent in the early phase.</p>
+<p>All you do early on is add new features. Even when tweaks appear, the mindset is to “add more.”
+That means you can happily ship for the first three years or so.</p>
+<p>Side note: You rarely need to worry about interpreter languages being too slow.
+I was skeptical about runtime performance at first, but unless you truly need extreme throughput, language-level performance is rarely the bottleneck for web services. (Middleware matters more, and a web service is slower than a native app anyway.)
+Web development also leans heavily on existing middleware, typically OSS or licensed products rather than homegrown code.
+Most of the performance impact stems from those components, so with some tuning you can achieve perfectly acceptable speed even in an interpreted language.</p>
+<p>Back to the story.</p>
+<p>Three to four years in, you begin to update and retire features constantly.
+That is what happened at my company.</p>
+<p>Depending on how you design things, weakly typed interpreter stacks allow subtle type differences or missing type definitions to creep in. Ambiguity grows and development speed drops.</p>
+<p>That is when technical debt sprouts.
+You are left with either a large refactor or painstakingly extracting functions bit by bit.</p>
+<p>Either way it is a time sink that does not improve product quality directly, so the return on effort is poor.</p>
+<p>Because of that history I am critical of casually picking a dynamically typed interpreter for the sake of early velocity or trendiness.</p>
+<p>In fact, when features are added and removed rapidly, strong typing often works in your favor.</p>
+<p>Strongly typed languages also make it easier to design abstractions.
+Doing that upfront lets you enforce constraints on how features can evolve, which is a good thing when changes are constant.</p>
+<h2 id="non-technical-considerations">Non-Technical Considerations</h2>
+<p>Language selection also affects areas beyond pure technology.</p>
+<p>Take hiring.
+Company systems are rarely built by one person, so recruiting must be part of the equation.</p>
+<p>Popular, battle-tested languages obviously help with hiring, but deliberately adopting new technology may attract developers who crave cutting-edge work.</p>
+<p>You also need to think about the ecosystem.</p>
+<p>JVM-based stacks have a massive body of existing assets, so the ecosystem is highly mature.
+If you hit a stack trace you can probably search the answer immediately.</p>
+<p>Conversely, languages or frameworks with little adoption often lack ecosystem maturity; if the library you need does not exist you may end up building it yourself.</p>
+<p>Or a library you rely on might be abandoned with no replacement in sight.
+The effort required in those situations is non-trivial.</p>
+<h2 id="in-closing">In Closing</h2>
+<p>This was my latest thinking on picking a language for a new web service.</p>
+<p>At this point I believe that if you expect a service to grow, choosing a strongly typed language leads to more long-term happiness.</p>
+<p>Frameworks like Rails that maximize early speed are undeniably attractive, but the debt piles up faster.
+As systems grow, debt becomes harder to pay down, so if you press on with lax design rules (for example, extending a PoC directly into production) your future velocity will suffer.</p>
+<p>Thanks to type inference and generics, modern statically typed languages are no longer slow to develop in.</p>
+<p>Splitting frontend and backend instead of building monoliths is now mainstream, so the paradigm is shifting away from “go as fast as possible with a full-stack framework” toward “build a healthy system that avoids debt.”</p>
+<p>On a related note, I recently evaluated backend options again and felt uncertain—yet I now suspect server-side Kotlin might be a fantastic choice. (I’ve been using Kotlin lately.)</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Choosing%20a%20Programming%20Language%20for%20a%20New%20Web%20Service&url=https%3A%2F%2Fhirotoyoshidome.com%2Fen%2Fposts%2F2025%2Fselect-programming-language-for-web%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
