@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>新規Webサービスにおける言語選定について</title><meta name="description" content="新規Webサービスにおける言語選定について考える。"><!-- OGP --><meta property="og:title" content="新規Webサービスにおける言語選定について"><meta name="og:description" content="新規Webサービスにおける言語選定について考える。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="新規Webサービスにおける言語選定について"><meta name="twitter:description" content="新規Webサービスにおける言語選定について考える。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">新規Webサービスにおける言語選定について</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">新規Webサービスにおける言語選定について</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2025-11-08T00:00:00.000Z"> 2025-11-08 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Engineering Philosophy </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Product Development </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2025/select-programming-language-for-web/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <h2 id="新規webサービスにおける言語選定について">新規Webサービスにおける言語選定について</h2>
+<p>新しくWebサービスを作る際に、プログラミング言語の選定というのは重要な判断になると思います。</p>
+<p>個人で開発するサービスであれば、自分がもっとも馴染みのある言語を採用することが多いかもしれません。</p>
+<p>あるいは、気になっているけど中々業務では触る機会がない言語を独学で勉強して採用することもあるかもしれないですね。</p>
+<p>一方で、会社のサービスとして提供したり、そのサービスで起業を考えていたりする場合、言語選定はとても重要です。</p>
+<p>今回は技術面とそれ以外の面から言語選定について、私の考えをまとめてみたいと思います。</p>
+<p>※バックエンド開発に限ります。</p>
+<h2 id="技術の側面">技術の側面</h2>
+<p>技術の側面を考える上で大切なのは拡張性だと考えます。</p>
+<p>例えば、大規模開発が前提だったり堅牢さが求められるケース、PoC的に開発するサービス、サブシステム的な役割を担うサービスではそれぞれ求められる要件が違います。</p>
+<p>現在、一般的に使われているWebバックエンドの言語は Java, PHP, Ruby, Go, Python, Nodejsあたりが多いと思います。</p>
+<p>SES系ではJavaが好まれる傾向があり、Web系ではRubyやPHPなどのインタプリタ言語の採用が多いと感じます。</p>
+<p>昨今では、Web系企業でもGoやKotlinのような静的片付けの言語が選ばれることも多いと感じます（今回書くのはこのあたりです）</p>
+<p>今回のケースでは、新規Webサービスという前提のもと</p>
+<ul>
+<li>少人数開発</li>
+<li>スピード重視</li>
+<li>新しい機能の追加と廃止が激しい
+という観点で考えてみましょう。要するにスタートアップの初期フェーズのような状態です。</li>
+</ul>
+<p>私自身、実際にスタートアップの初期フェーズの技術選定に関わった経験があり、
+そして数年後に失敗したなと感じた経験があります。そのことに注目して書いていきます。</p>
+<p>当時のロジックとしては、</p>
+<ul>
+<li>少人数だからできるだけシンプルな言語が良い</li>
+<li>スピードを重視したいからインタプリタ系の言語の方が楽</li>
+<li>癖のない言語を使いたい(触ったことがなくても他の言語の経験があれば書けるような)</li>
+</ul>
+<p>という理由でPythonを選択していました。</p>
+<p>また、FWにはWebアプリケーションにおけるフルスタックのフレームワークであるDjangoを採用しました。</p>
+<p>これはRubyならRuby on Rails, PHPならLaravelと言ったところでしょうか。</p>
+<p>初期フェーズの開発速度はかなり出ます。</p>
+<p>初期フェーズは基本的に新規機能の追加しかありません。多少の修正があったとしても基本的には付け加えていく思考が強いです。
+そのためサービス開始から3年くらいは特に不満なく開発を進めることができます。</p>
+<p>余談ですが、多くの場合インタプリタ言語だからといってパフォーマンスが悪いという懸念はほとんど考える必要はないです。
+私も最初はインタプリタ言語に対して処理速度のパフォーマンス面は懐疑的なところはあったのですが、よっぽど高パフォーマンスを求められるケースを除いて言語レベルでのパフォーマンスを考慮する必要はないと考えます。(Webの場合です。ミドルウェアなどは関係します。そもそもWebサービスの時点でネイティブアプリより速度は落ちるため速度パフォーマンスを求められることは稀だと思っています)<br>
+Webサービスの開発は、多くのミドルウェアを利用します。通常これらは自前で実装することはなく、オープンソースやライセンス契約をして外部のものを利用することがほとんどです。<br>
+そして、パフォーマンスに強く影響するのはこの部分であることが多く、工夫次第でインタプリタでも十分に速度パフォーマンスレベルを上げることは可能だと考えています。</p>
+<p>話を戻します。</p>
+<p>サービスの開発から3-4年が経過すると、機能のアップデートや削除などが頻繁に発生するようになります。
+私が所属していた企業でもこのあたりから頻繁に追加と削除が行われるようになっていきました。</p>
+<p>設計次第と言えばそれまでですが、インタプリタ言語で型付けが弱い場合、微妙な型の違いや関数の型が決まっていないため曖昧さが増し、実装スピードが低下するということが発生します。</p>
+<p>まさに技術負債が芽を出してきたタイミングです。
+この状態に陥ると大規模なリファクタリングをするか、少しずつ関数に切り出して整理していくという方法くらいしか取れなくなります。</p>
+<p>どちらにしても、時間がかかる割にサービス品質は直接的に向上しないため無駄な工数がかかることになります。</p>
+<p>私は、こういった背景を経験したこともあり、初期の開発速度やトレンド重視で安易にインタプリタ言語(型付け弱め)の技術選定を行うことに批判的です。</p>
+<p>むしろ、機能の追加と削除が激しいからこそ強力な型付けがうまく作用するケースも多いと思います。</p>
+<p>また、型付けが強い言語を利用した場合、抽象化が行いやすいです。
+抽象化設計を初期フェーズで行うことで、機能拡張の実装に制約をもたせることも機能追加・削除が多発する環境では有効だと考えます。</p>
+<h2 id="それ以外の側面">それ以外の側面</h2>
+<p>言語選定をするときに、直接的な技術以外の面も気にする必要があります。</p>
+<p>例えば、採用に関して。
+会社のサービスとしてシステムを構築する場合は一人で構築することはほとんどありません。
+そのため、採用面を気にする必要があります。</p>
+<p>人気な言語や実績のある言語は採用に強いことは言うまでもありませんが、あえて新しい技術を取り入れることで新技術に関心の高い技術者を獲得するという考え方もあるでしょう。</p>
+<p>エコシステムも気にしたいところです。</p>
+<p>例えばJVM系であれば資産が莫大なため、エコシステムは成熟していると言えます。
+スタックトレースが出た場合も検索したらすぐに原因が突き止められるでしょう。</p>
+<p>一方でそこまで採用実績のない言語やFWの場合はエコシステムが発達していないことも多く、実現したい機能のライブラリなどが整備されていなければ自作する必要があったりもします。</p>
+<p>あるいは利用していたライブラリがメンテナンス終了し、代替ライブラリが見つからないということもあるかもしれません。
+このあたりの工数は馬鹿になりません。</p>
+<h2 id="最後に">最後に</h2>
+<p>今回は、新規Webサービスの言語選定について考えてみました。</p>
+<p>現段階での私の意見としては、成長を前提とするサービスであれば、強い型付けの言語を採用するのが将来的に幸せになると思います。</p>
+<p>Railsのような開発速度が出るFWを採用するメリットも捨てがたいものではありますが、技術負債は溜まりやすい傾向にあると思います。
+システムが成長していゆくにつれ、負債を消化していくことは難しくなってゆくため、設計や実装ルールが整備されていない段階で（例えばPoCの延長線上で本番ソースが更新されてゆくみたいな）推し進めてしまうと、将来的な開発速度が遅くなる懸念もあります。</p>
+<p>また、昨今の静的型付けの言語は型推論やジェネリクスの進化のおかげで、開発速度も出やすくなってきていると思います。</p>
+<p>モノリシックな構成からフロントとバックを分ける構成も一般的になってきているため、フルスタックのフレームワークによる速度重視の開発から、負債を溜めない健全なシステムを作るという方向性へパラダイムが移りつつあるのではないかと感じます。</p>
+<p>余談ですが、直近でバックエンドの技術選定をした際にイマイチ腑に落ちなかったのですが、サーバーサイドKotlinという選択肢はかなりいいかもしれません。（最近Kotlin触っています）</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E6%96%B0%E8%A6%8FWeb%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E8%A8%80%E8%AA%9E%E9%81%B8%E5%AE%9A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2025%2Fselect-programming-language-for-web%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
