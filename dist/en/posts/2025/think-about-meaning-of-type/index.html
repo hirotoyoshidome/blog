@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Thinking About the Meaning Types Carry</title><meta name="description" content="Thinking About the Meaning Types Carry"><!-- OGP --><meta property="og:title" content="Thinking About the Meaning Types Carry"><meta name="og:description" content="Thinking About the Meaning Types Carry"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Thinking About the Meaning Types Carry"><meta name="twitter:description" content="Thinking About the Meaning Types Carry"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Thinking About the Meaning Types Carry</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Thinking About the Meaning Types Carry</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2025-11-23T00:00:00.000Z"> 2025-11-23 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Engineering Philosophy </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Software Architecture </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2025/think-about-meaning-of-type/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <h2 id="thinking-about-the-meaning-types-carry">Thinking About the Meaning Types Carry</h2>
+<p>Because I have spent so much time with Python, I had never truly reflected on programming language types.</p>
+<p>My mental model of a “type” so far was:</p>
+<ul>
+<li>explicitly specifying strings, integers, floating-point numbers, booleans, and so on when defining variables, function arguments, or return values</li>
+<li>once a type is explicit, you can instantly tell what values the variable or return value can take (which reduces the chance of bugs)</li>
+<li>in statically typed languages the compiler checks types, so compilation eliminates type-level bugs</li>
+</ul>
+<p>That was it.</p>
+<p>In dynamic languages you can get away without paying much attention to types, so you can initialize something as an Int and later assign a String.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">x </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 10</span></span>
+<span class="line"><span style="color:#E1E4E8">x </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "abc"</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(x)</span></span>
+<span class="line"></span></code></pre>
+<p>Statically typed languages generally forbid this.</p>
+<p>When initialization and later assignments change the type, accidental behavior becomes more likely.</p>
+<p>Imagine a large codebase where repeated assignments make a variable’s type oscillate. You now need to constantly keep its type in mind. Branches that alter types make it even more complex.</p>
+<p>That is effectively like running a type-inference interpreter inside the programmer’s head.</p>
+<p>So even in dynamic languages we usually avoid code like this. Languages such as JavaScript even allow <code>const</code>, so the language can provide safety by preventing reassignment.</p>
+<p>In practice, dynamic languages like Python often treat numeric strings and integers the same in many situations, so this kind of code slips in surprisingly often. At the same time, behavior can differ because of type distinctions, and those cases are very hard to spot.</p>
+<p>So is making types explicit only about reducing bugs?</p>
+<p>I do not think so. I feel that types <em>carry meaning</em>.</p>
+<p>Primitive types provided by the language are abstract and make it hard to capture meaning.</p>
+<p>At best you can say a variable or property is an integer, or that a function returns a string.</p>
+<p>It may be more accurate to say that capturing meaning is hard rather than saying that you can imbue meaning.</p>
+<p>You can also define your own types.</p>
+<p>Using classes or interfaces you can define types that encapsulate meaning.</p>
+<p>This, to me, is the true strength of a type system.</p>
+<p>Consider a backend API.</p>
+<p>Suppose there is an endpoint that returns product information.</p>
+<p>To keep things simple, a product has <code>id</code>, <code>name</code>, and <code>price</code>.</p>
+<p>If we only use primitive types we might end up with:</p>
+<ul>
+<li>id : Long</li>
+<li>name : String</li>
+<li>price : Int
+(Let us intentionally keep the price as an Int instead of Decimal.)</li>
+</ul>
+<p>Now define your own types: <code>Id</code>, <code>Name</code>, and <code>Price</code>.</p>
+<ul>
+<li>id : Id</li>
+<li>name : Name</li>
+<li>price : Price</li>
+</ul>
+<p>Then you can restrict the range of valid values for each type:</p>
+<ul>
+<li>Id only accepts positive integers greater than or equal to 1</li>
+<li>Name accepts values with at least 1 and at most 50 characters</li>
+<li>Price only accepts non-negative positive integers</li>
+</ul>
+<p>With these constraints, each type now has meaning.</p>
+<p>Primitive types merely enforce the generic constraints defined by the language (Long, String, Int), but custom types let you encode domain-specific rules.</p>
+<p>I believe this is the true power that types possess.</p>
+<p>Defining types and weaving them into the design yields many benefits:</p>
+<ul>
+<li>you can name the meaning of values, so the type matches your domain knowledge</li>
+<li>constraints on function arguments or return types produce functions that fail less often because they allow fewer shapes of data</li>
+<li>you eliminate impossible states (for example, a price defined as Int implicitly allows negative values, so a bug might set one)</li>
+</ul>
+<p>This way the system sheds complexity while gaining expressive power.</p>
+<h2 id="in-closing">In Closing</h2>
+<p>Today I focused on types and reflected on the meaning and strength they bring.</p>
+<p>Types often stay out of sight unless you consciously think about design.</p>
+<p>Recently I feel there has been a shift back toward statically typed languages from dynamically typed ones. As I mentioned in the previous article, you do get rapid early velocity, but things become tough in large systems.</p>
+<p>Domain-driven design gaining adoption may also be part of the backdrop.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Thinking%20About%20the%20Meaning%20Types%20Carry&url=https%3A%2F%2Fhirotoyoshidome.com%2Fen%2Fposts%2F2025%2Fthink-about-meaning-of-type%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

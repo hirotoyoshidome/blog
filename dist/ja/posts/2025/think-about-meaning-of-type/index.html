@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>型が持つ意味を考える</title><meta name="description" content="型が持つ意味を考える"><!-- OGP --><meta property="og:title" content="型が持つ意味を考える"><meta name="og:description" content="型が持つ意味を考える"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="型が持つ意味を考える"><meta name="twitter:description" content="型が持つ意味を考える"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">型が持つ意味を考える</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">型が持つ意味を考える</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2025-11-23T00:00:00.000Z"> 2025-11-23 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Engineering Philosophy </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Software Architecture </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2025/think-about-meaning-of-type/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <h2 id="型が持つ意味を考える">型が持つ意味を考える</h2>
+<p>私は長いことPythonを使ってきたため、これまで真剣にプログラミング言語の型について考えたことがありませんでした。</p>
+<p>これまでの「型」のイメージは、</p>
+<ul>
+<li>文字列や整数、浮動小数点、真偽値などを明示的に指定して変数を定義したり、関数の引数や戻り値を定義するもの</li>
+<li>「型」が明示されていると一瞬でその変数や関数の戻り値がどんな値を取るのかわかりやすい(つまりバグを生みにくい)</li>
+<li>静的型付け言語では、コンパイルによって型がチェックされるため、コンパイルによって型レベルのバグを排除できる</li>
+</ul>
+<p>というものでした。</p>
+<p>というのも、動的型付け言語なら型をそこまで意識する必要がないため、初期化をIntで行ってもStringを代入することができます。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">x </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 10</span></span>
+<span class="line"><span style="color:#E1E4E8">x </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "abc"</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(x)</span></span>
+<span class="line"></span></code></pre>
+<p>静的型付け言語では、基本的にこれを禁止となっています。</p>
+<p>初期化と代入で型が変わることで、意図しない動作を引き起こす可能性が生まれやすくなります。</p>
+<p>例えば、コードが大規模になってきて変数への代入によって型が目まぐるしく変わるコードを書くと、その変数の型の状態を意識しなければいけなくなります。
+また、分岐によって型が変わるということがある場合はさらに複雑性が高まります。</p>
+<p>これはプログラマの頭の中で型推論のインタプリタを動かし続けていることに等しいと思います。</p>
+<p>そのため、動的型付けの言語でもこのようなコードを基本的に書くことはありません。
+また、動的型付けの言語であっても JSのconstのように再代入不可として定義することもできるため、言語レベルで安全性を担保することはできます。</p>
+<p>しかし実際、Pythonのような動的型付け言語の場合、文字列の数字とIntの数字は意識しなくても同じ挙動になることも多いです。
+そのため、ついこのようなコードが混入することも度々発生します。
+一方で、型の違いによって挙動が変わることも往々にしてあり、このケースは本当に発見しにくいと思います。</p>
+<p>では、型を明示することは、ただバグを減らすためにあるのでしょうか？</p>
+<p>私はそれだけではなく、「型」は意味を表しているのだと感じます。</p>
+<p>標準で提供されている型であるプリミティブな型では抽象度が高く、意味を持たせることは難しいです。</p>
+<p>せいぜいこの変数やプロパティは整数であるとか、関数なら、戻り値は文字列であるということにとどまります。</p>
+<p>実際は意味を持たせるというより、意味を捉えることが難しいという方が正しいかもしれません。</p>
+<p>「型」は新しく定義することもできます。</p>
+<p>つまりクラスやインターフェースを使って、型を定義することで、型自体に意味を持たせることができます。</p>
+<p>型システムの真骨頂はここにあると考えらます。</p>
+<p>例えばバックエンドAPIについて考えてみましょう。</p>
+<p>このAPIは商品の情報を返却するエンドポイントです。</p>
+<p>簡単に考えるため、商品はid, name, priceを持つものだとします。</p>
+<p>プリミティブな型だけを使うなら、</p>
+<ul>
+<li>id : Long</li>
+<li>name : String</li>
+<li>price : Int
+という感じになるでしょうか？(※金額はDecimalではなくあえてIntにします)</li>
+</ul>
+<p>ここで型を自分で定義して、Id型、Name型、Price型というものを導入してみることにします。</p>
+<ul>
+<li>id : Id</li>
+<li>name : Name</li>
+<li>price : Price</li>
+</ul>
+<p>そして、それぞれの型で値の取りうる範囲を制限することもできます。</p>
+<ul>
+<li>Idは1以上の正の整数しか取らない</li>
+<li>Nameは1文字以上50文字以上の値しか取らない</li>
+<li>Priceは0以上の正の整数しか取らない</li>
+</ul>
+<p>とした場合、それぞれの型に意味が出てきます。</p>
+<p>プリミティブな型を使っていた場合は、プログラミング言語で定められたLong, String, Intの制約が反映されますが、
+型を定義することでドメイン知識に沿った型による制約を反映させることができます。</p>
+<p>これこそが、型が本来持つ力だと考えています。</p>
+<p>型を定義し、設計に組み込むことは多くのメリットを生みます。</p>
+<ul>
+<li>型の意味に名称を付けることができ、ドメインに沿った知識と型が一致する</li>
+<li>関数の引数や戻り値の型にも制約を付けることができるため、よりバグが少ない関数となる(自由度の低い関数となる)</li>
+<li>不可のケースを減らすことができる(例えば金額をIntで定義した場合は負値も制約レベルでは許容していることになるため実装ミスにより設定ができてしまう)</li>
+</ul>
+<p>というように、システムの複雑性を減らしつつも、表現力は向上するという方向性に寄与すると思います。</p>
+<h2 id="最後に">最後に</h2>
+<p>今回は「型」に着目して、「型」が持つ意味とその力について考えてみました。</p>
+<p>「型」は設計を意識しないとあまり関心が向かないところだと感じます。</p>
+<p>また、昨今は動的型付けの言語から静的型付け言語への回帰が起こってきているかなという感覚もあり、
+その背景には前回の記事でも書いたように、初速は確かに出るけど、大規模になると厳しいという感覚があるのではないかと思います。</p>
+<p>また、ドメイン駆動開発も浸透してきていることも背景にあるかもしれません。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E5%9E%8B%E3%81%8C%E6%8C%81%E3%81%A4%E6%84%8F%E5%91%B3%E3%82%92%E8%80%83%E3%81%88%E3%82%8B&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2025%2Fthink-about-meaning-of-type%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
