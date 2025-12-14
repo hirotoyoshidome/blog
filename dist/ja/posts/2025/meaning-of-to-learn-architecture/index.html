@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ソフトウェア設計を学ぶということ</title><meta name="description" content="ソフトウェア設計を学ぶということ"><!-- OGP --><meta property="og:title" content="ソフトウェア設計を学ぶということ"><meta name="og:description" content="ソフトウェア設計を学ぶということ"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="ソフトウェア設計を学ぶということ"><meta name="twitter:description" content="ソフトウェア設計を学ぶということ"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Cqs_ohrY.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">ソフトウェア設計を学ぶということ</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">ソフトウェア設計を学ぶということ</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2025-12-14T00:00:00.000Z"> 2025-12-14 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Engineering Philosophy </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Software Architecture </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2025/meaning-of-to-learn-architecture/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <h2 id="ソフトウェア設計を学ぶということ">ソフトウェア設計を学ぶということ</h2>
+<h3 id="導入">導入</h3>
+<p>ソフトウェアのプログラムを書くことを仕事にしている人は、設計という言葉を耳にする機会はとても多いです。</p>
+<p>通常、ソフトウェアは多くのプロセスを経て動作するものが生み出されます。</p>
+<p>様々なポジションの人からの要望であったり、ニーズに対して「要件」がまとめられ、
+その要件に対して設計が行われます。</p>
+<p>その設計に対して、技術的な側面からさらなる設計が生まれることも往々にして発生します。</p>
+<p>技術的な観点が明瞭になると、実際にプログラムとテストコードが作成され、レビュー、テスト環境へのデプロイ、テスト環境でのテスト、そしてスケジュール調整などが行われプログラムは多くの人に使われる環境へとデプロイされていきます。</p>
+<p>これはアジャイル開発では極一般的なプロセスですが、開発手法によってはテストが何重にも行われたり、まとまった単位でのリリースが行われるケースもあります。</p>
+<p>さて、本題のソフトウェア設計について。この言葉が指すのは一般的にどこに含まれるのでしょうか？</p>
+<p>私が思うには、このフローには含まれていません。いや。すべてに含まれていると言うこともできるかもしれません。</p>
+<p>この言葉が指す意味をこれから書いていきたいと思います。</p>
+<h3 id="ソフトウェア設計への誤解">ソフトウェア設計への誤解</h3>
+<p>「ソフトウェア設計」というワードを聞くと、</p>
+<ul>
+<li>要件をソフトウェアのレベルに落とし込むことでしょう</li>
+<li>アーキテクチャの話かな</li>
+<li>システムの初期段階の話でしょう</li>
+</ul>
+<p>のように連想されることも多いかもしれません。</p>
+<p>しかし実際はソフトウェア設計とは言葉の意味通りではないように感じます。</p>
+<p>確かに、要件をソフトウェアのレベルに落とし込むこともアーキテクチャの話もソフトウェア設計においては登場します。
+また、これらはシステムの初期段階に発生することがほとんどで、機能レベルの改修フェーズになるとほとんどの場合で意識することはなくなります。</p>
+<p>そのため、若手のソフトウェア開発者がソフトウェア設計について触れるのはある程度経験を積んでからというケースが多いように思います。</p>
+<p>私も例にもれず、ソフトウェア設計について触れたのはある程度の経験を積んでからです。</p>
+<p>これについて考えてみると、設計というのは経験に大きく依存するところが多いと思います。</p>
+<p>感覚としては、過去のプロジェクトで採用されていた設計を流用することは非常に多いです。</p>
+<p>なので、ソフトウェア設計について深く学ばなくても、過去の例からある程度できてしまうというのがソフトウェア設計の一番の誤解だと感じます。</p>
+<p>そのため、日々進化するトレンド技術の方が優先されソフトウェア設計について深く学ぶということのメリットはあまり語られることはありません。</p>
+<h3 id="転機">転機</h3>
+<p>私もソフトウェア設計への学びはかなり後回しになってきました。</p>
+<p>AIやデータ分析、新しいFW、言語など、ソフトウェアの発展は日進月歩です。そのため勉強したいことは山積みです。</p>
+<p>私は実務で機能レベルの設計をすることはありますが、設計を学ぶ前はすべて感覚と経験を頼りにやっていました。</p>
+<p>これまでの経験から、この方法が良いという選択の仕方です。
+これは強ち正しい結果を導いてくれることが多いです。なぜなら実績があるからです。</p>
+<p>ゆえに、より一層設計への興味関心というものは生まれにくくなっていたと今では感じます。</p>
+<p>しかしあるとき、経験からの選択というものに納得感がないという感覚が沸き起こってきました。
+これはまさにある程度経験を積んだからこそ、体系的に理解したいという欲求の現れだと思います。</p>
+<p>そこから設計について体系的に学び始めました。</p>
+<p>学びはじめて最初に思ったのは、同じ技術の話でも学びのベクトルが違うということです。</p>
+<p>これまでの勉強は具体的なものがほとんどでした。</p>
+<p>プログラム言語にしてもフレームワークやデータ分析にしても手法を学ぶという感覚が強いです。</p>
+<p>それは動くものがすぐにできて、理解しやすく、実務でもすぐに使える知識になりえます。</p>
+<p>一方で、設計の話は抽象的な話が多いです。</p>
+<p>なぜ、疎結合が良いとされているのか、結合は悪の面だけなのか、モジュール化がなぜ良いのか、境界とは</p>
+<p>こういった概念の話が展開されていきます。</p>
+<p>そのため実務ですぐに活かせる知識ではありません。</p>
+<p>これらの知識はソフトウェア技術者として長期的に作用するものだと考えています。</p>
+<h3 id="設計を学ぶのは哲学を学ぶこと">設計を学ぶのは哲学を学ぶこと</h3>
+<p>設計とよくセットで語られるのがアーキテクチャです。</p>
+<p>クリーンアーキテクチャが良いという記事などは検索すればとても多く見つかります。</p>
+<p>そして理解しないままアーキテクチャのディレクトリ構成だけ真似をしたものも多く散見されます。</p>
+<p>ここにも大きな誤解があると、強く主張したいと思います。</p>
+<p>さきほど、学びの性質が違うという話を書きました。
+まさにこれと同じことがここで起こっています。</p>
+<p>「手法」を学ぶという感覚でアーキテクチャを学ぶと、ディレクトリ構成を真似すればクリーンアーキテクチャになると誤解が発生すると感じます。</p>
+<p>しかし、アーキテクチャは「手法」ではありません。
+ただのパターンです。</p>
+<p>これは万能ではなく、全てのプロジェクトに適用できるほど汎化されたものでもないということです。</p>
+<p>ではなぜアーキテクチャを学ぶ必要があるのか。</p>
+<p>私はアーキテクチャの背後に隠された設計哲学を学ぶためだと考えています。</p>
+<p>どういう理由でこのファイルが分割されるのか、どういう理由でここを疎結合にしなければいけないのか、なぜ戻り値はモデルの形式ではなく値を返さないといけないのか。</p>
+<p>そういう背景に隠れたなぜ、つまり考えであり哲学を学ぶことが設計を学ぶということだと思います。</p>
+<h2 id="設計哲学を学ぶ意義">設計哲学を学ぶ意義</h2>
+<p>より具体的な手法を学ぶ意義はすぐに学ぶことのリターンが得られるため、学ぶ意義は明確です。</p>
+<p>これらは業務で必要な場合や、個人的興味から学ぶことになるため、すぐに業務に活かすことができます。</p>
+<p>では、設計における哲学を学ぶ意義とはなんでしょうか。</p>
+<p>私は普段の意識、そして選択肢の幅だと思います。</p>
+<p>ソフトウェア開発者として働き始めたときは、プログラムが動くということにフォーカスしています。</p>
+<p>そのため、ファイルの置き場所や処理の分割単位、スコープなどを考えた上で実装するというより、
+他の実装箇所と照らし合わせて決めていくことも多いでしょう。</p>
+<p>しかし、設計哲学を学ぶと、すべてのことに意味が見えてきます。
+逆に考えられていないときは、自ら提案していく糧になります。</p>
+<p>動くものから、より保守性、拡張性が高いシステムを作ることに意識が回るようになります。</p>
+<p>つまり、普段のコーディングレベルから質が高まると考えています。</p>
+<p>保守性や拡張性は未来に向けての投資です。
+それはすぐにリターンが期待できるものではありません。</p>
+<p>しかしながら、初期の設計が数年後のサービス開発のメンテナンスコストや開発速度に大きな影響を与えるということは、実体験からも感じられます。</p>
+<p>数年レベルで同じサービス開発に携わったことがある方であれば、きっと同じ感覚があると思います。</p>
+<p>設計の意図を明確にしながら将来への投資をしていくという観点でも、設計哲学を学ぶ意義は大きいと感じます。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2%E8%A8%AD%E8%A8%88%E3%82%92%E5%AD%A6%E3%81%B6%E3%81%A8%E3%81%84%E3%81%86%E3%81%93%E3%81%A8&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2025%2Fmeaning-of-to-learn-architecture%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
