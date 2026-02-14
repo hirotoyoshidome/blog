@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Abstraction Is a Contract</title><meta name="description" content="Abstraction Is a Contract"><!-- OGP --><meta property="og:title" content="Abstraction Is a Contract"><meta name="og:description" content="Abstraction Is a Contract"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Abstraction Is a Contract"><meta name="twitter:description" content="Abstraction Is a Contract"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.CjCAVj5L.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Abstraction Is a Contract</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Abstraction Is a Contract</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2026-02-14T00:00:00.000Z"> 2026-02-14 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Learning </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Engineering Philosophy </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Architecture </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Design Philosophy </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2026/abstraction-is-contract/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <p>In day-to-day software development, the word “abstraction” comes up constantly.</p>
+<p>In object-oriented languages such as Java or Kotlin, you can design classes, interfaces, and abstract classes so the architecture itself becomes an exercise in abstraction.</p>
+<p>Abstraction often appears in the early phases of design, but we also have to keep it in mind when building features.</p>
+<p>In this article, I would like to dig into what “abstraction” means in the context of software development.</p>
+<h2 id="what-the-word-abstraction-means">What the word “abstraction” means</h2>
+<p>The term abstraction is, fittingly, an abstract word.</p>
+<p>Even when someone says “make it more abstract,” it is surprisingly hard to explain what that entails.</p>
+<p>Nuance-wise, it can mean:</p>
+<ul>
+<li>Separating out only the truly important aspects of something</li>
+<li>Something vague yet essential</li>
+<li>Generalizing rules or concepts</li>
+</ul>
+<p>There is a similar term, “commonization” (making things common).</p>
+<p>I see the difference between abstraction and commonization as a matter of conceptual level.</p>
+<p>Commonization is the task of gathering shared elements regardless of what conceptual layer they belong to.</p>
+<p>Abstraction, by contrast, operates at a higher conceptual layer. It bundles only the essence and cuts it out from everything else.</p>
+<h2 id="commonization-in-software">Commonization in software</h2>
+<p>When we write programs, we are naturally conscious of commonizing logic.</p>
+<p>That is because it is almost instinctive to understand that having similar logic scattered everywhere makes maintenance harder.</p>
+<p>Take a simple example: you need logic to convert amounts to tax-inclusive prices.
+That logic might be needed across the entire system, not just on a single screen.
+If you sprinkle it around in many places and the tax rate changes, you suddenly have to modify lots of code.</p>
+<p>In Japan there is a reduced tax rate system where groceries and other items have different consumption tax rates, so simply sharing the tax rate constant is not enough.</p>
+<p>Because this tax rate is likely to change in the future, commonizing the logic reduces the number of places to update and makes it easier to identify the impact.</p>
+<p>In that sense, it is relatively easy to decide when to commonize.</p>
+<p>Abstraction, on the other hand, is harder to grasp intuitively than commonization.</p>
+<h2 id="abstraction-in-software">Abstraction in software</h2>
+<p>We can easily be mindful about commonizing logic at the feature level, but abstraction feels nebulous.</p>
+<p>That is because abstraction handles abstract things—especially in software development.</p>
+<p>Let’s use a DDD/CA (Domain-Driven Design / Clean Architecture) setup to illustrate.</p>
+<p>Assume our system has four layers: domain, infrastructure, use case, and application.</p>
+<p>We impose the following dependencies:</p>
+<ul>
+<li>The domain layer must not depend on anything.</li>
+<li>The infrastructure layer may depend only on the domain layer, and no other layer may depend on infrastructure.</li>
+<li>The use-case layer may depend only on the domain layer.</li>
+<li>The application layer may depend only on the use-case layer.</li>
+</ul>
+<p>This rule cleanly separates responsibility by layer.</p>
+<p>Each layer is an abstract concept; there is no tangible “layer” entity.</p>
+<p>Abstraction is the technique we use to enforce this rule.</p>
+<p>Let’s consider this using OOP, which plays nicely with DDD/CA.</p>
+<p>The domain layer is made up of plain classes and interfaces. It holds no concrete implementations.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>data class XxxEntity {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>interface XxxRepository {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>The infrastructure layer holds implementations. It is allowed to depend on the domain layer.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>class XxxRepositoryImpl : XxxRepository {</span></span>
+<span class="line"><span>  override ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>The use-case layer may depend on the domain layer but must not depend on infrastructure, so dependencies are injected from the outside.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>class XxxUseCase(xxxRepository: XxxRepository) {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>The application layer depends only on the use-case layer.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>class XxxApp(xxxUseCase: XxxUseCase) {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Grouping responsibilities like this at the conceptual level is what I consider abstraction.</p>
+<p>But this raises a problem:</p>
+<p>Isn’t the application layer still depending on the domain layer through the use case?
+Dependency here means we might have to change dependent components when the thing they rely on changes.</p>
+<p>To avoid that, we add an abstraction layer to the use-case layer and inject dependency into the application layer from the outside.</p>
+<p>In other words:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>interface BaseUseCase {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>class XxxUseCase(xxxRepository: XxxRepository) : BaseUseCase {</span></span>
+<span class="line"><span>  override ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>class XxxApp(useCase: BaseUseCase) {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Now we enforce the contract that only the methods defined in the interface may be invoked.
+The interface is the contract, and thus the abstraction rule.
+In other words, we lock in the responsibility without locking in the implementation.</p>
+<p>This is the real power of abstraction in software development.</p>
+<h2 id="why-abstraction-helps">Why abstraction helps</h2>
+<p>Finally, let’s discuss why abstraction is so often recommended.</p>
+<p>In my opinion, abstraction is a cost for small systems, small teams, or solo development.</p>
+<p>Abstraction tends to increase implementation cost and can raise cognitive load.</p>
+<p>This is what people call over-abstraction.</p>
+<p>On the other hand, in large systems that juggle many concepts, or in environments where multiple development teams collaborate, designing with abstraction works well.</p>
+<p>In those scenarios, abstraction can reduce both implementation cost and cognitive load.</p>
+<p>So it is wrong to declare abstraction a cost across the board.
+You have to choose when to use it case by case.</p>
+<p>It is easy to imagine why abstraction becomes a cost in small contexts, so I will skip that and focus on why it can reduce cost at scale.</p>
+<p>When layer responsibilities are clear:</p>
+<ul>
+<li>You can find the source of errors faster during incidents.</li>
+<li>Team members can build features without knowing the low-level layers.</li>
+<li>You can deploy pieces independently.</li>
+<li>Cognitive load drops.</li>
+</ul>
+<p>Ultimately, good software design comes down to two things: maintainability and low cognitive load.</p>
+<p>Maintainability encompasses reliability, availability, and extensibility—in short, how easy something is to change.</p>
+<p>Large-scale development means many people are changing many parts in parallel.
+Ensuring those components do not affect each other, or that any impact is obvious, goes a long way toward long-term maintainability.</p>
+<p>Abstraction is the tool for that.
+Or, if you prefer, think of it as a set of rules or contracts.</p>
+<p>I believe the stricter those rules or contracts are, the more they contribute to future extensibility, because they lower cognitive load.</p>
+<p>Loose rules and high freedom might sound like they lead to greater extensibility, but I argue the opposite.</p>
+<p>That is why statically typed languages ultimately scale better than dynamically typed ones, even if their initial development speed is slower: the type system is a contract.
+Even for variables, immutable types scale better than mutable ones.
+Dependencies scale better when enforced at the layer level instead of becoming a tangled mess.</p>
+<p>These practices shrink the blast radius of changes and thereby lower cognitive load.</p>
+<p>In conclusion, abstraction is a contract.
+In large-scale development it ultimately lowers cost—abstraction is an investment in the future.
+In small-scale development, abstraction can instead be a cost.
+That is how I see it.</p>
+<p>Evaluate how you use abstraction through the lenses of:</p>
+<ul>
+<li>Change frequency</li>
+<li>Team size</li>
+<li>Likelihood of swapping implementations</li>
+<li>System lifespan</li>
+<li>Number of concepts involved</li>
+</ul>
+<h2 id="in-closing">In closing</h2>
+<p>In this post we examined “abstraction” within software development.
+You only truly learn whether a design works once it has been run and maintained.</p>
+<p>You have to make choices at design time, and the “right” answer is unknown then.
+That uncertainty is part of the challenge—and the fun.</p>
+<p>I often see systems that simply mimic some popular architecture, but what matters is choosing a structure that matches your system’s outline at design time.
+It is not a good idea to assume one architecture can solve everything.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Abstraction%20Is%20a%20Contract&url=https%3A%2F%2Fhirotoyoshidome.com%2Fen%2Fposts%2F2026%2Fabstraction-is-contract%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

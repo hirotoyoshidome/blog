@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>抽象は契約</title><meta name="description" content="抽象は契約"><!-- OGP --><meta property="og:title" content="抽象は契約"><meta name="og:description" content="抽象は契約"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="抽象は契約"><meta name="twitter:description" content="抽象は契約"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.CjCAVj5L.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">抽象は契約</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">抽象は契約</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2026-02-14T00:00:00.000Z"> 2026-02-14 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Learning </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Engineering Philosophy </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Architecture </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Design Philosophy </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2026/abstraction-is-contract/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <p>ソフトウェア開発の現場では、「抽象」というワードが度々登場します。</p>
+<p>JavaやKotlinのようなオブジェクト指向言語では、class, interface, abstract classを上手に設計することで、抽象化の設計を行うことができますね。</p>
+<p>抽象化は、設計の初期フェーズで登場することが多いですが、機能レベルでも抽象化を意識することはあると思っています。</p>
+<p>今回の記事では、抽象という言葉について、ソフトウェア開発の文脈で掘り下げてみたいと思います。</p>
+<h2 id="抽象というワードの意味">抽象というワードの意味</h2>
+<p>抽象というワードは実に抽象的にワードです。</p>
+<p>実際に「抽象的」と言われたときに上手に説明することは難しいです。</p>
+<p>意味合いのニュアンスだと、</p>
+<ul>
+<li>物事の本当に大切な側面だけを切り離すこと</li>
+<li>あいまいだが、本質的なこと</li>
+<li>規則や概念を一般化すること</li>
+</ul>
+<p>という感じだと思います。</p>
+<p>似た言葉に「共通化」というワードもありますね。</p>
+<p>私は抽象化と共通化の違いは概念のレベルだと考えています。</p>
+<p>共通化は概念のレベルに関係なく、共通項目をまとめ上げる作業です。</p>
+<p>一方で、抽象化は共通化よりも概念のレイヤが高く、より本質的なものだけをまとめ上げ、切り離す作業だと考えています。</p>
+<h2 id="ソフトウェアにおける共通化">ソフトウェアにおける共通化</h2>
+<p>プログラムを書いていると、共通化ということには意識が回りますね。</p>
+<p>これは、同じようなロジックがいろいろなところに散らばっているのは、保守性の観点から良くないということが直感的にわかりやすいからだと思います。</p>
+<p>例えば、金額を税込みに変換するロジックが必要だとしましょう。
+税込みに変換するのは、単体の画面ではなく、システム全体に横断する可能性があります。
+そのため、税込みに変換するロジックを様々な場所に散りばめてしまうと、税率が変更したときに修正箇所が多くなります。</p>
+<p>日本では、軽減税率という食品とそれ以外で消費税率が異なるという仕組みもあるため、税率だけを共通の定数化するだけでは足りません。</p>
+<p>この税率は将来的には変更される可能性は非常に高いため、共通化しておけば、変更箇所が少なくなり、影響箇所も特定しやすいという思考になるわけです。</p>
+<p>このように、共通化に対しては判断がつきやすいと感じます。</p>
+<p>一方で、抽象化というのは感覚的には共通化よりは捉えにくい概念だと感じます。</p>
+<h2 id="ソフトウェアにおける抽象化">ソフトウェアにおける抽象化</h2>
+<p>機能レベルの共通化は意識しやすいが、抽象化と言われるとなかなか想像しにくいというのは自然な感覚です。</p>
+<p>なぜなら抽象化が扱うものが抽象的なものだからです。とりわけソフトウェア開発の文脈ではかなり抽象的なものです。</p>
+<p>DDD/CA構成を使って、例で考えてみましょう。</p>
+<p>あるシステムは、「ドメイン層」「インフラストラクチャ層」「ユースケース層」「アプリケーション層」の4層から構成されているとします。</p>
+<p>このときの依存関係は、</p>
+<ul>
+<li>ドメイン層はどこにも依存してはいけない</li>
+<li>インフラストラクチャはドメイン層にのみ依存するが、他の層から依存されてはいけない</li>
+<li>ユースケース層はドメイン層にのみ依存する</li>
+<li>アプリケーション層はユースケース層にのみ依存する</li>
+</ul>
+<p>というルールにすると綺麗に層の責務が分離されます。</p>
+<p>各層は、抽象的な概念ですね。具体的に〇〇層という実体があるわけではありません。</p>
+<p>そして、このルールを実現するための手段が「抽象化」です。</p>
+<p>DDD/CAと相性の良い、OOPを使って考えたいと思います。</p>
+<p>ドメイン層は単純なclass, interfaceです。実装は持ちません。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>data class XxxEntity {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>interface XxxRepository {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>インフラストラクチャ層は実装を持ちます。ドメイン層には依存して良いルールです。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>class XxxRepositoryImpl : XxxRepository {</span></span>
+<span class="line"><span>  overide ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>ユースケース層はドメイン層には依存して良いルールですが、インフラストラクチャ層には依存してはいけません。なので、依存関係は外部から注入します。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>class XxxUseCase(xxxRepository: XxxRepository) {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>そしてアプリケーション層はユースケース層にのみ依存します。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>class XxxApp(xxxUseCase: XxxUseCase) {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>このように概念レベルでまとめることは抽象化だと考えています。</p>
+<p>ここで一つ問題が見えてきます。</p>
+<p>それは、アプリケーション層がユースケースを介して、ドメイン層へ依存しているのではないかという点です。
+依存している状態というのは、変更したときに、依存しているコンポーネントも変更しなければいけない可能性がある状態を指します。</p>
+<p>これを回避するためには、ユースケース層に抽象化層を追加して、アプリケーション層は外から依存性を注入すれば解決できることになります。</p>
+<p>つまり</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>interface BaseUseCase {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>class XxxUseCase(xxxRepository: XxxRepository) : BaseUseCase {</span></span>
+<span class="line"><span>  override ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>class XxxApp(useCase: BaseUseCase) {</span></span>
+<span class="line"><span>  ...</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>とすれば、interfaceで定義したルール化されたメソッドを呼び出すという契約が強制できるわけです。
+interfaceが契約となり、抽象化のルールとなります。
+これは、実装は固定せずに責務を固定するという意味になりますね。</p>
+<p>これこそがソフトウェア開発における抽象化の力です。</p>
+<h2 id="抽象化することで何が良いのか">抽象化することで何が良いのか</h2>
+<p>最後に、なぜ抽象化することがよく語られ、推奨されるのかということについて考えます。</p>
+<p>私の考えでは、小規模のシステム、小規模の開発チームや個人の場合は、抽象化はコストだと考えています。</p>
+<p>抽象化することで実装コストは大きくなりやすいですし、認知負荷も高くなることがあります。</p>
+<p>これを過剰な抽象化と呼んでいます。</p>
+<p>一方で、大規模なシステムや多くの概念を取り扱うシステム、復数の開発チームが関わる開発環境などでは、抽象化設計はうまく機能すると考えています。</p>
+<p>そして、上記のようなケースでは、抽象化することで実装コストを下げることも認知負荷を下げることもできます。</p>
+<p>そのため一概に抽象化はコストと認識することは誤りです。
+ケースによって抽象化をうまく選択するということが重要なポイントです。</p>
+<p>小規模なケースで抽象化がコストとなることは想像しやすいと思いますので割愛しますが、大規模なケースで抽象化が結果的にコストを下げるということについて私の考えを書いていきます。</p>
+<p>層の責務が明確になると、</p>
+<ul>
+<li>障害時のエラーの場所を見つけやすくなる</li>
+<li>チーム開発でも下位レイヤーを知らなくても開発ができるようになる</li>
+<li>別々にデプロイできるようになる</li>
+<li>認知負荷が小さくなる</li>
+</ul>
+<p>といったメリットがもたらされます。</p>
+<p>結局のところ、ソフトウェア設計で重要なのは、メンテナンス性と認知負荷が低いという2点に集約されると思っています。</p>
+<p>メンテナンス性とは保守性、可用性、拡張性を含み、簡単に言えば変更しやすいということです。</p>
+<p>大規模な開発では、多くの人が多くの箇所を並行的に変更していきます。
+そのため、それぞれのコンポーネントの変更が他へ影響を与えない、あるいは影響が特定できるようにしておくのが将来的なメンテナンス性に大きく寄与します。</p>
+<p>抽象化はそのための道具です。
+あるいは、ルール、契約と捉えた方がわかりやすいかもしれませんね。</p>
+<p>私の考えでは、ルールや契約はできるだけ堅く、厳しくしておいた方が将来的な拡張性に寄与します。
+これは認知負荷が下がるためです。</p>
+<p>ルールがあまく自由度が高い環境の方が拡張性が高くなりそうな雰囲気があるのですが、実際は逆であるということを主張しておきます。</p>
+<p>そのためプログラミング言語にしても動的型付けの言語より静的型付け言語の方が、開発の初速は出ませんが、型による契約によって将来的にはスケールします。
+変数の型一つとってもmutableよりimmutableの方がスケールします。
+依存関係がぐちゃぐちゃになっているより、層レベルでルール化されている方がスケールします。</p>
+<p>これらは、変更するときに影響範囲が小さくなることに寄与するため、結果的に認知不可が低くなるためです。</p>
+<p>結論として、抽象化は契約であり、大規模開発のケースにおいては結果的にコストを下げる。
+抽象は未来への投資という考え方です。
+一方で、小規模開発のケースにおいては抽象化はコストになる。
+というのが私の考えです。</p>
+<ul>
+<li>変更頻度</li>
+<li>チーム人数</li>
+<li>実装の差し替え可能性</li>
+<li>システムの寿命</li>
+<li>取り扱う概念の数
+という観点で抽象化の使い方を検討するのが良いと考えています。</li>
+</ul>
+<h2 id="最後に">最後に</h2>
+<p>今回は「抽象」ということについて、ソフトウェア開発の文脈で考えてみました。
+ソフトウェア設計の答えは、実際に運用、保守をしてみて初めてわかります。</p>
+<p>設計のタイミングで選択が必要となりますが、このタイミングでは答えはわかりません。
+だからこそ面白いところもあり、重要性が高いところでもあります。</p>
+<p>アーキテクチャ構成のみを真似るシステムというのもよく見かけるのですが、
+設計のタイミングでシステムのアウトラインと照らし合わせて適切な構成を取ることが重要であり、
+すべてこのアーキテクチャで解決できるという考えはよくないと思います。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E6%8A%BD%E8%B1%A1%E3%81%AF%E5%A5%91%E7%B4%84&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2026%2Fabstraction-is-contract%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
