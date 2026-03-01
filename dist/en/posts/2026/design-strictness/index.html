@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Rigidity of Design</title><meta name="description" content="Reflections on the rigidity of design"><!-- OGP --><meta property="og:title" content="The Rigidity of Design"><meta name="og:description" content="Reflections on the rigidity of design"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="The Rigidity of Design"><meta name="twitter:description" content="Reflections on the rigidity of design"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.CjCAVj5L.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">The Rigidity of Design</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">The Rigidity of Design</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2026-03-01T00:00:00.000Z"> 2026-03-01 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Learning </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Engineering Philosophy </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Architecture </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Design Philosophy </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2026/design-strictness/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <h1 id="the-rigidity-of-design">The Rigidity of Design</h1>
+<p>When I design systems, I often focus on making them rigid.</p>
+<p>From experience, the more rigid the design is, the more resilient it becomes for future extensions.</p>
+<p>That said, making everything rigid is not always the right answer.</p>
+<p>In this post, I want to organize my thoughts on what “rigidity” means in design.</p>
+<h2 id="why-rigidity-improves-extensibility">Why Rigidity Improves Extensibility</h2>
+<p>By “making things rigid,” I mean practices like the following:</p>
+<ul>
+<li>Adding NOT NULL constraints</li>
+<li>Making things immutable</li>
+<li>Keeping maximum lengths for strings and similar fields as small as necessary</li>
+</ul>
+<p>All of these are acts of adding constraints.</p>
+<p>My mindset is: “Do not allow what is unnecessary at this point in time,” and apply only the minimum required constraints.</p>
+<p>So why does this improve extensibility?</p>
+<p>Because it reduces the scope of impact when changes happen.</p>
+<p>Extensions involve feature additions and modifications.
+If you can clearly see the impact range, changes are not that scary.</p>
+<p>On the other hand, a single change can sometimes break parts that seem unrelated.
+That means the impact range is not well understood.</p>
+<p>The constraints listed above all work toward narrowing that impact range.</p>
+<p>I believe reducing the impact range is a key element of design that remains strong under extension.</p>
+<h2 id="differences-in-rigidity">Differences in Rigidity</h2>
+<p>I used to strongly believe that table definitions should be rigid.</p>
+<p>As mentioned earlier, that was to improve resilience for extension.</p>
+<p>At the same time, I felt uncomfortable with situations where DB design was driven by the UI.</p>
+<p>For example, the UI layer is relatively easy to change.
+Whether it is web, CLI, or desktop, changes in upper layers are generally easier than changes in lower layers.</p>
+<p>Upper layers tend to depend on fewer things, while lower layers are depended on by many upper layers.
+Because of that, changing lower layers often forces updates in upper layers as well.</p>
+<p>Of course, with proper layer separation, impact can be minimized. Still, structurally, lower layers are depended on by more parts, so their changes tend to have broader impact.</p>
+<p>DB table definitions generally belong to lower layers.</p>
+<p>Letting UI concerns drive DB table design felt like bringing too much upper-layer convenience into lower layers.</p>
+<p>In other words, I started to feel that “rigidity” in table definitions and “rigidity” in UI were not the same thing.</p>
+<h2 id="what-was-mixed-up">What Was Mixed Up</h2>
+<p>As I thought more about this discomfort, I realized there are two aspects of rigidity:</p>
+<ul>
+<li>Semantic rigidity</li>
+<li>Structural rigidity</li>
+</ul>
+<p>What tables should carry is semantic rigidity.</p>
+<ul>
+<li>This value is required</li>
+<li>This relationship must exist</li>
+<li>This state is not allowed</li>
+</ul>
+<p>You could call these the application’s core rules.</p>
+<p>By contrast, what UI carries is structural rigidity.</p>
+<ul>
+<li>In what order users input data</li>
+<li>Which fields are grouped and shown together</li>
+<li>At what granularity users edit data</li>
+</ul>
+<p>Treating these two as the same kind of “rigidity” was, I think, the source of confusion.</p>
+<h2 id="what-was-being-dragged-along-was-not-meaning">What Was Being Dragged Along Was Not “Meaning”</h2>
+<p>When UI changes cause DB table definitions to change, in many cases the “meaning” itself is not actually changing.</p>
+<p>What is changing is presentation and interaction flow. The domain meaning is often unchanged.</p>
+<p>So if table definitions change anyway, that is not desirable from a design perspective.
+It happens when UI “structure” is applied too directly to DB table definitions.</p>
+<ul>
+<li>Making the UI model and persistence model identical</li>
+<li>Making screen structure equal table structure</li>
+</ul>
+<p>This may look simple at first, but it mixes layer responsibilities and can hurt future extensibility.</p>
+<p>Making tables rigid is not wrong. In fact, it is important.</p>
+<p>What matters is that the target of rigidity is “meaning,” not “structure.”</p>
+<p>If meaning is rigid, the UI can safely stay flexible.</p>
+<p>Because consistency of meaning is guaranteed in lower layers.</p>
+<p>For upper layers, where ease of change matters, having consistency guaranteed below is a major strength.
+In the long run, I feel this also increases the product’s fundamental robustness.</p>
+<h2 id="closing">Closing</h2>
+<p>In this post, I organized my thoughts on rigidity in design.</p>
+<p>It took me time to get here because I had mixed up different aspects of rigidity.
+But looking at it through responsibilities makes it much clearer.</p>
+<p>If you think from the perspective of “What responsibility should the DB have?” it becomes clear that what should be rigid is not always “structure.”</p>
+<p>This was a good opportunity to reconsider what should be made rigid.</p>
+<p>The UI model and persistence model do not have to match. In many cases, it is better if they do not.</p>
+<p>This insight may seem small, but it can become a trigger for changing the whole design.</p>
+<p>Rigidity is an important idea that supports future extensibility, but if used incorrectly, it can become a constraint that holds you back.
+Keeping that in mind, I want to keep designing with clear intent about what should be rigid.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=The%20Rigidity%20of%20Design&url=https%3A%2F%2Fhirotoyoshidome.com%2Fen%2Fposts%2F2026%2Fdesign-strictness%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
