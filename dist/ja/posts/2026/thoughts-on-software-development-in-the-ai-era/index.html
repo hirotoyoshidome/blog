@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>AI時代のソフトウェア開発へ思うこと</title><meta name="description" content="AI時代のソフトウェア開発へ思うことを書きました"><!-- OGP --><meta property="og:title" content="AI時代のソフトウェア開発へ思うこと"><meta name="og:description" content="AI時代のソフトウェア開発へ思うことを書きました"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="AI時代のソフトウェア開発へ思うこと"><meta name="twitter:description" content="AI時代のソフトウェア開発へ思うことを書きました"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Oi3ijLSw.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">AI時代のソフトウェア開発へ思うこと</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">AI時代のソフトウェア開発へ思うこと</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2026-03-20T00:00:00.000Z"> 2026-03-20 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Career </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Product Development </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Generative AI </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2026/thoughts-on-software-development-in-the-ai-era/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <h2 id="はじめに">はじめに</h2>
+<p>「AI時代のソフトウェア開発」とタイトルに掲げてみたものの、昨今の開発現場ではコーディングエージェントを導入していない会社はないのではないかと思うくらい、
+私の周りではコーディングエージェントが一般になってきました。</p>
+<p>私も2025年の中盤くらいから本格的にコーディングエージェントを開発で利用するようになり、現在はOSSプロジェクトとして開発している <a href="https://github.com/hirotoyoshidome/omohi">omohi</a> においても積極的に利用しています。</p>
+<p>今回は実際に私がコーディングエージェントを使って開発するようになって感じていることを書いてみたいと思います。</p>
+<p>加えて、AI時代の開発者の本質は「実装ではなく設計と意思決定に移る」と考えている理由について書きます。</p>
+<h2 id="コーディングエージェントを導入するまでの流れ私の場合">コーディングエージェントを導入するまでの流れ(私の場合)</h2>
+<p>私の最初のコーディングエージェントの使い方はとても限定的なものでした。</p>
+<p>例えば、大量のテストコードを機械的に修正するときに、かなり明確な指示を与えてコーディングエージェントに修正させたり、テストデータとしてcsvを作成するときに利用したりという具合です。</p>
+<p>これは、私がまだコーディングエージェントを疑ってかかっている段階で、完全に自分のコントロール配下でのみコーディングエージェントは使った方が良いのではないかと感じていたためです。</p>
+<p>やがて、この使い方からステップアップして、私が熟知しているシステムの機能改修などでコーディングエージェントを利用するようになりました。</p>
+<p>熟知しているということは、コーディングエージェントが修正したコードを見れば、内容が全部わかるというレベルです。</p>
+<p>そのため、コーディングはAIにやらせて、レビューに徹するという使い方になっていきました。</p>
+<p>このときも、編集するファイル名や関連するファイルの一覧などもコーディングエージェントに指示として渡して作業させていました。</p>
+<p>この方法は、概ねうまく行き、作業効率が格段に上がったと実感できました。</p>
+<p>この成功体験が持てると、コーディングエージェントへの信頼も生まれ、次に機能設計フェーズからAIとともに作業するようになりました。</p>
+<p>具体的には、Planモードを利用し、AIに考えていることを30%くらいの粒度で投げてAIと一緒に考えるというやり方です。</p>
+<p>実装が詳細に決まっていなくても、AIと対話しながら設計を決めていくことができます。</p>
+<p>実際に出来上がったソースを見ても、違和感がないどころか、きっと自分で思い至らなかったところまでケアされていることも珍しくありません。</p>
+<p>そして最近では、より効率よく、品質を高くAIと仕事をするために、AIが読むためのドキュメントやSkillsなどの整備を進めています。</p>
+<h2 id="ソフトウェア開発者としての存在意義">ソフトウェア開発者としての存在意義</h2>
+<p>コーディングエージェントがここまで優秀に作業をしてくれると、以前と同じ開発体験というわけにはいきません。</p>
+<p>コーディングエージェントをよりよく使って、開発サイクルを高めていくことは企業にとっては欠かせないことになります。</p>
+<p>また、スタートアップなどの少数精鋭の開発チームではこの流れがより顕著だと思います。</p>
+<p>むしろ、非開発者の方がWebサービスを開発できてしまう時代になっています。
+プロトタイプレベルであれば、技術者は不要となりました。</p>
+<p>こんな背景があり、ソフトウェア開発者の中では近い将来、自分たちの仕事がなくなるのではないかという声を聞くようになりました。</p>
+<p>確かに私も実際にコーディングエージェントを使ってみて、最初の印象は、「人間のいらないじゃん」でした。</p>
+<p>しかし、コーディングエージェントと一緒に開発を進めていくと、印象は少しずつ変わっていきました。</p>
+<p>コーディングというのは開発者にとっては、「おもしろい」作業です。
+プログラミングが好きでこの仕事をしている人が多いのではないでしょうか。</p>
+<p>私も最初はプログラムを書いているだけでとても楽しかったのを覚えています。</p>
+<p>しかし、いつのころからかプログラミングって作業だなと思うことが増えてきました。</p>
+<p>たくさんプログラムを書いていると、似たような処理を大量に書いていることに気づきます。</p>
+<p>でも、このようなプログラムは必要なんですね。だから書く必要があります。</p>
+<p>そして、プログラムを書いているときって、私の感覚では思考は止まっていると思います。</p>
+<p>正確には、使いたい方に頭のリソースを使えていない状態。プログラムを書くことだけに頭のリソースが使われてしまっていて、人間が得意とする「発想」「思考」というクリエイティブな方は止まっていると思います。</p>
+<p>このように感じてから、コーディングは作業にように捉えるようになっていきました。</p>
+<p>頭では良いアイディアがあったとしても、コードを書くということに莫大な時間がかかります。</p>
+<p>完成する前に情熱が冷めてしまうことも多々あります。</p>
+<p>考える角度を変えて、「ソフトウェアエンジニアリング」という観点でみてみると、コーディングは明らかに作業です。</p>
+<p>この「作業」をAIが高速でやってくれて、人間は「ソフトウェアエンジニアリング」に集中できるようになるという未来が正しいのではないかと思うようになりました。</p>
+<p>つまり、正しい設計と保守を実現するということです。
+企業であれば、拡張したいときに拡張でき、リリースしたいものをリリースできるということです。</p>
+<p>当たり前に聞こえるこれが、「技術的な要因」でできないケースがあることを現場の開発者は知っていると思います。</p>
+<p>当然ながら会社は人間が営む組織ですから、組織におけるソフトウェアエンジニアリングは人間しか担えないというのが私の考えです。</p>
+<h2 id="最後に">最後に</h2>
+<p>コーディングエージェントの台頭はソフトウェア開発者にとって、とてもインパクトの大きい出来事だと感じます。</p>
+<p>これはこれまでの開発体験が一変するようなものであることは、間違いないでしょう。</p>
+<p>一方で、悲観的になる必要はないと感じます。</p>
+<p>ソフトウェアエンジニアリングに割く時間ができる、アイディアを高速で形にできるというメリットを享受できるかがポイントになると思っています。</p>
+<p>逆に、コーディングエージェントの流れに乗り遅れると、これから先はかなり厳しいのではないかとも思いました。</p>
+<p>今は、このすばらしいコーディングエージェントが月額数十ドルで使えてしまいます。</p>
+<p>この流れはずっと続くかはわからないので、私としては今のうちに使い倒せるだけ使い倒す。そして新しいエンジニアリングの価値をいち早く手に入れるということが重要だろうと思っています。</p>
+<p>AI時代の開発者の本質は、実装ではなく“設計と意思決定”になると感じました。</p>
+<p>そして、このスピード感に耐えるため、意思決定のプロセスを残しておくことが大事だと感じています。</p>
+<p>※このような背景もあり、「思考の過程を失わせない」ことを目的としたCLIである <a href="https://github.com/hirotoyoshidome/omohi">omohi</a> を開発しています。</p>
+<p>AIとともに高速に意思決定を行う時代だからこそ、そのプロセス自体を記録し、再利用できる形で残すことが重要だと考えています。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=AI%E6%99%82%E4%BB%A3%E3%81%AE%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2%E9%96%8B%E7%99%BA%E3%81%B8%E6%80%9D%E3%81%86%E3%81%93%E3%81%A8&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2026%2Fthoughts-on-software-development-in-the-ai-era%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
