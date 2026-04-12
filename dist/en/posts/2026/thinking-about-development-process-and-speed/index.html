@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Thoughts on Development Process and Speed</title><meta name="description" content="I wrote about development process and speed"><!-- OGP --><meta property="og:title" content="Thoughts on Development Process and Speed"><meta name="og:description" content="I wrote about development process and speed"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Thoughts on Development Process and Speed"><meta name="twitter:description" content="I wrote about development process and speed"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Oi3ijLSw.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">Home</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/en/" class="text-blue-600 hover:underline">Posts</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">Thoughts on Development Process and Speed</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">Thoughts on Development Process and Speed</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2026-04-11T00:00:00.000Z"> 2026-04-11 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Career </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Product Development </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Generative AI </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/ja/posts/2026/thinking-about-development-process-and-speed/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> 日本語 </a> </nav> </header> <h2 id="introduction">Introduction</h2>
+<p>As AI coding agents become more widely adopted, how is development speed changing?</p>
+<p>Coding agents are increasingly becoming companions not only for implementation, but also for design.</p>
+<p>If that is the case, our understanding of “speed,” which has long been based on conventional development processes, should also begin to change.</p>
+<p>In this post, I want to look back at traditional development processes and think about where speed gets lost, how design relates to speed, and what may change as AI coding agents become more common.</p>
+<h2 id="traditional-development-processes">Traditional Development Processes</h2>
+<p>In many cases, traditional development has followed a cycle where requirements are defined from requests, design is created, and then implementation, testing, and release follow.</p>
+<p>Whether it is waterfall or agile, I do not think the broad flow is all that different. What really changes is the size of the cycle and how it is run.</p>
+<p>At that point, each phase basically depends on the one before it.</p>
+<p>For example, if requirements are not decided, the implementation approach cannot be fixed. And one reason requirements do not solidify is often that the original request itself is vague.</p>
+<p>In other words, development speed also depends heavily on the upstream phases.</p>
+<p>That is why, once a bottleneck appears somewhere, the later phases all get delayed together.</p>
+<p>So where do those bottlenecks actually tend to emerge?</p>
+<h2 id="what-a-bottleneck-really-is">What a Bottleneck Really Is</h2>
+<p>How do bottlenecks happen?</p>
+<p>My sense is that most bottlenecks come down to communication.</p>
+<p>It is not as simple as saying the upstream side is always slow or the downstream side is always slow.</p>
+<p>When the upstream side is slow, I think the problem often lies in organizational structure or decision-making mechanisms.</p>
+<p>On the other hand, when the downstream side is slow, it is often because the team is busy responding to sudden specification changes. Once the specification settles, a large portion of that delay can usually be reduced.</p>
+<p>That said, specification changes occurring after development has moved into downstream phases are themselves difficult to avoid to some extent.</p>
+<p>So why does that so easily become a bottleneck? I think it still comes back to communication.</p>
+<p>Gaps in understanding, insufficient explanation, slow decision-making, or poor sharing of why changes were made can quickly clog the work that follows.</p>
+<p>And the question of how well we can tolerate things changing later also leads directly into design.</p>
+<h2 id="the-trade-off-between-design-and-speed">The Trade-Off Between Design and Speed</h2>
+<p>When we say “design,” you might think architecture-level design for the whole system and feature-level design are different in scope.</p>
+<p>But I think the core sense of design and the way we think about trade-offs with development speed are fundamentally the same.</p>
+<p>There are many important aspects of design, but abstraction is probably one of the most commonly discussed.</p>
+<p>Loose coupling is something many developers keep in mind during design, and that too is one approach to abstraction.</p>
+<p>There are situations where loose coupling works well, but I do not think choosing loose coupling is always the right answer.</p>
+<p>In some cases, achieving loose coupling also requires introducing many modules and boundaries.</p>
+<p>For example, when connecting <code>class A</code> and <code>class B</code>, it is common to place an <code>interface</code> between them and define the boundary as a contract.</p>
+<p>If both classes depend on the <code>interface</code>, then <code>class A</code> and <code>class B</code> are not directly coupled, making it easier to replace one side with <code>class C</code> later if needed.</p>
+<p>On the other hand, suppose there is a future possibility of <code>class C</code>, but <code>class A</code> and <code>class B</code> are still changing frequently, and the contract at their boundary is also changing over and over. In other words, the system is not stable yet and is still in a build-and-break phase.</p>
+<p>In that kind of case, introducing abstraction too early creates a new cost: changing the boundary itself.</p>
+<p>When that happens across multiple layers, the number of modules you have to pass through increases, and only the complexity tends to grow.</p>
+<p>Especially from a short-term perspective, I think abstraction and speed are in a trade-off relationship.</p>
+<p>From a long-term perspective, however, abstraction can improve speed instead.</p>
+<p>When many related modules are tightly coupled to one another, making changes eventually becomes difficult.</p>
+<p>You can end up in a state where every change breaks something somewhere.</p>
+<p>In that case, you need to weaken the coupling so changes can be made safely.</p>
+<p>In other words, the opposite of the short-term view becomes true in the long run: abstraction starts supporting speed.</p>
+<p>Design is difficult because it deals with the concept of abstraction, but I think the real challenge is that the relationship is not simple. The best answer changes depending on the condition of the system as a whole.</p>
+<p>That is where a designer’s skill shows.</p>
+<p>Seen this way, “speed” is not simply about moving your hands faster. It is about how smoothly you can handle change and decision-making.</p>
+<h2 id="what-speed-really-means">What Speed Really Means</h2>
+<p>I have been talking consistently about speed, but what is speed in the first place? I want to dig a little deeper into why I think it matters.</p>
+<p>Not only in development, but in many organizational activities, speed is always valued.</p>
+<p>Automation, efficiency improvements, and smoother communication all contribute to speed.</p>
+<p>And I think what speed ultimately affects is time.</p>
+<p>I see the concept of time as one level more abstract, and more important, than many other metrics.
+To put it a little dramatically, it feels like it exists on a different layer from other indicators.</p>
+<p>Time is finite in all activities, not just economic ones. If we can achieve a goal in a shorter amount of time, that should generally be better.</p>
+<p>Of course, there are situations where spending time itself has value. But in many activities, I think it is better to use time as efficiently as possible.</p>
+<p>Against that finite resource of time, the concept that expresses how efficiently we are operating is what I call speed.</p>
+<p>If you think about it that way, the change brought by AI coding agents may be closer to redesigning how we use time itself than simply reducing implementation effort.</p>
+<h2 id="alongside-ai-coding-agents">Alongside AI Coding Agents</h2>
+<p>Over the past few months, the development experience has changed dramatically.</p>
+<p>From here on, development processes will need to be built together with coding agents.</p>
+<p>The speed created by coding agents is overwhelmingly faster than having humans do everything manually.</p>
+<p>Once you have seen that speed, the value of deliberately choosing slower methods starts to fade.</p>
+<p>This is still an emerging field, so things like the following are not yet settled:</p>
+<ul>
+<li>How much code review is necessary</li>
+<li>How far you need to think things through before asking AI</li>
+<li>Whether design direction should be decided by humans or delegated to AI</li>
+</ul>
+<p>These points still depend heavily on each person and each organization’s policy.</p>
+<p>However, I expect that over the next several months to several years, a somewhat stable workflow will emerge.</p>
+<p>Even though the use of AI is still left to individuals today, once it becomes socially standard, the level of speed expected from individuals themselves may also rise.</p>
+<p>The process will change a great deal, but I also think the expectations placed on people will change just as much.</p>
+<h2 id="closing">Closing</h2>
+<p>In this post, I wrote down my thoughts with the concept of speed at the center.</p>
+<p>In development processes, I think communication is the most common bottleneck to speed.</p>
+<p>In design, I wrote that short-term speed and long-term speed are deeply connected to how we handle abstraction.</p>
+<p>And now that AI coding agents are being adopted in earnest, I also feel that we need to reconsider development processes themselves from the perspective of speed.</p>
+<p>I place a lot of importance on speed, but I had not fully organized for myself why that was. Writing this helped me sort it out a little.</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=Thoughts%20on%20Development%20Process%20and%20Speed&url=https%3A%2F%2Fhirotoyoshidome.com%2Fen%2Fposts%2F2026%2Fthinking-about-development-process-and-speed%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>

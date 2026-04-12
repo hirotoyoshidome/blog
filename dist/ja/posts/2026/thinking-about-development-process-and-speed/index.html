@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>開発プロセスと速度について</title><meta name="description" content="開発プロセスと速度について書きました"><!-- OGP --><meta property="og:title" content="開発プロセスと速度について"><meta name="og:description" content="開発プロセスと速度について書きました"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="開発プロセスと速度について"><meta name="twitter:description" content="開発プロセスと速度について書きました"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Oi3ijLSw.css"><script type="module" src="/_astro/hoisted.DBccM9AK.js"></script></head> <body class="prose prose-neutral mx-auto p-6"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) -->  <main class="max-w-3xl mx-auto px-6 py-10 text-gray-800 leading-relaxed"> <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-blue-600 hover:underline">ホーム</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li><a href="/ja/" class="text-blue-600 hover:underline">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400">/</li> <li class="font-semibold text-gray-700 truncate max-w-[60ch]">開発プロセスと速度について</li> </ol> </nav> <header class="mb-8"> <h1 class="text-4xl font-bold tracking-tight mb-2">開発プロセスと速度について</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600"> <time datetime="2026-04-11T00:00:00.000Z"> 2026-04-11 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Career </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Product Development </li><li class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+#Generative AI </li> </ul> <nav class="text-sm text-gray-600 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2026/thinking-about-development-process-and-speed/" class="text-blue-600 hover:underline flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <h2 id="はじめに">はじめに</h2>
+<p>AI Coding Agentsの導入が進む中で、開発スピードはどのように変化しているのでしょうか。</p>
+<p>Coding Agentsは、実装だけでなく設計面でも伴走してくれる存在になりつつあります。</p>
+<p>そうなると、これまでの開発プロセスを前提にした「速度」の捉え方も、少しずつ変わってくるはずです。</p>
+<p>今回は、これまでの開発プロセスを振り返りながら、どこで速度が失われるのか、設計と速度はどう関係するのか、そしてAI Coding Agentsの普及によって何が変わるのかを考えてみたいと思います。</p>
+<h2 id="これまでの開発プロセス">これまでの開発プロセス</h2>
+<p>これまでの開発プロセスは、多くの場合、要望から要件が定義され、設計が行われた後に実装、テスト、リリースへ進むというサイクルでした。</p>
+<p>ウォーターフォールでもアジャイルでも、大枠の流れはそれほど変わらないと思います。本質的に違うのは、サイクルの単位や回し方です。</p>
+<p>このとき、各フェーズは基本的に一つ前のフェーズに依存します。</p>
+<p>例えば、要件が決まっていなければ実装の方針は固まりませんし、要件が固まらない原因は、そもそもの要望が曖昧であることも多いです。</p>
+<p>つまり、開発の速度も前段のフェーズに大きく依存します。</p>
+<p>そのため、どこかでボトルネックが発生すると、後続のフェーズはまとめて遅れていきます。</p>
+<p>では、そのボトルネックは実際にはどこで生まれやすいのでしょうか。</p>
+<h2 id="ボトルネックとは何か">ボトルネックとは何か</h2>
+<p>ボトルネックはどのように発生するのでしょうか？</p>
+<p>私の感覚では、ボトルネックの多くはコミュニケーションにあります。</p>
+<p>一連の流れの中で、上流が常に遅い、あるいは下流が常に遅い、という単純な話ではありません。</p>
+<p>上流が遅い場合は、組織の構造や意思決定の仕組みに問題があることが多いと思います。</p>
+<p>一方で下流が遅い場合は、急な仕様変更への対応に追われていることが多く、仕様が固まれば遅延はかなり減らせます。</p>
+<p>ただし、下流工程に進んでから仕様変更が発生すること自体は、ある程度避けがたい問題でもあります。</p>
+<p>では、なぜそれがボトルネックになりやすいのか。私は、やはりコミュニケーションの問題に行き着くと考えています。</p>
+<p>認識のずれ、説明の不足、意思決定の遅れ、あるいは変更理由の共有不足によって、後続の作業は一気に詰まりやすくなります。</p>
+<p>そして、この「後から変わることにどう耐えるか」は、設計の話にもつながっていきます。</p>
+<h2 id="設計におけるスピードとのトレードオフ">設計におけるスピードとのトレードオフ</h2>
+<p>設計と一言で言っても、システム全体のアーキテクチャレベルの設計と機能レベルの設計では、スコープが違うと思うかもしれません。</p>
+<p>しかし、設計の勘所と開発速度のトレードオフの考え方は、根本的には同じものだと思っています。</p>
+<p>設計における要点はさまざまありますが、多く語られるのは抽象化だと思います。</p>
+<p>疎結合は多くの開発者が設計時に意識することだと思いますが、これも抽象化のアプローチの一つです。</p>
+<p>疎結合が効果を発揮する場面はありますが、常に疎結合の選択が良いというわけではないと思います。</p>
+<p>また、疎結合を実現するために、多くのモジュールや境界を導入しなければいけないこともあります。</p>
+<p>例えば、<code>class A</code> と <code>class B</code> を連携させるときに、<code>interface</code> を介在させて境界を契約として定義することはよくあります。</p>
+<p><code>interface</code> に依存させておけば、<code>class A</code> と <code>class B</code> が直接結合するわけではないので、将来的に <code>class C</code> へ置き換えたい場合も対応しやすくなります。</p>
+<p>一方で、将来的に <code>class C</code> の可能性があったとしても、<code>class A</code> と <code>class B</code> の変更が頻繁で、境界の契約も何度も変わるフェーズだったとします。つまり、まだ安定しておらず、作っては壊す段階にあるということです。</p>
+<p>このようなケースでは、抽象化を先に行ってしまうことで、境界の変更コストが新たに発生します。</p>
+<p>これが複数のレイヤーで行われると、経由するモジュールの数も増え、複雑性だけが高くなりやすいです。</p>
+<p>特に短期的な視点で見たときに、抽象化とスピードはトレードオフの関係にあると思います。</p>
+<p>一方で、長期的な視点では、抽象化が逆にスピードを向上させるケースもあります。</p>
+<p>関連するモジュールの数が多く、互いに密結合になっている場合は、やがて変更が難しくなってきます。</p>
+<p>変更するたびにどこかが壊れる、という状態にもなりえます。</p>
+<p>このケースでは結合を弱めて、変更できるように調整しなければなりません。</p>
+<p>つまり、短期的な視点で見たときとは逆に、長期的には抽象化が速度を支えることになります。</p>
+<p>設計の難しさは、抽象化という概念を扱うことにありますが、これが単純な関係ではなく、システム全体の状況によって最適解が変わるところにあると思います。</p>
+<p>ここが、設計者の腕の見せ所です。</p>
+<p>ここまで見てくると、「速度」とは単に手を速く動かすことではなく、変更や意思決定をどれだけ滑らかに進められるかという話だとも言えます。</p>
+<h2 id="速度とは何か">速度とは何か</h2>
+<p>ここまで一貫して速度を中心に話してきましたが、そもそも速度とは何なのでしょうか。なぜ速度が重要だと考えているのか、もう少し深掘りしてみます。</p>
+<p>開発に限らず、組織におけるさまざまな活動で「速度」は常に重視されます。</p>
+<p>自動化、効率化、コミュニケーションの円滑化などは、すべて速度に寄与します。</p>
+<p>そして、速度が最終的に効いてくるのは「時間」だと思います。</p>
+<p>私は、「時間」という概念は他の多くの指標より一段抽象度が高く、より重要なものだと考えています。
+少しかっこよく言えば、他の指標とは一つレイヤーが違う感覚です。</p>
+<p>経済活動に限らず、あらゆる活動において時間は有限です。できるだけ短い時間で目的を達成できるなら、その方が良いはずです。</p>
+<p>もちろん、時間をかけること自体に価値がある場面もあります。しかし、多くの活動では時間はできるだけ効率的に使った方がよいと思います。</p>
+<p>この有限な時間に対して、どれだけ効率的に活動できているかを示す概念が「速度」なのだと思っています。</p>
+<p>そう考えると、AI Coding Agentsがもたらす変化は、単なる実装の省力化ではなく、時間の使い方そのものの再設計に近いのかもしれません。</p>
+<h2 id="ai-coding-agentsとともに">AI Coding Agentsとともに</h2>
+<p>ここ数ヶ月で開発体験は大幅に変化しました。</p>
+<p>これからの開発プロセスは、Coding Agentsとともに作っていく必要があります。</p>
+<p>Coding Agentsが生み出す速度は、人間が手作業で進めるよりも圧倒的に速いです。</p>
+<p>この速度を知ってしまうと、あえて遅い手法を取る価値は薄れてきます。</p>
+<p>まだ発展途上の分野なので、たとえば次のような点は定まっていません。</p>
+<ul>
+<li>コードレビューはどれくらい必要か</li>
+<li>AIに依頼する前にどのくらいまで考えておく必要があるのか</li>
+<li>設計の方針は人間が考えるべきか、それともAIに任せるべきか</li>
+</ul>
+<p>こうした点は、使う人や組織の方針に大きく委ねられています。</p>
+<p>しかし、この流れも数ヶ月から数年のうちに、ある程度安定したフローが確立されていくはずです。</p>
+<p>今は個々人に委ねられているAI活用も、社会的に当たり前になれば、個人レベルで求められる速度そのものが高い水準になっていくかもしれません。</p>
+<p>プロセスも大きく変わりますが、要求も大きく変わるだろうと感じます。</p>
+<h2 id="最後に">最後に</h2>
+<p>今回は、「速度」という概念を中心に私の考えを書いてみました。</p>
+<p>開発プロセスにおいて、速度のボトルネックになりやすいのは「コミュニケーション」だと思います。</p>
+<p>設計においては、短期的な速度と長期的な速度が、抽象化の扱い方と深く関係しているということを書きました。</p>
+<p>そして、AI Coding Agentsが本格的に導入されつつある今、速度という観点から開発プロセスそのものを見直す必要があるとも感じています。</p>
+<p>私は「速度」をかなり重視しているところがあり、その背景は自分でもあまり整理できていなかったのですが、書くことで少し整理できてきた気がします。</p> <section class="mt-10 border-t pt-6 space-y-8"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600">Share:</span> <a class="text-sm px-3 py-1.5 rounded border hover:bg-gray-50" href="https://twitter.com/intent/tweet?text=%E9%96%8B%E7%99%BA%E3%83%97%E3%83%AD%E3%82%BB%E3%82%B9%E3%81%A8%E9%80%9F%E5%BA%A6%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2026%2Fthinking-about-development-process-and-speed%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> </main>  </body></html>
