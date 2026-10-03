@@ -1,0 +1,5 @@
+import"./hoisted.BiInAPn9.js";const r=document.querySelector("[data-search-box]"),o=r?.dataset.lang??"ja",c=10;r||console.warn("SearchBox root not found for lang:",o);let l=[],n=[];async function u(){l=await(await fetch(`/${o}/api/posts.json`)).json()}u();const h=r?.querySelector("[data-search-input]"),t=r?.querySelector("[data-search-results]");h?.addEventListener("input",i=>{if(!t)return;const a=i.target.value.toLowerCase().trim();if(t.innerHTML="",!a){t.classList.add("hidden");return}if(n=l.filter(e=>e.title.toLowerCase().includes(a)||e.tags.some(s=>s.toLowerCase().includes(a))),n.length===0){t.classList.add("hidden");return}t.classList.remove("hidden");let d=0;for(const e of n){const s=document.createElement("li");if(s.className="rounded px-2 py-1.5 text-sm hover:bg-brand-50 dark:hover:bg-gray-800",s.innerHTML=`
+          <a href="/${o}/posts/${e.year}/${e.slug}/" class="text-brand-700 hover:underline dark:text-brand-300">
+            ${e.title}
+          </a>
+        `,t.appendChild(s),d++,d>=c)break}});
