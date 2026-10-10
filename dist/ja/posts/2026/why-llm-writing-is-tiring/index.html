@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="ja"> <head><!-- 描画前にテーマを決めて、読み込み時のちらつきを防ぐ --><script>
+      (function () {
+        let theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch (e) {
+          console.error("Failed to read theme preference:", e);
+        }
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (theme === "dark" || (theme !== "light" && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script><!-- Google Tag Manager --><!-- End Google Tag Manager --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>LLMの文章はなぜ疲れるのか</title><meta name="description" content="LLMが生成する調査資料を読むとなぜ疲れるのか。人間が判断したい抽象度と、LLMが先回りして示す具体度のずれから考えます。"><!-- OGP --><meta property="og:title" content="LLMの文章はなぜ疲れるのか"><meta name="og:description" content="LLMが生成する調査資料を読むとなぜ疲れるのか。人間が判断したい抽象度と、LLMが先回りして示す具体度のずれから考えます。"><meta property="og:type" content="website"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="LLMの文章はなぜ疲れるのか"><meta name="twitter:description" content="LLMが生成する調査資料を読むとなぜ疲れるのか。人間が判断したい抽象度と、LLMが先回りして示す具体度のずれから考えます。"><link rel="icon" type="image/png" href="/images/favicon.ico"><link rel="stylesheet" href="/_astro/_page_.Bk-M-rb0.css"><script type="module" src="/_astro/hoisted.DLJAB-XN.js"></script></head> <body class="min-h-screen bg-white text-gray-800 antialiased dark:bg-gray-950 dark:text-gray-200"> <!-- Google Tag Manager (noscript) --> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLX6XR3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> <!-- End Google Tag Manager (noscript) --> <header class="sticky top-0 z-30 border-t-4 border-brand-500 border-b border-b-gray-200/70 bg-white/80 backdrop-blur dark:border-b-gray-800 dark:bg-gray-950/80"> <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-1 px-6 py-3"> <a href="/" class="group flex items-center gap-2 font-bold tracking-tight text-gray-900 dark:text-gray-100"> <span class="inline-block h-2.5 w-2.5 rounded-sm bg-brand-500 transition group-hover:rotate-45" aria-hidden="true"></span> HirotoYoshidome Engineering Notes </a> <nav class="flex items-center gap-1 text-sm"> <a href="/ja/" class="rounded-md px-2 py-1 text-gray-600 transition hover:bg-brand-50 hover:text-brand-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-brand-300">記事一覧</a> <a href="/ja/tags/" class="rounded-md px-2 py-1 text-gray-600 transition hover:bg-brand-50 hover:text-brand-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-brand-300">タグ</a> <span class="mx-1 h-4 w-px bg-gray-300 dark:bg-gray-700" aria-hidden="true"></span> <a href="/ja/" class="rounded-md px-2 py-1 text-gray-600 transition hover:bg-brand-50 hover:text-brand-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-brand-300 uppercase font-semibold text-brand-700 dark:text-brand-300" aria-current="true"> ja </a><a href="/en/" class="rounded-md px-2 py-1 text-gray-600 transition hover:bg-brand-50 hover:text-brand-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-brand-300 uppercase "> en </a> <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-600 transition hover:bg-brand-50 hover:text-brand-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-brand-300" aria-label="ダークモードを切り替える" title="ダークモードを切り替える" data-theme-toggle> <!-- light 時は月、dark 時は太陽を出す --> <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path> </svg> <svg class="hidden h-5 w-5 dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <circle cx="12" cy="12" r="4"></circle> <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path> </svg> </button>  </nav> </div> </header>  <main class="max-w-6xl mx-auto px-6 py-10 leading-relaxed"> <nav aria-label="Breadcrumb" class="max-w-[45rem] mx-auto text-sm text-gray-500 dark:text-gray-400 mb-6"> <ol class="flex flex-wrap items-center gap-2 list-none"> <li><a href="/" class="text-brand-700 hover:underline dark:text-brand-300">ホーム</a></li> <li aria-hidden="true" class="text-gray-400 dark:text-gray-600">/</li> <li><a href="/ja/" class="text-brand-700 hover:underline dark:text-brand-300">記事一覧</a></li> <li aria-hidden="true" class="text-gray-400 dark:text-gray-600">/</li> <li class="font-semibold text-gray-700 dark:text-gray-300 truncate max-w-[60ch]">LLMの文章はなぜ疲れるのか</li> </ol> </nav> <header class="max-w-[45rem] mx-auto mb-10 border-b border-gray-200 pb-6 dark:border-gray-800"> <h1 class="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 mb-3">LLMの文章はなぜ疲れるのか</h1> <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-400"> <time datetime="2026-10-10T00:00:00.000Z"> 2026-10-10 </time> </div> <ul class="flex flex-wrap gap-2 mt-4 list-none"> <li><a href="/ja/tags/product-development/" class="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-700 no-underline transition hover:bg-brand-100 hover:text-brand-800 dark:bg-brand-900/50 dark:text-brand-300 dark:hover:bg-brand-900">
+#Product Development  </a></li><li><a href="/ja/tags/generative-ai/" class="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-700 no-underline transition hover:bg-brand-100 hover:text-brand-800 dark:bg-brand-900/50 dark:text-brand-300 dark:hover:bg-brand-900">
+#Generative AI  </a></li> </ul> <nav class="text-sm text-gray-600 dark:text-gray-400 flex flex-wrap gap-3 mt-4"> <a href="/en/posts/2026/why-llm-writing-is-tiring/" class="text-brand-700 hover:underline dark:text-brand-300 flex items-center gap-1"> <span aria-hidden="true">⇄</span> English </a> </nav> </header> <article class="article-body prose prose-neutral dark:prose-invert max-w-none"> <p>Claude CodeやCodexといったコーディングエージェントは、コーディングの効率化にとどまらず、調査やドキュメントの作成など、PCで行う多くのタスクを実行できるようになってきました。</p>
+<p>私はプラットフォーム寄りのタスクやインフラのタスクを行うことが多く、一次情報を扱った調査や、他の箇所への影響調査を慎重に行う必要があります。
+そのため、事前に情報を資料へ整理し、チームと認識を合わせてからタスクに取り掛かることも少なくありません。</p>
+<p>最近は、このような調査をClaude Codeに任せています。
+一度、Markdownなどのファイルに整理してもらい、その内容を見た上で設計や実装を進めるという流れです。</p>
+<p>人間が実施すると数時間から数日はかかる調査も、LLMに任せると数分で終わります。
+一方で、返却される資料を読み解くのには思いのほか時間がかかります。
+読めば理解はできるものの、LLMが生成した文章は読みづらく、とても疲れるのです。</p>
+<p>今回は、LLMが生成する調査資料はなぜこんなにも疲れるのかについて、最近気づいたことを書いてみたいと思います。</p>
+<h2 id="調査が速くても読むのは速くならない">調査が速くても読むのは速くならない</h2>
+<p>LLMは、本来なら数時間かかる調査を数分で実施し、その結果を一つの資料にまとめます。
+当然ながら、短時間で返ってくる資料であっても、含まれる情報は少なくありません。</p>
+<p>一つの資料ならまだ読めますが、二つ、三つと異なるタスクを並行して、それぞれの資料が生成されると、読むだけで大変な時間がかかります。
+時間がかかるのでLLMに要約を頼み、わからないところがあれば、さらにLLMへ質問することになります。</p>
+<p>調査を待つ数分の間に別のタスクを始めることもあります。
+しかし、別のことを考えてから結果へ戻ると、「これは何の話だったか？」となり、人間側のコンテキストを戻すところから始めなければなりません。</p>
+<p>効率よく複数のタスクを進めているつもりが、資料を読み、コンテキストを切り替えることに時間を使ってしまいます。
+このやり取りがとても疲れるのですが、私はその原因をしばらく言語化できませんでした。</p>
+<h2 id="欲しい情報と抽象度がずれている">欲しい情報と抽象度がずれている</h2>
+<p>最近、この疲れの原因は、私が知りたい内容とLLMが生成する内容の抽象度がずれていることにあるのではないかと気づきました。</p>
+<p>例えば、新しい機能を追加するとき、最初に知りたいのは、その変更が他の箇所へどのような影響を与えるかということです。
+他の箇所と照らし合わせたときに局所最適になっていないか、全体としてどの方針を選ぶべきかを考えたいのです。</p>
+<p>一方で、どの実装箇所が影響を受けるのか、現在の実装がどうなっているのかといった具体的な情報は、方針が決まった後に考えればよいことです。
+最初の意思決定では、そこまでの詳細を必要としていません。</p>
+<p>しかし、LLMは一歩目の段階から詳細まで踏み込み、抽象的な方針と具体的な実装を一つの資料にまとめてくれます。
+知りたいことは確かに含まれているのですが、今は必要のない情報も同じ粒度で並びます。</p>
+<p>その結果、人間は具体的な情報を読み解きながら、より抽象度の高い判断に必要な情報を拾わなければなりません。
+LLMが賢く、詳細まで調べられるからこそ生まれるこのギャップが、文章を読むときの疲れにつながっているのだと思います。</p>
+<h2 id="人間が関心を持つ場所の変化">人間が関心を持つ場所の変化</h2>
+<p>以前は人間が自分の手でプログラムを書き、具体的な実装にも強い関心を持っていました。
+しかし、LLMがコードを書くようになると、具体的な実装方法はAIに任せた方がよいのではないかと思うことが増えてきます。</p>
+<p>その一方で、どこに問題があるのか、どのような方針で実装するのかといった、一歩抽象度の高い意思決定は人間が担う必要があります。
+私はその話をしたいからこそ、具体的な内容まで混ざった資料を読むと疲れるのだと思います。</p>
+<p>今は、人間が手でプログラムを書いていた時代から、AIが書く時代への転換期です。
+そのため、これまで必要だった具体的な情報と、これから人間が判断したい情報が、まだ同じ資料の中に混ざっているのかもしれません。</p>
+<p>いずれAIが書くコードへ完全に切り替わっていけば、短時間で生成される膨大なコードを、人間が詳細まで目でレビューすることは難しくなると思います。
+だからこそ、人間が意思決定するために読む自然言語の文章は、これまで以上に重要になると感じています。</p>
+<h2 id="最後に">最後に</h2>
+<p>今回は、LLMが生成する文章を読むとなぜ疲れるのかについて考えてみました。</p>
+<p>調査結果が難しいことや情報量が多いことだけが原因ではありません。
+人間が判断したい抽象的な概念と、方針が決まった後に必要となる具体的な情報が、一つの資料に混ざっていることが大きな原因だと感じています。</p>
+<p>人間とAIの関心が分かれていく中で、その間をつなぐドキュメントの重要性は高まっていきます。
+今感じている課題がドキュメンテーションにあるのなら、抽象度のギャップを埋める対策や、LLMの周辺環境を整えることへ投資するのが、今のフェーズなのだと思います。</p> </article> <section class="max-w-[45rem] mx-auto mt-12 border-t border-gray-200 pt-6 dark:border-gray-800"> <div class="flex flex-wrap gap-3 items-center"> <span class="text-sm text-gray-600 dark:text-gray-400">Share:</span> <a class="text-sm px-3 py-1.5 rounded-md border border-gray-300 transition hover:border-brand-500 hover:text-brand-700 dark:border-gray-700 dark:hover:border-brand-400 dark:hover:text-brand-300" href="https://twitter.com/intent/tweet?text=LLM%E3%81%AE%E6%96%87%E7%AB%A0%E3%81%AF%E3%81%AA%E3%81%9C%E7%96%B2%E3%82%8C%E3%82%8B%E3%81%AE%E3%81%8B&url=https%3A%2F%2Fhirotoyoshidome.com%2Fja%2Fposts%2F2026%2Fwhy-llm-writing-is-tiring%2F" rel="noopener">
+X (Twitter)
+</a> </div> </section> <div hidden data-copy-code data-labels="{&#34;copy&#34;:&#34;Copy&#34;,&#34;copied&#34;:&#34;Copied!&#34;,&#34;failed&#34;:&#34;Failed&#34;}"></div>  </main>  <footer class="mt-16 border-t border-gray-200 dark:border-gray-800"> <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-8 text-sm text-gray-500 dark:text-gray-400"> <p>© 2026 Hiroto Yoshidome</p> <ul class="flex gap-5 list-none"> <li> <a href="https://github.com/hirotoyoshidome" target="_blank" rel="noopener noreferrer" class="text-gray-500 transition hover:text-brand-700 dark:text-gray-400 dark:hover:text-brand-300">GitHub</a> </li> <li> <a href="https://x.com/hirotoyoshidome" target="_blank" rel="noopener noreferrer" class="text-gray-500 transition hover:text-brand-700 dark:text-gray-400 dark:hover:text-brand-300">X (Twitter)</a> </li> </ul> </div> </footer> </body></html>
